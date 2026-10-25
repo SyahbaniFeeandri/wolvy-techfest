@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daftar Akun Mahasiswa — WOLVY Campus Streetwear</title>
+  <meta name="description" content="Daftarkan dirimu sebagai bagian dari komunitas WOLVY untuk menikmati promo diskon eksklusif mahasiswa dan ikuti voting Design Battle.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Permanent+Marker&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .auth-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at top right, #25123F 0%, #130722 100%);
+      padding: 60px 20px;
+      color: #FFFFFF;
+    }
+    .auth-card {
+      background: rgba(37, 18, 63, 0.7);
+      backdrop-filter: blur(16px);
+      border: 1.5px solid rgba(205, 184, 244, 0.25);
+      border-radius: var(--radius-2xl);
+      padding: 40px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      position: relative;
+    }
+    .auth-logo {
+      display: block;
+      margin: 0 auto 20px auto;
+      height: 48px;
+      object-fit: contain;
+    }
+    .auth-title {
+      font-family: var(--font-heading);
+      font-size: 1.8rem;
+      font-weight: 900;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+    .auth-subtitle {
+      text-align: center;
+      color: var(--color-lavender);
+      font-size: 0.88rem;
+      margin-bottom: 24px;
+    }
+    .form-row-auth {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .form-group-dark {
+      margin-bottom: 14px;
+    }
+    .form-label-dark {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--color-lavender);
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .form-input-dark, .form-select-dark {
+      width: 100%;
+      padding: 11px 14px;
+      background: rgba(19, 7, 34, 0.6);
+      border: 1.5px solid rgba(205, 184, 244, 0.3);
+      border-radius: var(--radius-md);
+      color: #FFFFFF;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-input-dark:focus, .form-select-dark:focus {
+      border-color: var(--color-neon-yellow);
+      box-shadow: 0 0 0 3px rgba(232, 255, 56, 0.15);
+    }
+    .form-select-dark option {
+      background: #130722;
+      color: #FFFFFF;
+    }
+    .btn-auth-submit {
+      width: 100%;
+      padding: 14px;
+      background: var(--color-neon-yellow);
+      color: #000000;
+      border: none;
+      border-radius: var(--radius-pill);
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      margin-top: 14px;
+      transition: all 0.2s;
+      box-shadow: 0 8px 20px rgba(232, 255, 56, 0.3);
+    }
+    .btn-auth-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 25px rgba(232, 255, 56, 0.5);
+    }
+    .auth-footer {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--color-lavender);
+    }
+    .auth-footer a {
+      color: var(--color-neon-yellow);
+      text-decoration: none;
+      font-weight: 700;
+    }
+    @media (max-width: 600px) {
+      .form-row-auth {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body class="auth-page">
+
+  <div class="auth-card">
+    <a href="index.html">
+      <img src="assets/wolvy_logo_clean.png" alt="WOLVY" class="auth-logo">
+    </a>
+
+    <h1 class="auth-title">Daftar Akun Mahasiswa</h1>
+    <p class="auth-subtitle">Gabung ke komunitas streetwear kampus WOLVY</p>
+
+    <form onsubmit="handleRegisterSubmit(event)">
+      <div class="form-row-auth">
+        <div>
+          <label class="form-label-dark" for="regName">Nama Lengkap</label>
+          <input type="text" id="regName" class="form-input-dark" placeholder="Nama mahasiswa" required>
+        </div>
+        <div>
+          <label class="form-label-dark" for="regNim">NIM Kampus</label>
+          <input type="text" id="regNim" class="form-input-dark" placeholder="Contoh: 220108..." required>
+        </div>
+      </div>
+
+      <div class="form-group-dark">
+        <label class="form-label-dark" for="regFaculty">Fakultas / Program Studi</label>
+        <select id="regFaculty" class="form-select-dark" required>
+          <option value="Fakultas Ilmu Komputer (FIK)">Fakultas Ilmu Komputer (FIK)</option>
+          <option value="Fakultas Teknik (FT)">Fakultas Teknik (FT)</option>
+          <option value="Fakultas Ekonomi & Bisnis (FEB)">Fakultas Ekonomi & Bisnis (FEB)</option>
+          <option value="Fakultas Seni Rupa & Desain (FSRD)">Fakultas Seni Rupa & Desain (FSRD)</option>
+          <option value="Fakultas Ilmu Sosial & Ilmu Politik (FISIP)">Fakultas Ilmu Sosial & Ilmu Politik (FISIP)</option>
+          <option value="Fakultas Kedokteran (FK)">Fakultas Kedokteran (FK)</option>
+        </select>
+      </div>
+
+      <div class="form-row-auth">
+        <div>
+          <label class="form-label-dark" for="regEmail">Email Kampus</label>
+          <input type="email" id="regEmail" class="form-input-dark" placeholder="nama@kampus.ac.id" required>
+        </div>
+        <div>
+          <label class="form-label-dark" for="regPhone">No. WhatsApp</label>
+          <input type="tel" id="regPhone" class="form-input-dark" placeholder="08..." required>
+        </div>
+      </div>
+
+      <div class="form-row-auth">
+        <div>
+          <label class="form-label-dark" for="regPassword">Password</label>
+          <input type="password" id="regPassword" class="form-input-dark" placeholder="Minimal 6 karakter" required>
+        </div>
+        <div>
+          <label class="form-label-dark" for="regPasswordConfirm">Konfirmasi Password</label>
+          <input type="password" id="regPasswordConfirm" class="form-input-dark" placeholder="Ulangi password" required>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-auth-submit">
+        Daftar Akun Mahasiswa ⚡
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      Sudah punya akun? <a href="login.html">Masuk di sini</a>
+    </div>
+  </div>
+
+  <script src="store.js"></script>
+  <script>
+    function handleRegisterSubmit(e) {
+      e.preventDefault();
+      const p1 = document.getElementById('regPassword').value;
+      const p2 = document.getElementById('regPasswordConfirm').value;
+      if (p1 !== p2) {
+        alert('Password konfirmasi tidak cocok!');
+        return;
+      }
+
+      const name = document.getElementById('regName').value;
+      const email = document.getElementById('regEmail').value;
+      const faculty = document.getElementById('regFaculty').value;
+
+      // Update store user
+      wolvyStore.db.user = {
+        isLoggedIn: true,
+        name,
+        email,
+        faculty,
+        role: 'pelanggan',
+        avatar: '🐺'
+      };
+      wolvyStore.save();
+
+      alert(`🎉 Pendaftaran Berhasil! Selamat datang di keluarga besar WOLVY, ${name}!`);
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html>

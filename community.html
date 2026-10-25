@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Community & Design Battle — WOLVY</title>
+  <meta name="description" content="Komunitas mahasiswa, forum diskusi gaya kampus, dan Design Battle untuk memilih karya merchandise resmi berikutnya.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Permanent+Marker&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .community-layout {
+      padding: 110px 0 80px 0;
+      background: #FAF8FF;
+      color: var(--color-text-dark);
+      min-height: 85vh;
+    }
+    .comm-hero-card {
+      background: linear-gradient(135deg, #25123F 0%, #130722 100%);
+      border-radius: var(--radius-2xl);
+      padding: 48px;
+      color: #FFFFFF;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 40px;
+      border: 1px solid rgba(205, 184, 244, 0.2);
+    }
+    .comm-hero-card::after {
+      content: '';
+      position: absolute;
+      right: -50px;
+      bottom: -50px;
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, rgba(232, 255, 56, 0.15) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .comm-badge {
+      display: inline-block;
+      background: var(--color-neon-yellow);
+      color: #000;
+      font-size: 0.78rem;
+      font-weight: 900;
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+    .comm-hero-title {
+      font-family: var(--font-heading);
+      font-size: 2.4rem;
+      font-weight: 900;
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+    .comm-hero-sub {
+      color: var(--color-lavender);
+      font-size: 1.05rem;
+      max-width: 600px;
+      line-height: 1.6;
+    }
+
+    /* 4 Category Action Pills matching reference docx */
+    .comm-action-pills {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+    .cap-pill {
+      background: #FFFFFF;
+      border: 1.5px solid rgba(205, 184, 244, 0.4);
+      border-radius: var(--radius-xl);
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 15px rgba(98, 45, 170, 0.05);
+    }
+    .cap-pill:hover, .cap-pill.active {
+      transform: translateY(-3px);
+      border-color: var(--color-mid-purple);
+      box-shadow: 0 10px 25px rgba(98, 45, 170, 0.12);
+      background: #FAF5FF;
+    }
+    .cap-pill.active {
+      border-color: var(--color-dark-purple);
+      background: #F4EBFF;
+    }
+    .cap-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: #EDE4FF;
+      color: var(--color-dark-purple);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+    }
+    .cap-pill.active .cap-icon {
+      background: var(--color-neon-yellow);
+      color: #000;
+    }
+    .cap-text-title {
+      font-family: var(--font-heading);
+      font-size: 0.98rem;
+      font-weight: 800;
+      color: var(--color-dark-purple);
+    }
+    .cap-text-desc {
+      font-size: 0.76rem;
+      color: #7B689E;
+    }
+
+    /* Section Styling */
+    .comm-section {
+      background: #FFFFFF;
+      border-radius: var(--radius-2xl);
+      padding: 32px;
+      border: 1.5px solid rgba(205, 184, 244, 0.35);
+      box-shadow: 0 8px 30px rgba(98, 45, 170, 0.06);
+      margin-bottom: 36px;
+    }
+    .section-head-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .sec-title {
+      font-family: var(--font-heading);
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--color-dark-purple);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Design Battle Cards */
+    .battle-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+    }
+    .battle-card {
+      background: #FAF8FF;
+      border-radius: var(--radius-xl);
+      border: 2px solid #EDE4FF;
+      overflow: hidden;
+      padding: 24px;
+      position: relative;
+      transition: all 0.25s ease;
+    }
+    .battle-card.leading {
+      border-color: #E8FF38;
+      box-shadow: 0 0 20px rgba(232, 255, 56, 0.25);
+    }
+    .bc-image {
+      width: 100%;
+      height: 240px;
+      object-fit: contain;
+      background: #FFFFFF;
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      margin-bottom: 18px;
+    }
+    .bc-title {
+      font-family: var(--font-heading);
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--color-dark-purple);
+      margin-bottom: 4px;
+    }
+    .bc-creator {
+      font-size: 0.82rem;
+      color: #7B689E;
+      margin-bottom: 14px;
+    }
+    .vote-progress-wrap {
+      margin-bottom: 16px;
+    }
+    .vp-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+      color: var(--color-dark-purple);
+    }
+    .vp-bar-outer {
+      height: 10px;
+      background: #EBE3F8;
+      border-radius: var(--radius-pill);
+      overflow: hidden;
+    }
+    .vp-bar-inner {
+      height: 100%;
+      background: linear-gradient(90deg, #9D6BF0 0%, #E8FF38 100%);
+      border-radius: var(--radius-pill);
+      transition: width 0.4s ease;
+    }
+    .btn-vote-now {
+      width: 100%;
+      padding: 12px;
+      background: var(--color-dark-purple);
+      color: #FFFFFF;
+      border-radius: var(--radius-pill);
+      font-weight: 800;
+      font-size: 0.9rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-vote-now:hover {
+      background: var(--color-neon-yellow);
+      color: #000;
+    }
+
+    /* Forum Threads */
+    .forum-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .forum-card {
+      background: #FFFFFF;
+      border-radius: var(--radius-lg);
+      border: 1.5px solid #F0E8FF;
+      padding: 20px;
+      transition: all 0.2s;
+    }
+    .forum-card:hover {
+      border-color: var(--color-mid-purple);
+      box-shadow: 0 4px 15px rgba(98, 45, 170, 0.05);
+    }
+    .fc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .fc-user {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .fc-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #EDE4FF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+    }
+    .fc-name {
+      font-weight: 800;
+      font-size: 0.9rem;
+      color: var(--color-dark-purple);
+    }
+    .fc-faculty {
+      font-size: 0.75rem;
+      color: #7B689E;
+    }
+    .fc-tag {
+      background: #F4EFFF;
+      color: var(--color-mid-purple);
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+    .fc-content {
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: #332047;
+      margin-bottom: 14px;
+    }
+    .fc-actions {
+      display: flex;
+      gap: 16px;
+      font-size: 0.8rem;
+      color: #7B689E;
+    }
+    .fc-action-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: inherit;
+      font-weight: 700;
+      transition: color 0.2s;
+    }
+    .fc-action-btn:hover {
+      color: var(--color-dark-purple);
+    }
+    .fc-action-btn.liked {
+      color: #FF3B30;
+    }
+
+    /* Events Cards */
+    .events-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .event-card {
+      background: #FAF8FF;
+      border-radius: var(--radius-xl);
+      border: 1.5px solid rgba(205, 184, 244, 0.4);
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+    }
+    .ev-date-pill {
+      display: inline-block;
+      background: #EDE4FF;
+      color: var(--color-dark-purple);
+      font-weight: 800;
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      margin-bottom: 12px;
+    }
+    .ev-title {
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--color-dark-purple);
+      margin-bottom: 8px;
+    }
+    .ev-loc {
+      font-size: 0.8rem;
+      color: #7B689E;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-join-ev {
+      margin-top: auto;
+      padding: 10px;
+      background: var(--color-dark-purple);
+      color: #FFFFFF;
+      border-radius: var(--radius-pill);
+      font-size: 0.82rem;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .btn-join-ev:hover {
+      background: var(--color-neon-yellow);
+      color: #000;
+    }
+
+    @media (max-width: 900px) {
+      .comm-action-pills {
+        grid-template-columns: 1fr 1fr;
+      }
+      .battle-grid, .events-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== HEADER ==================== -->
+  <header class="header" id="mainHeader">
+    <div class="nav-container">
+      <a href="index.html" class="brand-logo" aria-label="WOLVY Home">
+        <img src="assets/wolvy_logo_clean.png" alt="WOLVY Logo" class="brand-logo-img">
+      </a>
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="shop.html" class="nav-link">Shop</a>
+        <a href="tryon.html" class="nav-link nav-highlight">
+          Try On <span class="badge-pill">LIVE CV</span>
+        </a>
+        <a href="index.html#custom-merch" class="nav-link">Custom Merch</a>
+        <a href="community.html" class="nav-link active">Community</a>
+        <a href="about.html" class="nav-link">About</a>
+      </nav>
+      <div class="nav-actions">
+        <a href="orders.html" class="nav-link" style="font-size:0.85rem; font-weight:700; color:var(--color-neon-yellow); margin-right:12px;">
+          Pesanan Saya
+        </a>
+        <a href="wishlist.html" class="icon-btn" aria-label="Wishlist">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          <span class="badge-count" id="wishlistCount">4</span>
+        </a>
+        <a href="cart.html" class="icon-btn cart-btn" aria-label="Keranjang">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          <span class="badge-count" id="cartBadge">3</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== MAIN COMMUNITY ==================== -->
+  <main class="community-layout">
+    <div class="section-container">
+      
+      <!-- Hero Banner -->
+      <div class="comm-hero-card">
+        <span class="comm-badge">WOLVY CAMPUS HUB</span>
+        <h1 class="comm-hero-title">Campus Community &amp; Design Battle</h1>
+        <p class="comm-hero-sub">
+          Ruang kolaborasi mahasiswa untuk berdiskusi gaya kampus, voting desain merchandise resmi berikutnya, dan info event kreatif almamater.
+        </p>
+      </div>
+
+      <!-- 4 Action Pills matching reference docx Column 4 top -->
+      <div class="comm-action-pills">
+        <div class="cap-pill active" onclick="scrollToSection('forumSection', this)">
+          <div class="cap-icon">💬</div>
+          <div>
+            <div class="cap-text-title">Diskusi &amp; Forum</div>
+            <div class="cap-text-desc">OOTD &amp; Request Merchandise</div>
+          </div>
+        </div>
+
+        <div class="cap-pill" onclick="scrollToSection('battleSection', this)">
+          <div class="cap-icon">⚔️</div>
+          <div>
+            <div class="cap-text-title">Voting Desain</div>
+            <div class="cap-text-desc">Design Battle Minggu Ini</div>
+          </div>
+        </div>
+
+        <div class="cap-pill" onclick="scrollToSection('eventSection', this)">
+          <div class="cap-icon">🎪</div>
+          <div>
+            <div class="cap-text-title">Event Kampus</div>
+            <div class="cap-text-desc">Pop-Up Store &amp; Workshop</div>
+          </div>
+        </div>
+
+        <div class="cap-pill" onclick="scrollToSection('angkatanSection', this)">
+          <div class="cap-icon">🐺</div>
+          <div>
+            <div class="cap-text-title">Komunitas Angkatan</div>
+            <div class="cap-text-desc">Koneksi Lintas Fakultas</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 1: DESIGN BATTLE (FR-16) -->
+      <section class="comm-section" id="battleSection">
+        <div class="section-head-row">
+          <div>
+            <span class="comm-badge" style="background:#4B287D; color:#FFFFFF;">DESIGN BATTLE #14</span>
+            <h2 class="sec-title">
+              ⚔️ Battle Desain: Varsity Edisi Dies Natalis
+            </h2>
+            <p style="font-size:0.85rem; color:#7B689E; margin-top:4px;">
+              Pilih desain favoritmu! Desain pemenang akan diproduksi resmi dan dirilis dengan diskon pre-order khusus mahasiswa.
+            </p>
+          </div>
+          <button class="btn btn-secondary" onclick="openSubmitDesignModal()" style="font-size:0.85rem; padding:10px 18px;">
+            + Kirim Desainmu
+          </button>
+        </div>
+
+        <div class="battle-grid">
+          <!-- Design A -->
+          <div class="battle-card leading" id="cardA">
+            <span style="position:absolute; top:16px; right:16px; background:#E8FF38; color:#000; font-size:0.72rem; font-weight:900; padding:4px 10px; border-radius:12px;">
+              MEMIMPIN (64%)
+            </span>
+            <img src="assets/prod_varsity.png" alt="Desain A" class="bc-image">
+            <h3 class="bc-title">Design A: Cyber Wolvy Streetwear</h3>
+            <div class="bc-creator">Karya: <strong>Rian Dewantara</strong> (FSRD '22)</div>
+            
+            <div class="vote-progress-wrap">
+              <div class="vp-labels">
+                <span>Total Suara: <strong id="votesCountA">428</strong></span>
+                <span id="pctA">64%</span>
+              </div>
+              <div class="vp-bar-outer">
+                <div class="vp-bar-inner" id="barA" style="width: 64%;"></div>
+              </div>
+            </div>
+
+            <button type="button" class="btn-vote-now" id="btnVoteA" onclick="castVote('A')">
+              Beri Vote Desain A 👍
+            </button>
+          </div>
+
+          <!-- Design B -->
+          <div class="battle-card" id="cardB">
+            <img src="assets/prod_hoodie_black.png" alt="Desain B" class="bc-image">
+            <h3 class="bc-title">Design B: Minimalist Heritage Wolf</h3>
+            <div class="bc-creator">Karya: <strong>Nadira Safira</strong> (Arsitektur '23)</div>
+            
+            <div class="vote-progress-wrap">
+              <div class="vp-labels">
+                <span>Total Suara: <strong id="votesCountB">241</strong></span>
+                <span id="pctB">36%</span>
+              </div>
+              <div class="vp-bar-outer">
+                <div class="vp-bar-inner" id="barB" style="width: 36%;"></div>
+              </div>
+            </div>
+
+            <button type="button" class="btn-vote-now" id="btnVoteB" onclick="castVote('B')">
+              Beri Vote Desain B 👍
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 2: FORUM DISKUSI & GAYA KAMPUS (FR-15) -->
+      <section class="comm-section" id="forumSection">
+        <div class="section-head-row">
+          <div>
+            <h2 class="sec-title">
+              💬 Forum Mahasiswa &amp; Diskusi Gaya Kampus
+            </h2>
+            <p style="font-size:0.85rem; color:#7B689E; margin-top:4px;">
+              Sharing inspirasi OOTD kuliah, review merchandise, atau request produk baru.
+            </p>
+          </div>
+          <button class="btn btn-primary" onclick="openCreatePostModal()" style="font-size:0.85rem; padding:10px 18px;">
+            + Buat Postingan Baru
+          </button>
+        </div>
+
+        <div class="forum-feed" id="forumFeedContainer">
+          <!-- Thread 1 -->
+          <div class="forum-card">
+            <div class="fc-header">
+              <div class="fc-user">
+                <div class="fc-avatar">👩‍🎓</div>
+                <div>
+                  <div class="fc-name">Siti Nurhaliza</div>
+                  <div class="fc-faculty">Fakultas Ekonomi &amp; Bisnis · 2 jam lalu</div>
+                </div>
+              </div>
+              <span class="fc-tag">#OOTDKampus</span>
+            </div>
+            <div class="fc-content">
+              Varsity Jacket Purple Edition WOLVY ternyata pas banget dipadukan dengan jeans baggy dan sneakers putih! Bahannya adem waktu kelas AC gedung baru. Fix jadi jaket andalan bimbingan skripsi 💜✨
+            </div>
+            <div class="fc-actions">
+              <button class="fc-action-btn" onclick="toggleLike(this, 34)">
+                ❤️ <span>34 Suka</span>
+              </button>
+              <button class="fc-action-btn">
+                💬 <span>8 Komentar</span>
+              </button>
+              <button class="fc-action-btn">
+                🔗 <span>Bagikan</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Thread 2 -->
+          <div class="forum-card">
+            <div class="fc-header">
+              <div class="fc-user">
+                <div class="fc-avatar">👨‍💻</div>
+                <div>
+                  <div class="fc-name">Bima Arya Pratama</div>
+                  <div class="fc-faculty">Fakultas Ilmu Komputer · 5 jam lalu</div>
+                </div>
+              </div>
+              <span class="fc-tag">#RequestMerch</span>
+            </div>
+            <div class="fc-content">
+              Request dong min WOLVY, tolong adain lanyards card holder kulit sintetis warna ungu neon dengan logo serigala! Biar kartu mahasiswa KTM dan kartu lift lab ga gampang hilang hehe.
+            </div>
+            <div class="fc-actions">
+              <button class="fc-action-btn" onclick="toggleLike(this, 51)">
+                ❤️ <span>51 Suka</span>
+              </button>
+              <button class="fc-action-btn">
+                💬 <span>19 Komentar</span>
+              </button>
+              <button class="fc-action-btn">
+                🔗 <span>Bagikan</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Thread 3 -->
+          <div class="forum-card">
+            <div class="fc-header">
+              <div class="fc-user">
+                <div class="fc-avatar">🎨</div>
+                <div>
+                  <div class="fc-name">Jessica Tan</div>
+                  <div class="fc-faculty">Fakultas Seni Rupa &amp; Desain · Kemarin</div>
+                </div>
+              </div>
+              <span class="fc-tag">#DesignReview</span>
+            </div>
+            <div class="fc-content">
+              Keren banget fitur Virtual Try-On nya! Jadi gampang ngebayangin fitting ukuran L di badan sebelum checkout. Semoga next update bisa coba aksesoris topi juga ya min! 🔥
+            </div>
+            <div class="fc-actions">
+              <button class="fc-action-btn" onclick="toggleLike(this, 62)">
+                ❤️ <span>62 Suka</span>
+              </button>
+              <button class="fc-action-btn">
+                💬 <span>12 Komentar</span>
+              </button>
+              <button class="fc-action-btn">
+                🔗 <span>Bagikan</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 3: EVENT KAMPUS MENDATANG -->
+      <section class="comm-section" id="eventSection">
+        <div class="section-head-row">
+          <div>
+            <h2 class="sec-title">
+              🎪 Event &amp; Pop-Up Store Kampus Mendatang
+            </h2>
+            <p style="font-size:0.85rem; color:#7B689E; margin-top:4px;">
+              Kunjungi booth fisik WOLVY dan rasakan fitting merchandise langsung di area kampus.
+            </p>
+          </div>
+        </div>
+
+        <div class="events-grid">
+          <div class="event-card">
+            <span class="ev-date-pill">15 - 18 Mei 2026</span>
+            <h3 class="ev-title">WOLVY Pop-Up Experience @ Gedung BEM</h3>
+            <div class="ev-loc">📍 Gedung Pusat Mahasiswa Lantai 1</div>
+            <p style="font-size:0.82rem; color:#6C568E; margin-bottom:14px; line-height:1.4;">
+              Booth fitting langsung, exclusive sticker giveaway, dan diskon 15% khusus pembelian tunai/QRIS di tempat.
+            </p>
+            <button class="btn-join-ev" onclick="registerEvent('WOLVY Pop-Up Experience')">
+              Daftar / Pasang Pengingat 🔔
+            </button>
+          </div>
+
+          <div class="event-card">
+            <span class="ev-date-pill">24 Mei 2026</span>
+            <h3 class="ev-title">Workshop Streetwear Design &amp; Silkscreen</h3>
+            <div class="ev-loc">📍 Lab Desain FSRD Lt. 3</div>
+            <p style="font-size:0.82rem; color:#6C568E; margin-bottom:14px; line-height:1.4;">
+              Belajar mendesain grafis kaos streetwear kampus bersama desainer grafiti &amp; tim kreatif WOLVY.
+            </p>
+            <button class="btn-join-ev" onclick="registerEvent('Workshop Streetwear Design')">
+              Daftar / Pasang Pengingat 🔔
+            </button>
+          </div>
+
+          <div class="event-card">
+            <span class="ev-date-pill">2 Juni 2026</span>
+            <h3 class="ev-title">Final Design Battle &amp; Music Fest</h3>
+            <div class="ev-loc">📍 Lapangan Utama Kampus</div>
+            <p style="font-size:0.82rem; color:#6C568E; margin-bottom:14px; line-height:1.4;">
+              Pengumuman pemenang karya merchandise resmi, live runway fashion show ormawa, dan konser musik kampus.
+            </p>
+            <button class="btn-join-ev" onclick="registerEvent('Final Design Battle Fest')">
+              Daftar / Pasang Pengingat 🔔
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 4: KOMUNITAS ANGKATAN -->
+      <section class="comm-section" id="angkatanSection">
+        <div style="text-align:center; max-width:650px; margin:0 auto; padding:20px 0;">
+          <div style="font-size:2.5rem; margin-bottom:10px;">🐺🎓</div>
+          <h2 class="sec-title" style="justify-content:center; margin-bottom:10px;">
+            Ingin Buat Jaket atau Kaos Custom untuk Angkatanmu?
+          </h2>
+          <p style="font-size:0.9rem; color:#7B689E; line-height:1.6; margin-bottom:20px;">
+            WOLVY menyediakan paket <strong>Group Order Kampus</strong> dengan harga khusus grosir mahasiswa, free desain grafis, dan bordir/sablon nama per individu.
+          </p>
+          <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
+            <a href="index.html#custom-merch" class="btn btn-primary" style="font-size:0.9rem; padding:12px 24px;">
+              Buka Custom Merch Studio
+            </a>
+            <a href="https://wa.me/6281234567890" target="_blank" class="btn btn-secondary" style="font-size:0.9rem; padding:12px 24px;">
+              Konsultasi WhatsApp Ormawa
+            </a>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="footer-strip">
+    <div class="section-container footer-content">
+      <div class="footer-copy">
+        © 2026 WOLVY Campus Streetwear · All Rights Reserved. Built for Web Development Competition.
+      </div>
+      <div class="footer-links">
+        <a href="shop.html">Shop</a>
+        <a href="tryon.html">Virtual Try-On</a>
+        <a href="orders.html">Status Pesanan</a>
+        <a href="admin.html">Admin Dashboard</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="store.js"></script>
+  <script>
+    let votesA = 428;
+    let votesB = 241;
+    let hasVoted = false;
+
+    function scrollToSection(id, el) {
+      document.querySelectorAll('.cap-pill').forEach(p => p.classList.remove('active'));
+      el.classList.add('active');
+      const target = document.getElementById(id);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    function castVote(choice) {
+      if (hasVoted) {
+        alert('Kamu sudah memberikan suaramu pada Design Battle ini! Terima kasih sudah berpartisipasi.');
+        return;
+      }
+
+      if (choice === 'A') {
+        votesA++;
+      } else {
+        votesB++;
+      }
+      hasVoted = true;
+
+      const total = votesA + votesB;
+      const pctAVal = Math.round((votesA / total) * 100);
+      const pctBVal = 100 - pctAVal;
+
+      document.getElementById('votesCountA').innerText = votesA;
+      document.getElementById('pctA').innerText = pctAVal + '%';
+      document.getElementById('barA').style.width = pctAVal + '%';
+
+      document.getElementById('votesCountB').innerText = votesB;
+      document.getElementById('pctB').innerText = pctBVal + '%';
+      document.getElementById('barB').style.width = pctBVal + '%';
+
+      document.getElementById('btnVoteA').disabled = true;
+      document.getElementById('btnVoteB').disabled = true;
+      document.getElementById('btnVoteA').style.opacity = '0.6';
+      document.getElementById('btnVoteB').style.opacity = '0.6';
+
+      alert(`🎉 Terima kasih! Suaramu untuk Desain ${choice} berhasil tercatat.`);
+    }
+
+    function toggleLike(btn, count) {
+      const isLiked = btn.classList.contains('liked');
+      if (isLiked) {
+        btn.classList.remove('liked');
+        btn.querySelector('span').innerText = count + ' Suka';
+      } else {
+        btn.classList.add('liked');
+        btn.querySelector('span').innerText = (count + 1) + ' Suka';
+      }
+    }
+
+    function openCreatePostModal() {
+      const topic = prompt('Masukkan topik diskusi kamu (contoh: #OOTDKampus, #RequestMerch):', '#OOTDKampus');
+      if (!topic) return;
+      const content = prompt('Tulis pesan atau pertanyaan diskusimu:');
+      if (!content) return;
+
+      const user = wolvyStore.getUser();
+      const feed = document.getElementById('forumFeedContainer');
+      const newCard = document.createElement('div');
+      newCard.className = 'forum-card';
+      newCard.innerHTML = `
+        <div class="fc-header">
+          <div class="fc-user">
+            <div class="fc-avatar">🐺</div>
+            <div>
+              <div class="fc-name">${user.name || 'Mahasiswa WOLVY'}</div>
+              <div class="fc-faculty">${user.faculty || 'Fakultas'} · Baru saja</div>
+            </div>
+          </div>
+          <span class="fc-tag">${topic}</span>
+        </div>
+        <div class="fc-content">${content}</div>
+        <div class="fc-actions">
+          <button class="fc-action-btn" onclick="toggleLike(this, 1)">
+            ❤️ <span>1 Suka</span>
+          </button>
+          <button class="fc-action-btn">
+            💬 <span>0 Komentar</span>
+          </button>
+          <button class="fc-action-btn">
+            🔗 <span>Bagikan</span>
+          </button>
+        </div>
+      `;
+      feed.prepend(newCard);
+      alert('Postingan diskusimu berhasil dipublikasikan di Forum Mahasiswa! 🚀');
+    }
+
+    function openSubmitDesignModal() {
+      alert('Pendaftaran karya Design Battle terbuka untuk seluruh mahasiswa aktif ber-KTM! Silakan kirim file karya (PNG/PSD 300DPI) ke email: creative@wolvy.ac.id.');
+    }
+
+    function registerEvent(eventName) {
+      alert(`✅ Berhasil! Pengingat untuk event "${eventName}" telah ditambahkan ke kalender dan email mahasiswa kamu.`);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const badge = document.getElementById('cartBadge');
+      if (badge) badge.innerText = wolvyStore.getCartCount();
+      const wishlistCountEl = document.getElementById('wishlistCount');
+      if (wishlistCountEl) wishlistCountEl.innerText = wolvyStore.getWishlist().length;
+    });
+  </script>
+</body>
+</html>

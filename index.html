@@ -22,14 +22,14 @@
 
       <!-- Desktop Navigation Links -->
       <nav class="nav-menu" id="navMenu">
-        <a href="#hero" class="nav-link active">Home</a>
-        <a href="#categories" class="nav-link">Shop</a>
-        <a href="#tryon" class="nav-link nav-highlight">
+        <a href="index.html" class="nav-link active">Home</a>
+        <a href="shop.html" class="nav-link">Shop</a>
+        <a href="tryon.html" class="nav-link nav-highlight">
           Try On <span class="badge-pill">LIVE CV</span>
         </a>
         <a href="#custom-merch" class="nav-link">Custom Merch</a>
-        <a href="#community" class="nav-link">Community</a>
-        <a href="#about" class="nav-link">About</a>
+        <a href="community.html" class="nav-link">Community</a>
+        <a href="about.html" class="nav-link">About</a>
       </nav>
 
       <!-- Right Utility Actions -->
@@ -43,12 +43,12 @@
         </button>
 
         <!-- Wishlist Trigger -->
-        <button class="icon-btn" id="wishlistBtn" aria-label="Wishlist" title="Wishlist favorit">
+        <a href="wishlist.html" class="icon-btn" id="wishlistBtn" aria-label="Wishlist" title="Wishlist favorit">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
           </svg>
           <span class="badge-count" id="wishlistCount">3</span>
-        </button>
+        </a>
 
         <!-- Cart Trigger -->
         <button class="icon-btn cart-btn" id="cartBtn" aria-label="Keranjang belanja" title="Keranjang Belanja">
@@ -1155,9 +1155,12 @@
           <span class="cart-total-price" id="cartTotalPrice">Rp 538.000</span>
         </div>
 
-        <button class="btn btn-primary btn-checkout-trigger" id="checkoutBtn">
+        <a href="checkout.html" class="btn btn-primary btn-checkout-trigger" id="checkoutBtn" style="text-decoration:none; display:flex; justify-content:center; align-items:center;">
           Checkout Pesanan &rarr;
-        </button>
+        </a>
+        <a href="cart.html" style="display:block; text-align:center; font-size:0.82rem; color:var(--color-lavender); text-decoration:underline; margin-top:8px;">
+          Buka Halaman Keranjang Lengkap
+        </a>
         <p class="cart-footer-note">Simulasi transaksi instan via QRIS / Virtual Account</p>
       </div>
     </div>
@@ -1239,24 +1242,32 @@
         <span class="badge-pill-neon">Pelanggan Aktif</span>
       </div>
       <div class="user-menu-list">
-        <a href="#cartDrawer" class="user-menu-link" id="userOrdersLink">
-          <span>📦 Pesanan Saya (1 Aktif)</span>
+        <a href="orders.html" class="user-menu-link" id="userOrdersLink">
+          <span>📦 Pesanan Saya (Riwayat &amp; Status)</span>
           <span class="menu-arrow">&rarr;</span>
         </a>
-        <a href="#wishlist" class="user-menu-link" id="userWishlistLink">
-          <span>❤️ Wishlist Favorit (3 Item)</span>
+        <a href="wishlist.html" class="user-menu-link" id="userWishlistLink">
+          <span>❤️ Wishlist Favorit</span>
           <span class="menu-arrow">&rarr;</span>
         </a>
-        <a href="#tryon" class="user-menu-link">
-          <span>📸 Saved Try-On Looks</span>
+        <a href="tryon.html" class="user-menu-link">
+          <span>📸 Virtual Try-On Live</span>
+          <span class="menu-arrow">&rarr;</span>
+        </a>
+        <a href="admin.html" class="user-menu-link" style="color:var(--color-neon-yellow);">
+          <span>🛡️ Dashboard Admin Toko (FR-09..FR-11)</span>
+          <span class="menu-arrow">&rarr;</span>
+        </a>
+        <a href="login.html" class="user-menu-link" style="color:#CDB8F4;">
+          <span>🚪 Ganti Akun / Logout (FR-04)</span>
           <span class="menu-arrow">&rarr;</span>
         </a>
         <div class="user-role-switch">
           <div class="switch-info">
             <strong>Role Demo Lomba:</strong>
-            <span>Ganti mode ke Dashboard Admin</span>
+            <span>Akses langsung panel kelola</span>
           </div>
-          <button class="btn btn-sm btn-outline" id="roleToggleBtn">Ganti ke Admin</button>
+          <a href="admin.html" class="btn btn-sm btn-outline" style="text-decoration:none;">Buka Admin</a>
         </div>
       </div>
     </div>

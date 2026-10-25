@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Virtual Try-On (Computer Vision) — WOLVY</title>
+  <meta name="description" content="Virtual Try-On berbasis Computer Vision. Coba jaket varsity, hoodie, dan merchandise kampus langsung di kameramu sebelum membeli.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Permanent+Marker&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .tryon-page-wrapper {
+      padding-top: 85px;
+      background: radial-gradient(circle at 50% 10%, #2B1252 0%, #130722 80%);
+      color: var(--color-white);
+      overflow-x: hidden;
+    }
+    
+    /* Hero Section of Try-On (Matches image2.png) */
+    .tryon-hero-layout {
+      max-width: var(--container-max-width);
+      margin: 0 auto;
+      padding: 40px 24px;
+      display: grid;
+      grid-template-columns: 1fr 390px 1.15fr;
+      gap: 32px;
+      align-items: center;
+    }
+    .tryon-left-narrative {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .tryon-page-title {
+      font-family: var(--font-doodle);
+      font-size: 3.4rem;
+      line-height: 1.05;
+      color: var(--color-neon-yellow);
+      letter-spacing: 0.02em;
+    }
+    .tryon-page-desc {
+      font-size: 1rem;
+      color: var(--color-lavender);
+      line-height: 1.6;
+    }
+    .tryon-features-vertical {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 10px;
+    }
+    .tf-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 12px 18px;
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(205, 184, 244, 0.15);
+    }
+    .tf-icon {
+      font-size: 1.5rem;
+    }
+    .tf-title {
+      font-weight: 800;
+      font-size: 0.92rem;
+      color: var(--color-white);
+    }
+    .tf-desc {
+      font-size: 0.76rem;
+      color: var(--color-text-muted);
+    }
+
+    /* Right Aesthetic Streetwear Notes */
+    .tryon-right-notes {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      align-items: flex-end;
+    }
+    .aesthetic-note-card {
+      background: rgba(232, 255, 56, 0.1);
+      border: 1.5px solid var(--color-neon-yellow);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      max-width: 260px;
+      transform: rotate(2deg);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    }
+    .anc-title {
+      font-family: var(--font-doodle);
+      font-size: 1.4rem;
+      color: var(--color-neon-yellow);
+      line-height: 1.2;
+    }
+    .anc-sub {
+      font-family: var(--font-hand);
+      font-size: 1.15rem;
+      color: var(--color-white);
+      margin-top: 8px;
+    }
+    .sticker-yellow-postit {
+      background: #E8FF38;
+      color: #120624;
+      font-family: var(--font-doodle);
+      padding: 16px;
+      border-radius: 8px;
+      font-size: 1rem;
+      max-width: 240px;
+      transform: rotate(-3deg);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    }
+
+    /* How It Works Section */
+    .hiw-section {
+      padding: 60px 0;
+      background: #170A2A;
+      border-top: 1px solid var(--color-dark-border);
+      border-bottom: 1px solid var(--color-dark-border);
+    }
+    .hiw-header {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+    .hiw-title {
+      font-family: var(--font-doodle);
+      font-size: 2.4rem;
+      color: var(--color-white);
+    }
+
+    /* Gallery Showcase ("Try Different Looks, Find Your Vibe") */
+    .different-vibes-section {
+      padding: 70px 0;
+      background: #EFEAFF;
+      color: var(--color-text-dark);
+    }
+    .dv-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 30px;
+    }
+    .dv-title {
+      font-family: var(--font-doodle);
+      font-size: 2.4rem;
+      color: var(--color-dark-purple);
+      line-height: 1.1;
+    }
+    .dv-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr) 1fr;
+      gap: 20px;
+    }
+    .vibe-card {
+      background: #FFFFFF;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(98,45,170,0.08);
+      position: relative;
+    }
+    .vibe-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+    }
+    .vibe-badge {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: rgba(20, 8, 38, 0.8);
+      color: var(--color-white);
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+    }
+    .vibe-body {
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .vibe-name {
+      font-family: var(--font-heading);
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--color-dark-purple);
+    }
+    .vibe-sub {
+      font-size: 0.74rem;
+      color: #7B689E;
+    }
+    .btn-simpan-vibe {
+      font-size: 0.78rem;
+      font-weight: 700;
+      background: #EDE6FB;
+      color: var(--color-dark-purple);
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+    }
+
+    /* Saved Looks Box */
+    .saved-looks-card {
+      background: #FFFFFF;
+      border-radius: var(--radius-xl);
+      padding: 20px;
+      border: 1px solid rgba(205, 184, 244, 0.4);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .sl-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .sl-title {
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--color-dark-purple);
+    }
+    .sl-thumbs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .sl-thumb {
+      height: 65px;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .sl-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    @media (max-width: 1100px) {
+      .tryon-hero-layout {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        text-align: center;
+      }
+      .tryon-right-notes {
+        align-items: center;
+      }
+      .dv-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 600px) {
+      .dv-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== HEADER ==================== -->
+  <header class="header" id="mainHeader">
+    <div class="nav-container">
+      <a href="index.html" class="brand-logo" aria-label="WOLVY Home">
+        <img src="assets/wolvy_logo_clean.png" alt="WOLVY Logo" class="brand-logo-img">
+      </a>
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="shop.html" class="nav-link">Shop</a>
+        <a href="tryon.html" class="nav-link active nav-highlight">
+          Try On <span class="badge-pill">LIVE CV</span>
+        </a>
+        <a href="index.html#custom-merch" class="nav-link">Custom Merch</a>
+        <a href="community.html" class="nav-link">Community</a>
+        <a href="about.html" class="nav-link">About</a>
+      </nav>
+      <div class="nav-actions">
+        <a href="wishlist.html" class="icon-btn" aria-label="Wishlist">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          <span class="badge-count" id="wishlistCount">4</span>
+        </a>
+        <a href="cart.html" class="icon-btn cart-btn" aria-label="Keranjang">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          <span class="badge-count" id="cartBadge">3</span>
+        </a>
+        <a href="orders.html" class="icon-btn" title="Pesanan Saya">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== MAIN TRY-ON WORKSPACE ==================== -->
+  <main class="tryon-page-wrapper">
+    <div class="tryon-hero-layout">
+      
+      <!-- LEFT COLUMN: NARRATIVE & VALUE BADGES -->
+      <div class="tryon-left-narrative">
+        <span class="badge-pill-neon" style="align-self: flex-start;">COMPUTER VISION BROWSER CV</span>
+        <h1 class="tryon-page-title">
+          TRY IT ON<br>BEFORE YOU BUY
+        </h1>
+        <p class="tryon-page-desc">
+          Lihat langsung bagaimana merchandise WOLVY cocok di kamu! Coba fitur Virtual Try-On dan temukan gaya terbaikmu sebelum checkout.
+        </p>
+        <button class="btn btn-primary" id="btnScrollCam" style="align-self: flex-start; padding: 14px 28px;">
+          Mulai Coba Sekarang &rarr;
+        </button>
+
+        <!-- 3 Feature Badges from reference image2.png -->
+        <div class="tryon-features-vertical">
+          <div class="tf-item">
+            <span class="tf-icon">📷</span>
+            <div>
+              <div class="tf-title">Live Preview</div>
+              <div class="tf-desc">Lihat langsung di wajahmu secara real-time</div>
+            </div>
+          </div>
+          <div class="tf-item">
+            <span class="tf-icon">👕</span>
+            <div>
+              <div class="tf-title">Multiple Merch Options</div>
+              <div class="tf-desc">Coba berbagai produk dalam satu tempat</div>
+            </div>
+          </div>
+          <div class="tf-item">
+            <span class="tf-icon">⭐</span>
+            <div>
+              <div class="tf-title">Save &amp; Share Your Look</div>
+              <div class="tf-desc">Simpan hasilnya dan bagikan ke teman-temanmu</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CENTER COLUMN: REAL-TIME PHONE CANVAS SIMULATOR -->
+      <div class="tryon-center-phone">
+        <div class="tryon-phone-frame" style="width: 360px;">
+          <div class="phone-notch">
+            <span class="camera-lens"></span>
+            <span class="speaker"></span>
+          </div>
+          <div class="phone-screen" id="tryonPhoneScreen">
+            <div class="live-status-pill">
+              <span class="live-dot"></span> Live Preview
+            </div>
+
+            <!-- Video or Model Photo -->
+            <img src="assets/tryon_girl.png" alt="Try-On Model Preview" id="tryonMainModel" class="tryon-model-image">
+            <video id="webcamFullStream" autoplay playsinline muted style="display:none;"></video>
+            <canvas id="poseCanvasOverlay" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;"></canvas>
+
+            <!-- Overlay Garment on Chest -->
+            <div class="tryon-overlay-layer" id="tryonLiveOverlay">
+              <img src="assets/varsity_transparent.png" alt="Overlay Garment" id="tryonOverlayAsset" class="overlay-item" style="width: 58%; bottom: 20%;">
+            </div>
+
+            <!-- Camera bar controls -->
+            <div class="phone-camera-bar">
+              <button class="cam-action-btn" id="btnCamFlip" title="Balik Kamera">🔄</button>
+              <button class="cam-shutter-btn" id="btnCamCapture" title="Ambil Foto Look">
+                <span class="shutter-inner"></span>
+              </button>
+              <button class="cam-action-btn" id="btnCamSave" title="Simpan Look">💾</button>
+            </div>
+          </div>
+          <div class="phone-privacy-hint">
+            <span>🔒 Foto diproses dengan aman di browser</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN: CONTROLS & STREETWEAR AESTHETICS -->
+      <div class="tryon-control-panel" style="background: rgba(255,255,255,0.03); padding: 24px; border-radius: var(--radius-xl); border: 1px solid rgba(205,184,244,0.2);">
+        <div class="panel-tabs">
+          <button class="panel-tab active" data-tab="merch">Merch</button>
+          <button class="panel-tab" data-tab="outfit">Outfit Set</button>
+        </div>
+
+        <!-- Merch Categories -->
+        <div class="merch-type-selector">
+          <button class="merch-type-btn active" data-type="jacket">🧥 Jacket</button>
+          <button class="merch-type-btn" data-type="hoodie">👕 Hoodie</button>
+          <button class="merch-type-btn" data-type="tshirt">🎽 T-Shirt</button>
+          <button class="merch-type-btn" data-type="cap">🧢 Cap</button>
+        </div>
+
+        <!-- Merch Grid Options -->
+        <div class="merch-items-slider" style="grid-template-columns: repeat(2, 1fr);">
+          <div class="slider-item active" data-img="assets/varsity_transparent.png" data-name="Varsity Jacket Purple Edition">
+            <div class="slider-item-check">&#10003;</div>
+            <img src="assets/prod_varsity.png" alt="Varsity Jacket" class="slider-img">
+            <h4 class="slider-title">Varsity Jacket Purple</h4>
+            <span class="slider-price">Rp 399.000</span>
+          </div>
+          <div class="slider-item" data-img="assets/p_hoodie.png" data-name="Hoodie Wolf Logo Black">
+            <img src="assets/prod_hoodie_black.png" alt="Hoodie Wolf" class="slider-img">
+            <h4 class="slider-title">Hoodie Wolf Black</h4>
+            <span class="slider-price">Rp 299.000</span>
+          </div>
+        </div>
+
+        <!-- Ukuran -->
+        <div class="size-selector-row">
+          <label class="size-label">Ukuran:</label>
+          <div class="size-options">
+            <button class="size-chip">XS</button>
+            <button class="size-chip">S</button>
+            <button class="size-chip active">M</button>
+            <button class="size-chip">L</button>
+            <button class="size-chip">XL</button>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" id="btnApplyPreviewFull" style="width: 100%;">
+          Terapkan ke Preview &rarr;
+        </button>
+
+        <!-- Webcam / Photo Alternative -->
+        <div class="upload-alternative-card">
+          <div class="upload-text">
+            <span>📷</span>
+            <div>
+              <strong>Belum ada kamera?</strong>
+              <p>Kamu juga bisa mengunggah foto untuk mencoba.</p>
+            </div>
+          </div>
+          <div class="upload-btns">
+            <button class="btn btn-sm btn-outline" id="btnToggleFullWebcam">Nyalakan Webcam</button>
+            <label class="btn btn-sm btn-outline btn-file-label">
+              Upload Foto
+              <input type="file" id="tryonUploadInput" accept="image/*" style="display: none;">
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== HOW IT WORKS SECTION ==================== -->
+    <section class="hiw-section">
+      <div class="section-container">
+        <div class="hiw-header">
+          <h2 class="hiw-title">How It Works?</h2>
+          <p style="color: var(--color-lavender); font-size: 0.95rem;">Gampang banget! Cukup 3 langkah untuk lihat look kamu dengan merch favorit.</p>
+        </div>
+
+        <div class="tryon-steps-bar" style="border: none; margin-bottom: 0;">
+          <div class="step-card active">
+            <span class="step-num">1</span>
+            <div class="step-desc">
+              <strong>Pilih Produk</strong>
+              <span>Pilih merchandise yang ingin kamu coba.</span>
+            </div>
+          </div>
+          <div class="step-arrow">&rarr;</div>
+          <div class="step-card">
+            <span class="step-num">2</span>
+            <div class="step-desc">
+              <strong>Aktifkan Kamera</strong>
+              <span>Izinkan akses kamera dan lihat hasilnya secara real-time.</span>
+            </div>
+          </div>
+          <div class="step-arrow">&rarr;</div>
+          <div class="step-card">
+            <span class="step-num">3</span>
+            <div class="step-desc">
+              <strong>Lihat, Simpan &amp; Bagikan</strong>
+              <span>Screenshot atau simpan look kamu dan bagikan ke teman!</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TRY DIFFERENT LOOKS, FIND YOUR VIBE ==================== -->
+    <section class="different-vibes-section">
+      <div class="section-container">
+        <div class="dv-header">
+          <div>
+            <h2 class="dv-title">Try Different Looks, Find Your Vibe</h2>
+            <p style="color: #6B5B8E;">Dari gaya santai sampai ke kampus yang lebih formal, semuanya bisa kamu coba di sini!</p>
+          </div>
+          <div class="category-filter-chips">
+            <button class="chip-btn active">Semua</button>
+            <button class="chip-btn">Casual</button>
+            <button class="chip-btn">Campus</button>
+            <button class="chip-btn">Streetwear</button>
+          </div>
+        </div>
+
+        <div class="dv-grid">
+          <!-- Card 1 -->
+          <div class="vibe-card">
+            <span class="vibe-badge">Campus</span>
+            <img src="assets/tryon_girl.png" alt="Campus Look">
+            <div class="vibe-body">
+              <div>
+                <h4 class="vibe-name">Varsity Jacket Purple</h4>
+                <span class="vibe-sub">Campus Look</span>
+              </div>
+              <button class="btn-simpan-vibe" onclick="saveVibe('Varsity Jacket Purple')">🤍 Simpan</button>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="vibe-card">
+            <span class="vibe-badge">Casual</span>
+            <img src="assets/detail_hero.png" alt="Casual Look">
+            <div class="vibe-body">
+              <div>
+                <h4 class="vibe-name">Hoodie Wolf Logo</h4>
+                <span class="vibe-sub">Daily Look</span>
+              </div>
+              <button class="btn-simpan-vibe" onclick="saveVibe('Hoodie Wolf Logo')">🤍 Simpan</button>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="vibe-card">
+            <span class="vibe-badge">Streetwear</span>
+            <img src="assets/hero_student_wolf.png" alt="Streetwear Look">
+            <div class="vibe-body">
+              <div>
+                <h4 class="vibe-name">T-Shirt Classic</h4>
+                <span class="vibe-sub">Streetwear Look</span>
+              </div>
+              <button class="btn-simpan-vibe" onclick="saveVibe('T-Shirt Classic')">🤍 Simpan</button>
+            </div>
+          </div>
+
+          <!-- Saved Looks Side Card (from reference image2.png) -->
+          <div class="saved-looks-card">
+            <div class="sl-header">
+              <h4 class="sl-title">📸 Look Tersimpan</h4>
+              <a href="#" style="font-size: 0.78rem; font-weight: 700; color: var(--color-dark-purple);">Lihat semua &rarr;</a>
+            </div>
+            <div class="sl-thumbs-grid">
+              <div class="sl-thumb"><img src="assets/tryon_girl.png" alt="Saved"></div>
+              <div class="sl-thumb"><img src="assets/detail_hero.png" alt="Saved"></div>
+              <div class="sl-thumb"><img src="assets/prod_varsity.png" alt="Saved"></div>
+            </div>
+            <div style="display: flex; gap: 8px; margin-top: auto;">
+              <button class="btn btn-sm btn-primary" style="flex: 1;" onclick="alert('Link koleksi look kamu disalin!')">Bagikan Semua</button>
+              <a href="shop.html" class="btn btn-sm btn-outline" style="color: var(--color-dark-purple); border-color: var(--color-dark-purple);">Lihat Koleksi</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="footer-strip">
+    <div class="footer-container">
+      <div class="footer-brand-side">
+        <div class="footer-logo-pack">
+          <img src="assets/mascot.png" alt="WOLVY Mascot Logo" class="footer-mascot-img">
+          <span class="footer-brand-title">WOLVY</span>
+        </div>
+        <div class="footer-tagline-text">
+          More Than Merchandise,<br>It's Your Campus Story.
+        </div>
+      </div>
+      <div class="footer-links-side">
+        <a href="index.html">Home</a>
+        <a href="shop.html">Shop All</a>
+        <a href="tryon.html">Try-On CV</a>
+        <a href="orders.html">Pesanan Saya</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="store.js"></script>
+  <script>
+    function showToast(msg, icon = '🐺') {
+      const c = document.getElementById('toastContainer');
+      const t = document.createElement('div');
+      t.className = 'toast';
+      t.innerHTML = `<span>${icon}</span><span>${msg}</span>`;
+      c.appendChild(t);
+      setTimeout(() => t.remove(), 2800);
+    }
+
+    function saveVibe(name) {
+      showToast(`Look "${name}" disimpan ke profilmu! (PRD FR-14)`, '⭐');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('cartBadge').textContent = window.wolvyStore.getCartCount();
+      document.getElementById('wishlistCount').textContent = window.wolvyStore.getWishlist().length;
+
+      const overlayImg = document.getElementById('tryonOverlayAsset');
+      const tryonLiveOverlay = document.getElementById('tryonLiveOverlay');
+
+      // Slider items selection
+      document.querySelectorAll('.slider-item').forEach(item => {
+        item.addEventListener('click', () => {
+          document.querySelectorAll('.slider-item').forEach(i => i.classList.remove('active'));
+          item.classList.add('active');
+          const img = item.getAttribute('data-img');
+          const name = item.getAttribute('data-name');
+          if (overlayImg) overlayImg.src = img;
+          showToast(`Merchandise: ${name}`, '🧥');
+        });
+      });
+
+      // Apply to preview
+      document.getElementById('btnApplyPreviewFull').addEventListener('click', () => {
+        tryonLiveOverlay.style.opacity = '0';
+        setTimeout(() => {
+          tryonLiveOverlay.style.opacity = '1';
+          showToast('Overlay dipasang pada pose tubuh!', '✨');
+        }, 200);
+      });
+
+      // Webcam toggle
+      const webcam = document.getElementById('webcamFullStream');
+      const model = document.getElementById('tryonMainModel');
+      const btnWebcam = document.getElementById('btnToggleFullWebcam');
+      let streamActive = false;
+      let curStream = null;
+
+      btnWebcam.addEventListener('click', async () => {
+        if (!streamActive) {
+          try {
+            curStream = await navigator.mediaDevices.getUserMedia({ video: true });
+            webcam.srcObject = curStream;
+            webcam.style.display = 'block';
+            model.style.display = 'none';
+            streamActive = true;
+            btnWebcam.textContent = 'Matikan Kamera';
+            showToast('Kamera aktif! Deteksi pose visual dimulai.', '📷');
+          } catch(e) {
+            showToast('Izin kamera ditolak. Menggunakan preview model.', 'ℹ️');
+          }
+        } else {
+          if (curStream) curStream.getTracks().forEach(t => t.stop());
+          webcam.style.display = 'none';
+          model.style.display = 'block';
+          streamActive = false;
+          btnWebcam.textContent = 'Nyalakan Webcam';
+          showToast('Kembali ke foto preview model.');
+        }
+      });
+
+      // Photo upload
+      document.getElementById('tryonUploadInput').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+            webcam.style.display = 'none';
+            model.src = ev.target.result;
+            model.style.display = 'block';
+            showToast('Foto pribadi berhasil diunggah untuk Try-On!', '🖼️');
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+
+      // Camera shutter & save buttons
+      document.getElementById('btnCamCapture').addEventListener('click', () => {
+        showToast('Foto look kamu berhasil di-capture!', '📸');
+      });
+      document.getElementById('btnCamSave').addEventListener('click', () => {
+        showToast('Look tersimpan ke Saved Looks! (PRD FR-14)', '⭐');
+      });
+      document.getElementById('btnCamFlip').addEventListener('click', () => {
+        showToast('Kamera dibalik.', '🔄');
+      });
+      document.getElementById('btnScrollCam').addEventListener('click', () => {
+        document.getElementById('tryonPhoneScreen').scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  </script>
+</body>
+</html>
