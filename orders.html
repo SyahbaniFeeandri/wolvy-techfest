@@ -538,9 +538,9 @@
               <button class="btn-track" onclick="openTrackModal('${order.orderId}')">
                 Lacak Status ⚡
               </button>
-              <a href="shop.html" class="btn-secondary-order">
-                Beli Lagi
-              </a>
+              <button type="button" class="btn-secondary-order" onclick="reorderItems('${order.orderId}')">
+                Beli Lagi ↻
+              </button>
             </div>
           </div>
         </div>
@@ -594,6 +594,22 @@
 
     function closeTrackModal() {
       document.getElementById('trackModal').classList.remove('open');
+    }
+
+    function reorderItems(orderId) {
+      const order = wolvyStore.getOrders().find(o => o.orderId === orderId);
+      if (order && order.items) {
+        order.items.forEach(it => {
+          wolvyStore.addToCart({
+            id: it.productId || 1,
+            name: it.name,
+            price: it.price || 0,
+            image: it.image
+          }, it.size || 'M', it.color || 'Standard', it.qty || 1);
+        });
+        alert('Produk berhasil dimasukkan kembali ke keranjang belanja!');
+        window.location.href = 'cart.html';
+      }
     }
 
     document.addEventListener('DOMContentLoaded', () => {

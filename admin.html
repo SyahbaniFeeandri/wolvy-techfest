@@ -333,6 +333,7 @@
 
         <div class="admin-role-switch">
           <span style="font-size:0.82rem; font-weight:700; color:var(--color-dark-purple);">Role: <strong>Admin Toko</strong></span>
+          <button class="btn-switch-role" style="background:#551D9B;" onclick="switchRoleToPelanggan()">Mode Mahasiswa</button>
           <button class="btn-switch-role" onclick="resetDatabaseDemo()">Reset Data Demo</button>
         </div>
       </div>
@@ -679,6 +680,12 @@
         renderOrdersTable();
         alert('Database simulasi berhasil direset ke status awal!');
       }
+    }
+
+    function switchRoleToPelanggan() {
+      wolvyStore.setRole('pelanggan');
+      alert('Beralih ke mode Mahasiswa (Pelanggan). Membuka beranda toko.');
+      window.location.href = 'index.html';
     }
 
     document.addEventListener('DOMContentLoaded', () => {

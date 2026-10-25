@@ -418,6 +418,15 @@
           Terapkan ke Preview &rarr;
         </button>
 
+        <div style="display:flex; flex-direction:column; gap:8px; margin-top:12px;">
+          <button class="btn btn-secondary" id="btnTryonAddToCart" style="width: 100%; font-size:0.85rem; padding:12px;">
+            🛒 Tambah ke Keranjang
+          </button>
+          <a href="checkout.html" class="btn btn-outline" id="btnTryonCheckout" style="width: 100%; font-size:0.85rem; padding:10px; text-align:center; text-decoration:none; border-color:var(--color-neon-yellow); color:var(--color-neon-yellow);">
+            ⚡ Checkout Langsung
+          </a>
+        </div>
+
         <!-- Webcam / Photo Alternative -->
         <div class="upload-alternative-card">
           <div class="upload-text">
@@ -667,7 +676,19 @@
         showToast('Foto look kamu berhasil di-capture!', '📸');
       });
       document.getElementById('btnCamSave').addEventListener('click', () => {
-        showToast('Look tersimpan ke Saved Looks! (PRD FR-14)', '⭐');
+        const activeItem = document.querySelector('.slider-item.active');
+        const prodName = activeItem ? activeItem.getAttribute('data-name') : 'Varsity Jacket Purple';
+        if (window.wolvyStore && window.wolvyStore.db.savedLooks) {
+          window.wolvyStore.db.savedLooks.unshift({
+            id: Date.now(),
+            title: prodName + ' Look',
+            date: 'Hari ini',
+            image: 'assets/tryon_girl.png',
+            tag: 'Virtual Try-On'
+          });
+          window.wolvyStore.save();
+        }
+        showToast('Look tersimpan ke profil Saved Looks! (PRD FR-14)', '⭐');
       });
       document.getElementById('btnCamFlip').addEventListener('click', () => {
         showToast('Kamera dibalik.', '🔄');
@@ -675,7 +696,99 @@
       document.getElementById('btnScrollCam').addEventListener('click', () => {
         document.getElementById('tryonPhoneScreen').scrollIntoView({ behavior: 'smooth' });
       });
-    });
+
+      // Size chip scaler
+      const sizeScales = { 'XS': '52%', 'S': '55%', 'M': '58%', 'L': '62%', 'XL': '66%' };
+      document.querySelectorAll('.size-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+          document.querySelectorAll('.size-chip').forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+          const sz = chip.textContent.trim();
+          if (overlayImg && sizeScales[sz]) {
+            overlayImg.style.width = sizeScales[sz];
+            showToast(`Ukuran ${sz} diterapkan pada visual!`, '📏');
+          }
+        });
+      });
+
+      // Merch category switcher
+      const merchCatalog = {
+        jacket: [
+          { name: "Varsity Jacket Purple Edition", img: "assets/varsity_transparent.png", thumb: "assets/prod_varsity.png", price: "Rp 399.000", id: 1 },
+          { name: "Varsity Jacket Navy Edition", img: "assets/varsity_transparent.png", thumb: "assets/prod_varsity.png", price: "Rp 399.000", id: 1 }
+        ],
+        hoodie: [
+          { name: "Hoodie Wolf Logo Black", img: "assets/prod_hoodie_black.png", thumb: "assets/prod_hoodie_black.png", price: "Rp 299.000", id: 4 }
+        ],
+        tshirt: [
+          { name: "T-Shirt Faculty Streetwear", img: "assets/prod_tshirt.png", thumb: "assets/prod_tshirt.png", price: "Rp 149.000", id: 11 },
+          { name: "Custom Jersey Angkatan", img: "assets/prod_jersey.png", thumb: "assets/prod_jersey.png", price: "Rp 249.000", id: 12 }
+        ],
+        cap: [
+          { name: "Cap Classic Navy", img: "assets/prod_cap_navy.png", thumb: "assets/prod_cap_navy.png", price: "Rp 149.000", id: 3 }
+        ]
+      };
+
+      const sliderContainer = document.querySelector('.merch-items-slider');
+
+      document.querySelectorAll('.merch-type-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.merch-type-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const type = btn.getAttribute('data-type');
+          const items = merchCatalog[type] || merchCatalog.jacket;
+
+          sliderContainer.innerHTML = items.map((it, idx) => `
+            <div class="slider-item ${idx === 0 ? 'active' : ''}" data-img="${it.img}" data-name="${it.name}" data-id="${it.id}">
+              ${idx === 0 ? '<div class="slider-item-check">&#10003;</div>' : ''}
+              <img src="${it.thumb}" alt="${it.name}" class="slider-img">
+              <h4 class="slider-title">${it.name}</h4>
+              <span class="slider-price">${it.price}</span>
+            </div>
+          `).join('');
+
+          // Select first item by default
+          if (items[0] && overlayImg) {
+            overlayImg.src = items[0].img;
+            if (type === 'cap') {
+              overlayImg.style.bottom = '68%';
+              overlayImg.style.width = '30%';
+            } else {
+              overlayImg.style.bottom = '20%';
+              overlayImg.style.width = '58%';
+            }
+          }
+
+          // Re-bind click
+          sliderContainer.querySelectorAll('.slider-item').forEach(item => {
+            item.addEventListener('click', () => {
+              sliderContainer.querySelectorAll('.slider-item').forEach(i => {
+                i.classList.remove('active');
+                const ch = i.querySelector('.slider-item-check');
+                if (ch) ch.remove();
+              });
+              item.classList.add('active');
+              item.insertAdjacentHTML('afterbegin', '<div class="slider-item-check">&#10003;</div>');
+              const img = item.getAttribute('data-img');
+              const name = item.getAttribute('data-name');
+              if (overlayImg) overlayImg.src = img;
+              showToast(`Merchandise: ${name}`, '🧥');
+            });
+          });
+        });
+      });
+
+      // Add to Cart from Try-On
+      document.getElementById('btnTryonAddToCart').addEventListener('click', () => {
+        const activeItem = document.querySelector('.slider-item.active');
+        const prodId = activeItem ? Number(activeItem.getAttribute('data-id')) || 1 : 1;
+        const prod = window.wolvyStore.getProductById(prodId) || window.wolvyStore.getProductById(1);
+        const activeSize = document.querySelector('.size-chip.active')?.textContent.trim() || 'M';
+
+        window.wolvyStore.addToCart(prod, activeSize, "Purple", 1);
+        document.getElementById('cartBadge').textContent = window.wolvyStore.getCartCount();
+        showToast(`🛒 ${prod.name} (${activeSize}) berhasil ditambahkan ke keranjang belanja!`);
+      });
   </script>
 </body>
 </html>

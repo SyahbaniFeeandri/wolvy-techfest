@@ -456,10 +456,20 @@
       const priceRadios = document.querySelectorAll('input[name="priceFilter"]');
       const shopPills = document.querySelectorAll('.shop-pill');
 
-      let currentCat = 'all';
+      const urlParams = new URLSearchParams(window.location.search);
+      let currentCat = urlParams.get('cat') || 'all';
       let currentPrice = 'all';
-      let currentSearch = '';
+      let currentSearch = urlParams.get('q') || '';
       let currentSort = 'newest';
+
+      if (currentSearch && searchInput) {
+        searchInput.value = currentSearch;
+      }
+      if (currentCat !== 'all') {
+        const matchingRadio = document.querySelector(`input[name="catFilter"][value="${currentCat}"]`);
+        if (matchingRadio) matchingRadio.checked = true;
+        shopPills.forEach(p => p.classList.toggle('active', p.getAttribute('data-pill') === currentCat));
+      }
 
       function showToast(msg, icon = '🐺') {
         const c = document.getElementById('toastContainer');

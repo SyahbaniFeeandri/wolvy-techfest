@@ -657,7 +657,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (submitDesignBtn) {
     submitDesignBtn.addEventListener('click', () => {
-      showToast('Desain disimpan! Melanjutkan ke preview 3D...', '🎨');
+      const text = customTextInput ? (customTextInput.value.trim() || 'WOLVY SQUAD') : 'WOLVY SQUAD';
+      const sub = customSubTextInput ? (customSubTextInput.value.trim() || 'CAMPUS 2025') : 'CAMPUS 2025';
+      const customItem = {
+        name: `Custom T-Shirt: "${text}" (${sub})`,
+        price: 159000,
+        category: 'custom',
+        stock: 50,
+        image: 'assets/prod_tshirt.png',
+        id: 11
+      };
+      if (window.wolvyStore) {
+        window.wolvyStore.addToCart(customItem, 'L', 'Custom White', 1);
+        const cartBadgeEl = document.getElementById('cartBadge');
+        if (cartBadgeEl) cartBadgeEl.textContent = window.wolvyStore.getCartCount();
+      }
+      showToast(`Kaos kustom "${text}" berhasil masuk ke keranjang belanja!`, '🎉');
+      openCart();
     });
   }
 
@@ -707,6 +723,17 @@ document.addEventListener('DOMContentLoaded', () => {
       if (bestseller) bestseller.scrollIntoView({ behavior: 'smooth' });
     });
   });
+
+  if (searchInput) {
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const query = searchInput.value.trim();
+        if (query) {
+          window.location.href = `shop.html?q=${encodeURIComponent(query)}`;
+        }
+      }
+    });
+  }
 
   // ==================== USER PROFILE & ROLE TOGGLE MODAL ====================
   const userBtn = document.getElementById('userBtn');

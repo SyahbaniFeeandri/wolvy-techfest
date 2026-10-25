@@ -523,6 +523,14 @@
             Tambah ke Keranjang &rarr;
           </button>
 
+          <a href="tryon.html" class="btn btn-outline" style="width: 100%; padding: 13px; font-size: 0.95rem; text-align: center; text-decoration: none; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <span>📸</span> Coba di Virtual Try-On Live
+          </a>
+
+          <button type="button" class="btn" id="btnDetailWishlist" style="width: 100%; padding: 12px; font-size: 0.9rem; margin-top: 8px; background: #F4EFFF; color: var(--color-dark-purple); border: 1.5px solid rgba(205, 184, 244, 0.4); border-radius: var(--radius-pill); cursor: pointer; font-weight: 700;">
+            ❤️ Simpan ke Wishlist Favorit
+          </button>
+
           <!-- Custom & Preview Box (Identical to Column 3 in reference docx) -->
           <div class="custom-preview-box">
             <div class="cp-header">
@@ -668,6 +676,28 @@
         window.wolvyStore.addToCart(product, selectedSize, "Purple", 1);
         document.getElementById('cartBadge').textContent = window.wolvyStore.getCartCount();
         showToast(`${product.name} (Ukuran ${selectedSize}) berhasil masuk keranjang!`, '🛒');
+      });
+
+      // Color swatch selection
+      let selectedColor = "Purple";
+      document.querySelectorAll('.color-swatch-dot').forEach(dot => {
+        dot.addEventListener('click', () => {
+          document.querySelectorAll('.color-swatch-dot').forEach(d => d.classList.remove('active'));
+          dot.classList.add('active');
+          selectedColor = dot.getAttribute('title') || 'Standard';
+          showToast(`Varian warna: ${selectedColor}`, '🎨');
+        });
+      });
+
+      // Wishlist button action
+      document.getElementById('btnDetailWishlist').addEventListener('click', () => {
+        const added = window.wolvyStore.toggleWishlist(product.id);
+        document.getElementById('wishlistCount').textContent = window.wolvyStore.getWishlist().length;
+        if (added) {
+          showToast(`${product.name} disimpan ke Wishlist!`, '❤️');
+        } else {
+          showToast(`${product.name} dihapus dari Wishlist.`, '🤍');
+        }
       });
 
       // Size chart modal trigger
