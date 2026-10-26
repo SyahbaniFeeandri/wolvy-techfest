@@ -883,14 +883,6 @@ button {
   font-size: 0.88rem;
 }
 
-.drop-mascot-peek {
-  position: absolute;
-  bottom: -15px;
-  right: -10px;
-  width: 130px;
-  pointer-events: none;
-  opacity: 0.95;
-}
 
 /* ==========================================================================
    TRUST / VALUE PROPOSITION BAR (Light lavender pill card from reference)

@@ -689,6 +689,14 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      // Auth Guard: Admin access requires logging in as admin
+      const currentUser = wolvyStore.getUser();
+      if (!currentUser || currentUser.role !== 'admin') {
+        alert('Akses khusus Administrator. Silakan masuk terlebih dahulu melalui halaman login.');
+        window.location.href = 'login.html';
+        return;
+      }
+
       renderProductsTable();
       renderMetrics();
     });
