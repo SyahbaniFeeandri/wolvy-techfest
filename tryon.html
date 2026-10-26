@@ -242,6 +242,110 @@
       object-fit: cover;
     }
 
+    /* Instagram / TikTok Style Filter Reels */
+    .tryon-source-bar {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .btn-source-mode {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(205, 184, 244, 0.3);
+      color: #FFFFFF;
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 7px 14px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-source-mode:hover {
+      background: rgba(205, 184, 244, 0.2);
+      border-color: var(--color-neon-yellow);
+    }
+    .btn-source-mode.active {
+      background: var(--color-neon-yellow);
+      color: #120624;
+      border-color: var(--color-neon-yellow);
+      box-shadow: 0 0 14px rgba(232, 255, 56, 0.45);
+      font-weight: 800;
+    }
+
+    .ig-filter-reel-bar {
+      position: absolute;
+      bottom: 70px;
+      left: 0;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 14px;
+      padding: 8px 16px;
+      z-index: 25;
+      overflow-x: auto;
+      scrollbar-width: none;
+      mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+      -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    }
+    .ig-filter-reel-bar::-webkit-scrollbar {
+      display: none;
+    }
+    .ig-filter-bubble {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      transition: all 0.22s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      flex-shrink: 0;
+    }
+    .ig-filter-bubble .bubble-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(19, 7, 34, 0.75);
+      backdrop-filter: blur(8px);
+      border: 2px solid rgba(255, 255, 255, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      transition: all 0.2s ease;
+    }
+    .ig-filter-bubble .bubble-circle img {
+      width: 80%;
+      height: 80%;
+      object-fit: contain;
+    }
+    .ig-filter-bubble .bubble-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.9);
+      text-shadow: 0 1px 3px rgba(0,0,0,0.9);
+      letter-spacing: 0.2px;
+      white-space: nowrap;
+    }
+    .ig-filter-bubble:hover .bubble-circle {
+      transform: scale(1.08);
+      border-color: #FFF;
+    }
+    .ig-filter-bubble.active .bubble-circle {
+      border: 3px solid var(--color-neon-yellow);
+      transform: scale(1.18);
+      box-shadow: 0 0 16px rgba(232, 255, 56, 0.65);
+      background: rgba(232, 255, 56, 0.2);
+    }
+    .ig-filter-bubble.active .bubble-label {
+      color: var(--color-neon-yellow);
+      font-weight: 900;
+    }
+
     @media (max-width: 1100px) {
       .tryon-hero-layout {
         grid-template-columns: 1fr;
@@ -340,6 +444,21 @@
 
       <!-- CENTER COLUMN: REAL-TIME AR PHONE CANVAS SIMULATOR (INSTAGRAM FILTER STYLE) -->
       <div class="tryon-center-phone">
+
+        <!-- Top Source Switcher (Webcam vs Upload vs Demo) -->
+        <div class="tryon-source-bar">
+          <button type="button" class="btn-source-mode" id="btnModeWebcam">
+            <span>📷 Buka Kamera AR</span>
+          </button>
+          <label class="btn-source-mode" id="btnLabelUpload" style="cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+            <span>📁 Upload Foto</span>
+            <input type="file" id="tryonUploadInput" accept="image/*" style="display:none;">
+          </label>
+          <button type="button" class="btn-source-mode active" id="btnModeDemo">
+            <span>👤 Model Demo</span>
+          </button>
+        </div>
+
         <div class="tryon-phone-frame" style="width: 360px;">
           <div class="phone-notch">
             <span class="camera-lens"></span>
@@ -369,17 +488,51 @@
             <!-- Hidden Source Model Image for initial rendering -->
             <img src="assets/tryon_girl.png" alt="Model Preview" id="tryonMainModel" style="display:none;">
 
+            <!-- Instagram / TikTok Style Filter Reels (Horizontal Carousel of Garments) -->
+            <div class="ig-filter-reel-bar" id="igFilterReel">
+              <div class="ig-filter-bubble active" data-img="assets/tryon_varsity_hd.png" data-name="Varsity Jacket Purple" data-id="1" data-type="jacket" data-ratio="1.0">
+                <div class="bubble-circle">
+                  <img src="assets/prod_varsity.png" alt="Varsity">
+                </div>
+                <span class="bubble-label">Varsity</span>
+              </div>
+              <div class="ig-filter-bubble" data-img="assets/tryon_hoodie_hd.png" data-name="Hoodie Wolf Black" data-id="4" data-type="hoodie" data-ratio="0.58">
+                <div class="bubble-circle">
+                  <img src="assets/prod_hoodie_black.png" alt="Hoodie">
+                </div>
+                <span class="bubble-label">Hoodie</span>
+              </div>
+              <div class="ig-filter-bubble" data-img="assets/tryon_tshirt_hd.png" data-name="T-Shirt Streetwear" data-id="11" data-type="tshirt" data-ratio="0.79">
+                <div class="bubble-circle">
+                  <img src="assets/prod_tshirt.png" alt="T-Shirt">
+                </div>
+                <span class="bubble-label">T-Shirt</span>
+              </div>
+              <div class="ig-filter-bubble" data-img="assets/tryon_jersey_clean.png" data-name="Jersey Angkatan" data-id="12" data-type="tshirt" data-ratio="0.65">
+                <div class="bubble-circle">
+                  <img src="assets/prod_jersey.png" alt="Jersey">
+                </div>
+                <span class="bubble-label">Jersey</span>
+              </div>
+              <div class="ig-filter-bubble" data-img="assets/tryon_cap_hd.png" data-name="Snapback Cap Navy" data-id="3" data-type="cap" data-ratio="0.72">
+                <div class="bubble-circle">
+                  <img src="assets/prod_cap_navy.png" alt="Cap">
+                </div>
+                <span class="bubble-label">Snapback</span>
+              </div>
+            </div>
+
             <!-- Camera bar controls -->
-            <div class="phone-camera-bar" style="z-index:20;">
-              <button class="cam-action-btn" id="btnCamFlip" title="Ganti Mode Kamera / Model">🔄</button>
-              <button class="cam-shutter-btn" id="btnCamCapture" title="Ambil Foto Look (Snapshot AR)">
+            <div class="phone-camera-bar" style="z-index:30;">
+              <button class="cam-action-btn" id="btnCamFlip" title="Buka / Tutup Kamera">📷</button>
+              <button class="cam-shutter-btn" id="btnCamCapture" title="Ambil Foto Look (Snapshot Filter)">
                 <span class="shutter-inner"></span>
               </button>
               <button class="cam-action-btn" id="btnCamSave" title="Simpan Look ke Profil">💾</button>
             </div>
           </div>
           <div class="phone-privacy-hint">
-            <span>🔒 MediaPipe Pose AI · Diproses langsung di browser secara lokal</span>
+            <span>🔒 MediaPipe Pose AI · Diproses langsung di browser secara lokal tanpa kirim video ke server</span>
           </div>
         </div>
       </div>
@@ -731,14 +884,20 @@
       const arLockState = document.getElementById('arLockState');
       const liveDot = document.getElementById('liveDotIndicator');
 
-      // Controls
+      // Controls & DOM Elements
       const toggleSkeleton = document.getElementById('toggleSkeleton');
       const sliderOffsetY = document.getElementById('sliderOffsetY');
       const labelOffsetY = document.getElementById('labelOffsetY');
       const sliderExtraScale = document.getElementById('sliderExtraScale');
       const labelExtraScale = document.getElementById('labelExtraScale');
-      const btnToggleWebcam = document.getElementById('btnToggleFullWebcam');
+      
+      const btnModeWebcam = document.getElementById('btnModeWebcam');
+      const btnModeDemo = document.getElementById('btnModeDemo');
+      const btnLabelUpload = document.getElementById('btnLabelUpload');
       const uploadInput = document.getElementById('tryonUploadInput');
+      const btnCamFlip = document.getElementById('btnCamFlip');
+      const btnCamCapture = document.getElementById('btnCamCapture');
+      const btnCamSave = document.getElementById('btnCamSave');
 
       // Snapshot Modal Elements
       const snapshotModal = document.getElementById('tryonSnapshotModal');
@@ -751,24 +910,24 @@
       // ==================== MERCHANDISE CATALOG WITH HD TRANSPARENTS ====================
       const merchCatalog = {
         jacket: [
-          { name: "Varsity Jacket Purple Edition", img: "assets/tryon_varsity_hd.png", thumb: "assets/prod_varsity.png", price: "Rp 399.000", id: 1, baseRatio: 1.0, type: "jacket" },
+          { name: "Varsity Jacket Purple", img: "assets/tryon_varsity_hd.png", thumb: "assets/prod_varsity.png", price: "Rp 399.000", id: 1, baseRatio: 1.0, type: "jacket" },
           { name: "Varsity Jacket Navy Classic", img: "assets/tryon_varsity_hd.png", thumb: "assets/prod_varsity.png", price: "Rp 399.000", id: 1, baseRatio: 1.0, type: "jacket" }
         ],
         hoodie: [
-          { name: "Hoodie Wolf Logo Black", img: "assets/tryon_hoodie_hd.png", thumb: "assets/prod_hoodie_black.png", price: "Rp 299.000", id: 4, baseRatio: 0.58, type: "hoodie" }
+          { name: "Hoodie Wolf Black", img: "assets/tryon_hoodie_hd.png", thumb: "assets/prod_hoodie_black.png", price: "Rp 299.000", id: 4, baseRatio: 0.58, type: "hoodie" }
         ],
         tshirt: [
-          { name: "T-Shirt Faculty Streetwear", img: "assets/tryon_tshirt_hd.png", thumb: "assets/prod_tshirt.png", price: "Rp 149.000", id: 11, baseRatio: 0.79, type: "tshirt" },
-          { name: "Custom Jersey Angkatan", img: "assets/tryon_jersey_clean.png", thumb: "assets/prod_jersey.png", price: "Rp 249.000", id: 12, baseRatio: 0.82, type: "tshirt" }
+          { name: "T-Shirt Streetwear", img: "assets/tryon_tshirt_hd.png", thumb: "assets/prod_tshirt.png", price: "Rp 149.000", id: 11, baseRatio: 0.79, type: "tshirt" },
+          { name: "Jersey Angkatan", img: "assets/tryon_jersey_clean.png", thumb: "assets/prod_jersey.png", price: "Rp 249.000", id: 12, baseRatio: 0.65, type: "tshirt" }
         ],
         cap: [
-          { name: "Cap Classic Navy", img: "assets/tryon_cap_hd.png", thumb: "assets/prod_cap_navy.png", price: "Rp 149.000", id: 3, baseRatio: 0.72, type: "cap" }
+          { name: "Snapback Cap Navy", img: "assets/tryon_cap_hd.png", thumb: "assets/prod_cap_navy.png", price: "Rp 149.000", id: 3, baseRatio: 0.72, type: "cap" }
         ]
       };
 
       // Active state
       let activeMerch = {
-        name: "Varsity Jacket Purple Edition",
+        name: "Varsity Jacket Purple",
         id: 1,
         type: "jacket",
         baseRatio: 1.0,
@@ -824,9 +983,10 @@
           });
           pose.onResults(onPoseResults);
           isPoseReady = true;
+          console.log("⚡ [WOLVY AR] MediaPipe Pose Engine initialized successfully!");
         }
       } catch (err) {
-        console.warn("MediaPipe Pose load warning:", err);
+        console.warn("⚠️ [WOLVY AR] MediaPipe Pose notice:", err);
       }
 
       function onPoseResults(results) {
@@ -845,8 +1005,8 @@
         const rightSh = lm[12];
         const nose = lm[0];
 
-        if (leftSh && rightSh && (leftSh.visibility > 0.35 || rightSh.visibility > 0.35)) {
-          // Note: When webcam is mirrored, MediaPipe landmark coordinates:
+        if (leftSh && rightSh && (leftSh.visibility > 0.3 || rightSh.visibility > 0.3)) {
+          // When webcam is mirrored, MediaPipe landmark coordinates:
           // Mirrored X = (1 - lm.x) * canvas.width
           const lx = (1 - rightSh.x) * canvas.width;
           const ly = rightSh.y * canvas.height;
@@ -884,7 +1044,6 @@
       }
 
       // ==================== CONTINUOUS AR RENDER LOOP ====================
-      let lastTime = 0;
       let breathAngle = 0;
 
       function renderARFrame(timestamp) {
@@ -942,7 +1101,7 @@
           }
         }
 
-        // 2. Exponential Lerp Smoothing (The Instagram Filter Secret)
+        // 2. Exponential Lerp Smoothing (The Instagram / TikTok Filter Fluidity)
         const LERP = 0.35;
         smoothTransform.x += (targetTransform.x - smoothTransform.x) * LERP;
         smoothTransform.y += (targetTransform.y - smoothTransform.y) * LERP;
@@ -961,7 +1120,7 @@
           ctx.translate(smoothTransform.x, smoothTransform.y);
           ctx.rotate(smoothTransform.angle);
 
-          // Realistic soft drop shadow under garment
+          // Realistic soft drop shadow under garment (gives depth like a real filter)
           ctx.shadowColor = 'rgba(19, 7, 34, 0.45)';
           ctx.shadowBlur = 14;
           ctx.shadowOffsetY = 6;
@@ -1062,34 +1221,37 @@
         requestAnimationFrame(webcamPoseLoop);
       }
 
-      // Webcam Toggle Button
-      btnToggleWebcam.addEventListener('click', async () => {
-        if (!isWebcamActive) {
-          try {
-            webcamStream = await navigator.mediaDevices.getUserMedia({
-              video: {
-                width: { ideal: 640 },
-                height: { ideal: 480 },
-                facingMode: 'user'
-              }
-            });
-            webcam.srcObject = webcamStream;
-            await webcam.play();
-            isWebcamActive = true;
-            btnToggleWebcam.textContent = 'Matikan Webcam AR';
-            arStatusText.textContent = 'Live AR: Webcam Aktif';
-            liveDot.style.background = '#00FFA3';
-            liveDot.style.boxShadow = '0 0 10px #00FFA3';
-            showToast('Kamera aktif! Filter AR melacak bahu & tubuhmu secara langsung.', '📷');
-            requestAnimationFrame(webcamPoseLoop);
-          } catch(err) {
-            console.error("Camera error:", err);
-            showToast('Izin kamera ditolak. Silakan gunakan model demo atau upload fotomu.', '⚠️');
-          }
-        } else {
-          stopWebcam();
+      // Start/Stop Webcam Helper
+      async function startWebcam() {
+        try {
+          webcamStream = await navigator.mediaDevices.getUserMedia({
+            video: {
+              width: { ideal: 640 },
+              height: { ideal: 480 },
+              facingMode: 'user'
+            }
+          });
+          webcam.srcObject = webcamStream;
+          await webcam.play();
+          isWebcamActive = true;
+          userUploadedImg = null;
+
+          btnModeWebcam.classList.add('active');
+          btnModeDemo.classList.remove('active');
+          btnLabelUpload.classList.remove('active');
+
+          btnModeWebcam.innerHTML = '<span>⏹️ Matikan Kamera</span>';
+          arStatusText.textContent = 'Live AR: Kamera Aktif';
+          liveDot.style.background = '#00FFA3';
+          liveDot.style.boxShadow = '0 0 10px #00FFA3';
+
+          showToast('Kamera aktif! Baju otomatis menempel mengikuti gerakan tubuhmu.', '📷');
+          requestAnimationFrame(webcamPoseLoop);
+        } catch (err) {
+          console.error("Camera access error:", err);
+          showToast('Izin kamera ditolak. Silakan gunakan model demo atau upload foto.', '⚠️');
         }
-      });
+      }
 
       function stopWebcam() {
         if (webcamStream) {
@@ -1097,66 +1259,129 @@
           webcamStream = null;
         }
         isWebcamActive = false;
-        btnToggleWebcam.textContent = 'Nyalakan Webcam AR';
+        btnModeWebcam.classList.remove('active');
+        btnModeWebcam.innerHTML = '<span>📷 Buka Kamera AR</span>';
+
         arStatusText.textContent = userUploadedImg ? 'Live AR: Foto Pribadi' : 'Live AR: Model Demo';
         liveDot.style.background = '#FF4565';
         liveDot.style.boxShadow = 'none';
-        showToast('Webcam dimatikan. Kembali ke mode preview.', 'ℹ️');
       }
 
-      // Photo Upload
-      uploadInput.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file) {
-          if (isWebcamActive) stopWebcam();
-          const reader = new FileReader();
-          reader.onload = (ev) => {
-            const img = new Image();
-            img.onload = async () => {
-              userUploadedImg = img;
-              arStatusText.textContent = 'Live AR: Foto Unggahan';
-              showToast('Foto pribadi berhasil dimuat! Baju disesuaikan dengan fotomu.', '🖼️');
-              if (pose) {
-                try {
-                  await pose.send({ image: img });
-                } catch(err) {
-                  console.warn("Pose detection on image:", err);
-                }
-              }
-            };
-            img.src = ev.target.result;
-          };
-          reader.readAsDataURL(file);
-        }
-      });
-
-      // Flip Camera Button
-      document.getElementById('btnCamFlip').addEventListener('click', () => {
-        if (isWebcamActive) {
-          stopWebcam();
+      function toggleWebcam() {
+        if (!isWebcamActive) {
+          startWebcam();
         } else {
-          btnToggleWebcam.click();
+          stopWebcam();
+          btnModeDemo.click();
+          showToast('Kamera dimatikan. Kembali ke model demo.', 'ℹ️');
         }
+      }
+
+      // Button Listeners for Camera
+      btnModeWebcam.addEventListener('click', toggleWebcam);
+      if (btnCamFlip) {
+        btnCamFlip.addEventListener('click', toggleWebcam);
+      }
+
+      // Mode Demo Button
+      btnModeDemo.addEventListener('click', () => {
+        stopWebcam();
+        userUploadedImg = null;
+        btnModeDemo.classList.add('active');
+        btnLabelUpload.classList.remove('active');
+        arStatusText.textContent = 'Live AR: Model Demo';
+        showToast('Mode Model Demo aktif. Pilih baju untuk melihat fitting otomatis!', '👤');
       });
 
-      // Scroll to Cam Button
-      const btnScroll = document.getElementById('btnScrollCam');
-      if (btnScroll) {
-        btnScroll.addEventListener('click', () => {
-          document.getElementById('tryonPhoneScreen').scrollIntoView({ behavior: 'smooth' });
+      // Photo Upload
+      if (uploadInput) {
+        uploadInput.addEventListener('change', (e) => {
+          const file = e.target.files[0];
+          if (file) {
+            stopWebcam();
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+              const img = new Image();
+              img.onload = async () => {
+                userUploadedImg = img;
+                btnModeDemo.classList.remove('active');
+                btnLabelUpload.classList.add('active');
+                arStatusText.textContent = 'Live AR: Foto Pribadi';
+                showToast('Foto berhasil dimuat! Baju langsung tertempel pas di badanmu.', '🖼️');
+                if (pose) {
+                  try {
+                    await pose.send({ image: img });
+                  } catch(err) {
+                    console.warn("Pose detection on image:", err);
+                  }
+                }
+              };
+              img.src = ev.target.result;
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+      }
+
+      // ==================== INSTAGRAM / TIKTOK FILTER REEL CAROUSEL ====================
+      const filterBubbles = document.querySelectorAll('.ig-filter-bubble');
+      filterBubbles.forEach(bubble => {
+        bubble.addEventListener('click', () => {
+          filterBubbles.forEach(b => b.classList.remove('active'));
+          bubble.classList.add('active');
+
+          const name = bubble.getAttribute('data-name');
+          const id = bubble.getAttribute('data-id');
+          const type = bubble.getAttribute('data-type') || 'jacket';
+          const ratio = bubble.getAttribute('data-ratio') || '1.0';
+          const img = bubble.getAttribute('data-img');
+
+          applyGarmentFilter(name, id, type, ratio, img);
+
+          // Sinkronkan juga ke slider samping
+          syncSidebarSelection(id);
+        });
+      });
+
+      function applyGarmentFilter(name, id, type, ratio, imgSrc) {
+        activeMerch.name = name;
+        activeMerch.id = Number(id) || 1;
+        activeMerch.type = type;
+        activeMerch.baseRatio = Number(ratio) || 1.0;
+        activeMerch.imgElement = new Image();
+        activeMerch.imgElement.src = imgSrc;
+        showToast(`Filter Terpasang: ${name} ✨`, '👕');
+      }
+
+      function syncSidebarSelection(id) {
+        const sliderItems = document.querySelectorAll('.slider-item');
+        sliderItems.forEach(item => {
+          if (item.getAttribute('data-id') === String(id)) {
+            sliderItems.forEach(i => {
+              i.classList.remove('active');
+              const ch = i.querySelector('.slider-item-check');
+              if (ch) ch.remove();
+            });
+            item.classList.add('active');
+            item.insertAdjacentHTML('afterbegin', '<div class="slider-item-check">&#10003;</div>');
+          }
         });
       }
 
       // ==================== FINE TUNING SLIDERS ====================
-      sliderOffsetY.addEventListener('input', (e) => {
-        userOffsetY = Number(e.target.value);
-        labelOffsetY.textContent = `${userOffsetY > 0 ? '+' : ''}${userOffsetY} px`;
-      });
+      if (sliderOffsetY) {
+        sliderOffsetY.addEventListener('input', (e) => {
+          userOffsetY = Number(e.target.value);
+          labelOffsetY.textContent = `${userOffsetY > 0 ? '+' : ''}${userOffsetY} px`;
+        });
+      }
 
-      sliderExtraScale.addEventListener('input', (e) => {
-        userExtraScale = Number(e.target.value);
-        labelExtraScale.textContent = `${userExtraScale.toFixed(2)}x`;
-      });
+      if (sliderExtraScale) {
+        sliderExtraScale.addEventListener('input', (e) => {
+          userExtraScale = Number(e.target.value);
+          labelExtraScale.textContent = `${userExtraScale.toFixed(2)}x`;
+        });
+      }
 
       // Size Chips
       const sizeMultipliers = { 'XS': 1.7, 'S': 1.85, 'M': 2.0, 'L': 2.15, 'XL': 2.3 };
@@ -1172,7 +1397,7 @@
         });
       });
 
-      // ==================== MERCHANDISE CATEGORY SWITCHER ====================
+      // ==================== MERCHANDISE CATEGORY SWITCHER (SIDEBAR) ====================
       const sliderContainer = document.querySelector('.merch-items-slider');
 
       document.querySelectorAll('.merch-type-btn').forEach(btn => {
@@ -1182,36 +1407,34 @@
           const type = btn.getAttribute('data-type');
           const items = merchCatalog[type] || merchCatalog.jacket;
 
-          sliderContainer.innerHTML = items.map((it, idx) => `
-            <div class="slider-item ${idx === 0 ? 'active' : ''}" data-img="${it.img}" data-name="${it.name}" data-id="${it.id}" data-type="${it.type}" data-ratio="${it.baseRatio}">
-              ${idx === 0 ? '<div class="slider-item-check">&#10003;</div>' : ''}
-              <img src="${it.thumb}" alt="${it.name}" class="slider-img">
-              <h4 class="slider-title">${it.name}</h4>
-              <span class="slider-price">${it.price}</span>
-            </div>
-          `).join('');
+          if (sliderContainer) {
+            sliderContainer.innerHTML = items.map((it, idx) => `
+              <div class="slider-item ${idx === 0 ? 'active' : ''}" data-img="${it.img}" data-name="${it.name}" data-id="${it.id}" data-type="${it.type}" data-ratio="${it.baseRatio}">
+                ${idx === 0 ? '<div class="slider-item-check">&#10003;</div>' : ''}
+                <img src="${it.thumb}" alt="${it.name}" class="slider-img">
+                <h4 class="slider-title">${it.name}</h4>
+                <span class="slider-price">${it.price}</span>
+              </div>
+            `).join('');
 
-          // Auto-select first item in new category
-          if (items[0]) {
-            selectMerchItem(items[0].name, items[0].id, items[0].type, items[0].baseRatio, items[0].img);
+            if (items[0]) {
+              applyGarmentFilter(items[0].name, items[0].id, items[0].type, items[0].baseRatio, items[0].img);
+              // Sinkronkan ke bulatan filter kamera
+              filterBubbles.forEach(b => {
+                if (b.getAttribute('data-id') === String(items[0].id)) {
+                  filterBubbles.forEach(fb => fb.classList.remove('active'));
+                  b.classList.add('active');
+                }
+              });
+            }
+
+            bindSliderItems();
           }
-
-          // Re-bind click
-          bindSliderItems();
         });
       });
 
-      function selectMerchItem(name, id, type, ratio, imgSrc) {
-        activeMerch.name = name;
-        activeMerch.id = Number(id) || 1;
-        activeMerch.type = type;
-        activeMerch.baseRatio = Number(ratio) || 1.0;
-        activeMerch.imgElement = new Image();
-        activeMerch.imgElement.src = imgSrc;
-        showToast(`Filter berganti ke: ${name}`, '✨');
-      }
-
       function bindSliderItems() {
+        if (!sliderContainer) return;
         sliderContainer.querySelectorAll('.slider-item').forEach(item => {
           item.addEventListener('click', () => {
             sliderContainer.querySelectorAll('.slider-item').forEach(i => {
@@ -1228,7 +1451,15 @@
             const ratio = item.getAttribute('data-ratio') || '1.0';
             const img = item.getAttribute('data-img');
 
-            selectMerchItem(name, id, type, ratio, img);
+            applyGarmentFilter(name, id, type, ratio, img);
+
+            // Sinkronkan ke bulatan filter kamera
+            filterBubbles.forEach(b => {
+              if (b.getAttribute('data-id') === String(id)) {
+                filterBubbles.forEach(fb => fb.classList.remove('active'));
+                b.classList.add('active');
+              }
+            });
           });
         });
       }
@@ -1251,6 +1482,15 @@
           }
         });
       });
+
+      // Scroll to Cam Button
+      const btnScroll = document.getElementById('btnScrollCam');
+      if (btnScroll) {
+        btnScroll.addEventListener('click', () => {
+          document.getElementById('tryonPhoneScreen').scrollIntoView({ behavior: 'smooth' });
+          if (!isWebcamActive) startWebcam();
+        });
+      }
 
       // ==================== SHUTTER CAPTURE & SNAPSHOT MODAL ====================
       function takeSnapshot() {
@@ -1281,50 +1521,62 @@
         showToast('Foto AR berhasil diambil dan disimpan ke profil!', '📸');
       }
 
-      document.getElementById('btnCamCapture').addEventListener('click', takeSnapshot);
+      if (btnCamCapture) {
+        btnCamCapture.addEventListener('click', takeSnapshot);
+      }
+      if (btnCamSave) {
+        btnCamSave.addEventListener('click', takeSnapshot);
+      }
 
-      document.getElementById('btnCamSave').addEventListener('click', () => {
-        takeSnapshot();
-      });
-
-      btnCloseSnapshot.addEventListener('click', () => {
-        snapshotModal.classList.remove('active');
-      });
-
-      snapshotModal.addEventListener('click', (e) => {
-        if (e.target === snapshotModal) {
+      if (btnCloseSnapshot) {
+        btnCloseSnapshot.addEventListener('click', () => {
           snapshotModal.classList.remove('active');
-        }
-      });
+        });
+      }
 
-      btnSaveSnapshot.addEventListener('click', () => {
-        showToast('Look tersimpan di profil "Saved Looks" kamu! (PRD FR-14)', '⭐');
-        snapshotModal.classList.remove('active');
-      });
+      if (snapshotModal) {
+        snapshotModal.addEventListener('click', (e) => {
+          if (e.target === snapshotModal) {
+            snapshotModal.classList.remove('active');
+          }
+        });
+      }
 
-      btnBuySnapshot.addEventListener('click', () => {
-        const prod = window.wolvyStore ? (window.wolvyStore.getProductById(activeMerch.id) || window.wolvyStore.getProductById(1)) : null;
-        const activeSize = document.querySelector('.size-chip.active')?.textContent.trim() || 'M';
-        if (prod && window.wolvyStore) {
-          window.wolvyStore.addToCart(prod, activeSize, "Purple", 1);
-          document.getElementById('cartBadge').textContent = window.wolvyStore.getCartCount();
-          showToast(`🛒 ${prod.name} (${activeSize}) ditambahkan! Menuju checkout...`);
-          setTimeout(() => {
-            window.location.href = 'checkout.html';
-          }, 600);
-        }
-      });
+      if (btnSaveSnapshot) {
+        btnSaveSnapshot.addEventListener('click', () => {
+          showToast('Look tersimpan di profil "Saved Looks" kamu! (PRD FR-14)', '⭐');
+          snapshotModal.classList.remove('active');
+        });
+      }
+
+      if (btnBuySnapshot) {
+        btnBuySnapshot.addEventListener('click', () => {
+          const prod = window.wolvyStore ? (window.wolvyStore.getProductById(activeMerch.id) || window.wolvyStore.getProductById(1)) : null;
+          const activeSize = document.querySelector('.size-chip.active')?.textContent.trim() || 'M';
+          if (prod && window.wolvyStore) {
+            window.wolvyStore.addToCart(prod, activeSize, "Purple", 1);
+            document.getElementById('cartBadge').textContent = window.wolvyStore.getCartCount();
+            showToast(`🛒 ${prod.name} (${activeSize}) ditambahkan! Menuju checkout...`);
+            setTimeout(() => {
+              window.location.href = 'checkout.html';
+            }, 600);
+          }
+        });
+      }
 
       // Add to Cart button in side panel
-      document.getElementById('btnTryonAddToCart').addEventListener('click', () => {
-        const prod = window.wolvyStore ? (window.wolvyStore.getProductById(activeMerch.id) || window.wolvyStore.getProductById(1)) : null;
-        const activeSize = document.querySelector('.size-chip.active')?.textContent.trim() || 'M';
-        if (prod && window.wolvyStore) {
-          window.wolvyStore.addToCart(prod, activeSize, "Purple", 1);
-          document.getElementById('cartBadge').textContent = window.wolvyStore.getCartCount();
-          showToast(`🛒 ${prod.name} (${activeSize}) berhasil ditambahkan ke keranjang belanja!`);
-        }
-      });
+      const btnAddCart = document.getElementById('btnTryonAddToCart');
+      if (btnAddCart) {
+        btnAddCart.addEventListener('click', () => {
+          const prod = window.wolvyStore ? (window.wolvyStore.getProductById(activeMerch.id) || window.wolvyStore.getProductById(1)) : null;
+          const activeSize = document.querySelector('.size-chip.active')?.textContent.trim() || 'M';
+          if (prod && window.wolvyStore) {
+            window.wolvyStore.addToCart(prod, activeSize, "Purple", 1);
+            document.getElementById('cartBadge').textContent = window.wolvyStore.getCartCount();
+            showToast(`🛒 ${prod.name} (${activeSize}) berhasil ditambahkan ke keranjang belanja!`);
+          }
+        });
+      }
     });
   </script>
 </body>
