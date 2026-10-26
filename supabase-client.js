@@ -11,8 +11,8 @@
 
 // Ganti nilai di bawah ini dengan Project URL dan Anon Key dari dashboard Supabase Anda:
 const SUPABASE_CONFIG = {
-  url: 'https://xyzcompany.supabase.co', // Contoh: https://abcdefghijklm.supabase.co
-  anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh5eiIsInJvbGUiOiJhbW9uIiwiaWF0IjoxNj...YOUR_ANON_KEY_HERE'
+  url: 'https://dmfhditcvadbfuwwasmw.supabase.co/rest/v1/', // Contoh: https://abcdefghijklm.supabase.co
+  anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtZmhkaXRjdmFkYmZ1d3dhc213Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMwMDg5MzgsImV4cCI6MjEwODU4NDkzOH0.Bf9bbaqLfdBDrfb2XsZTdKZutWe0xP6a6E7rWqrBq5I'
 };
 
 class WolvyAuthService {
