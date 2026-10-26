@@ -44,10 +44,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const navMenu = document.getElementById('navMenu');
 
   window.addEventListener('scroll', () => {
-    if (window.scrollY > 40) {
-      mainHeader.classList.add('scrolled');
-    } else {
-      mainHeader.classList.remove('scrolled');
+    if (mainHeader) {
+      if (window.scrollY > 40) {
+        mainHeader.classList.add('scrolled');
+      } else {
+        mainHeader.classList.remove('scrolled');
+      }
     }
   });
 
@@ -191,13 +193,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const checkoutBtn = document.getElementById('checkoutBtn');
 
   function openCart() {
-    cartDrawer.classList.add('open');
-    cartDrawer.setAttribute('aria-hidden', 'false');
+    if (cartDrawer) {
+      cartDrawer.classList.add('open');
+      cartDrawer.setAttribute('aria-hidden', 'false');
+    }
   }
 
   function closeCart() {
-    cartDrawer.classList.remove('open');
-    cartDrawer.setAttribute('aria-hidden', 'true');
+    if (cartDrawer) {
+      cartDrawer.classList.remove('open');
+      cartDrawer.setAttribute('aria-hidden', 'true');
+    }
   }
 
   if (cartBtn) cartBtn.addEventListener('click', openCart);
