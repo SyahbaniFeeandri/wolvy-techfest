@@ -9,6 +9,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Permanent+Marker&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  
+  <!-- MediaPipe Pose & Camera Utils for Live AR Clothing Filter -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
   <style>
     .tryon-page-wrapper {
       padding-top: 85px;
@@ -335,109 +339,133 @@
         </div>
       </div>
 
-      <!-- CENTER COLUMN: REAL-TIME PHONE CANVAS SIMULATOR -->
+      <!-- CENTER COLUMN: REAL-TIME AR PHONE CANVAS SIMULATOR (INSTAGRAM FILTER STYLE) -->
       <div class="tryon-center-phone">
         <div class="tryon-phone-frame" style="width: 360px;">
           <div class="phone-notch">
             <span class="camera-lens"></span>
             <span class="speaker"></span>
           </div>
-          <div class="phone-screen" id="tryonPhoneScreen">
-            <div class="live-status-pill">
-              <span class="live-dot"></span> Live Preview
+          <div class="phone-screen" id="tryonPhoneScreen" style="position:relative; overflow:hidden;">
+            <!-- Live AR Status Pill -->
+            <div class="live-status-pill" id="arStatusPill" style="display:flex; align-items:center; gap:6px; z-index:15;">
+              <span class="live-dot" id="liveDotIndicator"></span>
+              <span id="arStatusText">Live AR: Model Demo</span>
             </div>
 
-            <!-- Video or Model Photo -->
-            <img src="assets/tryon_girl.png" alt="Try-On Model Preview" id="tryonMainModel" class="tryon-model-image">
+            <!-- AR Pose Tracking Indicator Badge -->
+            <div id="arTrackingBadge" style="position:absolute; top:42px; left:12px; background:rgba(19,7,34,0.75); backdrop-filter:blur(6px); border:1px solid #E8FF38; border-radius:6px; padding:3px 8px; font-size:0.68rem; font-weight:800; color:#E8FF38; z-index:15; display:flex; align-items:center; gap:5px;">
+              <span>🤖 AR POSE:</span> <span id="arLockState" style="color:#00FFA3;">BODY LOCKED</span>
+            </div>
+
+            <!-- Shutter Flash Effect Overlay -->
+            <div id="shutterFlashOverlay" style="position:absolute; top:0; left:0; width:100%; height:100%; background:#FFFFFF; opacity:0; pointer-events:none; z-index:50; transition:opacity 0.15s ease;"></div>
+
+            <!-- Hidden Video Stream for MediaPipe -->
             <video id="webcamFullStream" autoplay playsinline muted style="display:none;"></video>
-            <canvas id="poseCanvasOverlay" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;"></canvas>
+            
+            <!-- Real-time AR Composite Canvas (Draws user + garment automatically tracked on body) -->
+            <canvas id="arCompositeCanvas" width="450" height="700" style="width:100%; height:100%; object-fit:cover; display:block;"></canvas>
 
-            <!-- Overlay Garment on Chest -->
-            <div class="tryon-overlay-layer" id="tryonLiveOverlay">
-              <img src="assets/varsity_transparent.png" alt="Overlay Garment" id="tryonOverlayAsset" class="overlay-item" style="width: 58%; bottom: 20%;">
-            </div>
+            <!-- Hidden Source Model Image for initial rendering -->
+            <img src="assets/tryon_girl.png" alt="Model Preview" id="tryonMainModel" style="display:none;">
 
             <!-- Camera bar controls -->
-            <div class="phone-camera-bar">
-              <button class="cam-action-btn" id="btnCamFlip" title="Balik Kamera">🔄</button>
-              <button class="cam-shutter-btn" id="btnCamCapture" title="Ambil Foto Look">
+            <div class="phone-camera-bar" style="z-index:20;">
+              <button class="cam-action-btn" id="btnCamFlip" title="Ganti Mode Kamera / Model">🔄</button>
+              <button class="cam-shutter-btn" id="btnCamCapture" title="Ambil Foto Look (Snapshot AR)">
                 <span class="shutter-inner"></span>
               </button>
-              <button class="cam-action-btn" id="btnCamSave" title="Simpan Look">💾</button>
+              <button class="cam-action-btn" id="btnCamSave" title="Simpan Look ke Profil">💾</button>
             </div>
           </div>
           <div class="phone-privacy-hint">
-            <span>🔒 Foto diproses dengan aman di browser</span>
+            <span>🔒 MediaPipe Pose AI · Diproses langsung di browser secara lokal</span>
           </div>
         </div>
       </div>
 
-      <!-- RIGHT COLUMN: CONTROLS & STREETWEAR AESTHETICS -->
+      <!-- RIGHT COLUMN: CONTROLS & AR FILTER SETTINGS -->
       <div class="tryon-control-panel" style="background: rgba(255,255,255,0.03); padding: 24px; border-radius: var(--radius-xl); border: 1px solid rgba(205,184,244,0.2);">
         <div class="panel-tabs">
-          <button class="panel-tab active" data-tab="merch">Merch</button>
-          <button class="panel-tab" data-tab="outfit">Outfit Set</button>
+          <button class="panel-tab active" data-tab="merch">Pilih Merchandise</button>
+          <button class="panel-tab" data-tab="adjust">Atur AR Fitting</button>
         </div>
 
         <!-- Merch Categories -->
-        <div class="merch-type-selector">
+        <div class="merch-type-selector" style="margin-top:14px;">
           <button class="merch-type-btn active" data-type="jacket">🧥 Jacket</button>
           <button class="merch-type-btn" data-type="hoodie">👕 Hoodie</button>
           <button class="merch-type-btn" data-type="tshirt">🎽 T-Shirt</button>
           <button class="merch-type-btn" data-type="cap">🧢 Cap</button>
         </div>
 
-        <!-- Merch Grid Options -->
-        <div class="merch-items-slider" style="grid-template-columns: repeat(2, 1fr);">
-          <div class="slider-item active" data-img="assets/varsity_transparent.png" data-name="Varsity Jacket Purple Edition">
+        <!-- Merch Grid Options (HD Transparent Assets) -->
+        <div class="merch-items-slider" style="grid-template-columns: repeat(2, 1fr); margin-top:14px;">
+          <div class="slider-item active" data-img="assets/tryon_varsity_hd.png" data-name="Varsity Jacket Purple Edition" data-id="1">
             <div class="slider-item-check">&#10003;</div>
             <img src="assets/prod_varsity.png" alt="Varsity Jacket" class="slider-img">
             <h4 class="slider-title">Varsity Jacket Purple</h4>
             <span class="slider-price">Rp 399.000</span>
           </div>
-          <div class="slider-item" data-img="assets/p_hoodie.png" data-name="Hoodie Wolf Logo Black">
+          <div class="slider-item" data-img="assets/tryon_hoodie_hd.png" data-name="Hoodie Wolf Logo Black" data-id="4">
             <img src="assets/prod_hoodie_black.png" alt="Hoodie Wolf" class="slider-img">
             <h4 class="slider-title">Hoodie Wolf Black</h4>
             <span class="slider-price">Rp 299.000</span>
           </div>
         </div>
 
-        <!-- Ukuran -->
-        <div class="size-selector-row">
-          <label class="size-label">Ukuran:</label>
+        <!-- Ukuran Pakaian -->
+        <div class="size-selector-row" style="margin-top:14px;">
+          <label class="size-label">Ukuran Fitting:</label>
           <div class="size-options">
-            <button class="size-chip">XS</button>
-            <button class="size-chip">S</button>
-            <button class="size-chip active">M</button>
-            <button class="size-chip">L</button>
-            <button class="size-chip">XL</button>
+            <button class="size-chip" data-scale="1.7">XS</button>
+            <button class="size-chip" data-scale="1.85">S</button>
+            <button class="size-chip active" data-scale="2.0">M</button>
+            <button class="size-chip" data-scale="2.15">L</button>
+            <button class="size-chip" data-scale="2.3">XL</button>
           </div>
         </div>
 
-        <button class="btn btn-primary" id="btnApplyPreviewFull" style="width: 100%;">
-          Terapkan ke Preview &rarr;
-        </button>
+        <!-- AR Options & Fine Tuning Accordion -->
+        <div style="background:rgba(205,184,244,0.06); padding:12px 14px; border-radius:10px; margin-top:14px; border:1px solid rgba(205,184,244,0.15);">
+          <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:0.78rem; font-weight:800; color:var(--color-neon-yellow); margin-bottom:10px;">
+            <input type="checkbox" id="toggleSkeleton" checked style="accent-color:var(--color-neon-yellow); width:15px; height:15px;">
+            ⚡ Tampilkan Sensor Titik Tubuh (AR Tracker)
+          </label>
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.72rem; color:var(--color-lavender); margin-bottom:4px;">
+            <span>Geser Posisi Vertikal Baju:</span>
+            <span id="labelOffsetY">0 px</span>
+          </div>
+          <input type="range" id="sliderOffsetY" min="-80" max="80" value="0" style="width:100%; accent-color:var(--color-neon-yellow); margin-bottom:8px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.72rem; color:var(--color-lavender); margin-bottom:4px;">
+            <span>Skala Lebar Ekstra:</span>
+            <span id="labelExtraScale">1.0x</span>
+          </div>
+          <input type="range" id="sliderExtraScale" min="0.7" max="1.4" step="0.05" value="1.0" style="width:100%; accent-color:var(--color-neon-yellow);">
+        </div>
 
-        <div style="display:flex; flex-direction:column; gap:8px; margin-top:12px;">
+        <!-- Action CTAs -->
+        <div style="display:flex; flex-direction:column; gap:8px; margin-top:14px;">
           <button class="btn btn-secondary" id="btnTryonAddToCart" style="width: 100%; font-size:0.85rem; padding:12px;">
-            🛒 Tambah ke Keranjang
+            🛒 Tambah ke Keranjang Belanja
           </button>
-          <a href="checkout.html" class="btn btn-outline" id="btnTryonCheckout" style="width: 100%; font-size:0.85rem; padding:10px; text-align:center; text-decoration:none; border-color:var(--color-neon-yellow); color:var(--color-neon-yellow);">
+          <a href="checkout.html" class="btn btn-outline" id="btnTryonCheckout" style="width: 100%; font-size:0.85rem; padding:10px; text-align:center; text-decoration:none; border-color:var(--color-neon-yellow); color:var(--color-neon-yellow); font-weight:800;">
             ⚡ Checkout Langsung
           </a>
         </div>
 
         <!-- Webcam / Photo Alternative -->
-        <div class="upload-alternative-card">
+        <div class="upload-alternative-card" style="margin-top:16px;">
           <div class="upload-text">
             <span>📷</span>
             <div>
-              <strong>Belum ada kamera?</strong>
-              <p>Kamu juga bisa mengunggah foto untuk mencoba.</p>
+              <strong>Coba di Badanmu Sendiri:</strong>
+              <p>Nyalakan webcam untuk filter live atau unggah fotomu.</p>
             </div>
           </div>
           <div class="upload-btns">
-            <button class="btn btn-sm btn-outline" id="btnToggleFullWebcam">Nyalakan Webcam</button>
+            <button class="btn btn-sm btn-outline" id="btnToggleFullWebcam">Nyalakan Webcam AR</button>
             <label class="btn btn-sm btn-outline btn-file-label">
               Upload Foto
               <input type="file" id="tryonUploadInput" accept="image/*" style="display: none;">
@@ -581,7 +609,77 @@
     </div>
   </footer>
 
+  <!-- ==================== AR SNAPSHOT MODAL (INSTAGRAM FILTER STYLE) ==================== -->
+  <div class="ar-modal-backdrop" id="tryonSnapshotModal">
+    <div class="ar-modal-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:1.4rem;">📸</span>
+          <h3 style="font-size:1.15rem; font-weight:800; color:var(--color-neon-yellow); margin:0;">AR Look Berhasil Diambil!</h3>
+        </div>
+        <button class="modal-close-btn" id="btnCloseSnapshotModal" style="background:none; border:none; color:var(--color-lavender); font-size:1.6rem; cursor:pointer; line-height:1;">&times;</button>
+      </div>
+      
+      <div style="border-radius:12px; overflow:hidden; border:2px solid var(--color-neon-yellow); margin-bottom:14px; background:#000; box-shadow:0 8px 24px rgba(0,0,0,0.5);">
+        <img id="snapshotPreviewImg" src="" alt="Captured Look" style="width:100%; height:auto; display:block;">
+      </div>
+
+      <div style="background:rgba(205,184,244,0.08); padding:10px 14px; border-radius:10px; margin-bottom:14px; font-size:0.78rem; color:var(--color-lavender); line-height:1.4;">
+        ✨ <strong>Fitur Filter AR WOLVY:</strong> Pakaian terpasang otomatis mengikuti orientasi tubuh dan lebar bahumu secara presisi.
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <a id="btnDownloadSnapshot" download="wolvy-ar-look.jpg" class="btn btn-primary" style="width:100%; text-align:center; text-decoration:none; padding:10px;">
+          📥 Unduh Foto AR (Instagram Story)
+        </a>
+        <button class="btn btn-secondary" id="btnSaveToProfileSnapshot" style="width:100%; padding:10px;">
+          ⭐ Simpan ke Koleksi Looks Saya (FR-14)
+        </button>
+        <button class="btn btn-outline" id="btnBuySnapshotMerch" style="width:100%; padding:10px; border-color:var(--color-neon-yellow); color:var(--color-neon-yellow); font-weight:800;">
+          🛒 Beli Merchandise Ini Sekarang
+        </button>
+      </div>
+    </div>
+  </div>
+
   <div class="toast-container" id="toastContainer"></div>
+
+  <style>
+    /* AR Snapshot Modal Styles */
+    .ar-modal-backdrop {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(19, 7, 34, 0.85);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      padding: 16px;
+    }
+    .ar-modal-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .ar-modal-card {
+      background: #1F0D36;
+      border: 1px solid rgba(205, 184, 244, 0.3);
+      border-radius: var(--radius-xl);
+      padding: 22px;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 30px rgba(232, 255, 56, 0.15);
+      color: var(--color-white);
+      transform: translateY(20px) scale(0.96);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .ar-modal-backdrop.active .ar-modal-card {
+      transform: translateY(0) scale(1);
+    }
+  </style>
 
   <script src="store.js"></script>
   <script>
@@ -598,137 +696,470 @@
       showToast(`Look "${name}" disimpan ke profilmu! (PRD FR-14)`, '⭐');
     }
 
+    // =========================================================================
+    // WOLVY AR CLOTHING FILTER ENGINE (MediaPipe Pose + Canvas Composition)
+    // =========================================================================
     document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('cartBadge').textContent = window.wolvyStore.getCartCount();
-      document.getElementById('wishlistCount').textContent = window.wolvyStore.getWishlist().length;
+      // Header badges
+      if (window.wolvyStore) {
+        document.getElementById('cartBadge').textContent = window.wolvyStore.getCartCount();
+        document.getElementById('wishlistCount').textContent = window.wolvyStore.getWishlist().length;
+      }
 
-      const overlayImg = document.getElementById('tryonOverlayAsset');
-      const tryonLiveOverlay = document.getElementById('tryonLiveOverlay');
-
-      // Slider items selection
-      document.querySelectorAll('.slider-item').forEach(item => {
-        item.addEventListener('click', () => {
-          document.querySelectorAll('.slider-item').forEach(i => i.classList.remove('active'));
-          item.classList.add('active');
-          const img = item.getAttribute('data-img');
-          const name = item.getAttribute('data-name');
-          if (overlayImg) overlayImg.src = img;
-          showToast(`Merchandise: ${name}`, '🧥');
-        });
-      });
-
-      // Apply to preview
-      document.getElementById('btnApplyPreviewFull').addEventListener('click', () => {
-        tryonLiveOverlay.style.opacity = '0';
-        setTimeout(() => {
-          tryonLiveOverlay.style.opacity = '1';
-          showToast('Overlay dipasang pada pose tubuh!', '✨');
-        }, 200);
-      });
-
-      // Webcam toggle
+      // Canvas & Rendering Context
+      const canvas = document.getElementById('arCompositeCanvas');
+      const ctx = canvas.getContext('2d');
       const webcam = document.getElementById('webcamFullStream');
-      const model = document.getElementById('tryonMainModel');
-      const btnWebcam = document.getElementById('btnToggleFullWebcam');
-      let streamActive = false;
-      let curStream = null;
+      const modelImg = document.getElementById('tryonMainModel');
+      const shutterFlash = document.getElementById('shutterFlashOverlay');
 
-      btnWebcam.addEventListener('click', async () => {
-        if (!streamActive) {
-          try {
-            curStream = await navigator.mediaDevices.getUserMedia({ video: true });
-            webcam.srcObject = curStream;
-            webcam.style.display = 'block';
-            model.style.display = 'none';
-            streamActive = true;
-            btnWebcam.textContent = 'Matikan Kamera';
-            showToast('Kamera aktif! Deteksi pose visual dimulai.', '📷');
-          } catch(e) {
-            showToast('Izin kamera ditolak. Menggunakan preview model.', 'ℹ️');
+      // Status HUD
+      const arStatusText = document.getElementById('arStatusText');
+      const arLockState = document.getElementById('arLockState');
+      const liveDot = document.getElementById('liveDotIndicator');
+
+      // Controls
+      const toggleSkeleton = document.getElementById('toggleSkeleton');
+      const sliderOffsetY = document.getElementById('sliderOffsetY');
+      const labelOffsetY = document.getElementById('labelOffsetY');
+      const sliderExtraScale = document.getElementById('sliderExtraScale');
+      const labelExtraScale = document.getElementById('labelExtraScale');
+      const btnToggleWebcam = document.getElementById('btnToggleFullWebcam');
+      const uploadInput = document.getElementById('tryonUploadInput');
+
+      // Snapshot Modal Elements
+      const snapshotModal = document.getElementById('tryonSnapshotModal');
+      const snapshotPreviewImg = document.getElementById('snapshotPreviewImg');
+      const btnCloseSnapshot = document.getElementById('btnCloseSnapshotModal');
+      const btnDownloadSnapshot = document.getElementById('btnDownloadSnapshot');
+      const btnSaveSnapshot = document.getElementById('btnSaveToProfileSnapshot');
+      const btnBuySnapshot = document.getElementById('btnBuySnapshotMerch');
+
+      // ==================== MERCHANDISE CATALOG WITH HD TRANSPARENTS ====================
+      const merchCatalog = {
+        jacket: [
+          { name: "Varsity Jacket Purple Edition", img: "assets/tryon_varsity_hd.png", thumb: "assets/prod_varsity.png", price: "Rp 399.000", id: 1, baseRatio: 1.0, type: "jacket" },
+          { name: "Varsity Jacket Navy Classic", img: "assets/tryon_varsity_hd.png", thumb: "assets/prod_varsity.png", price: "Rp 399.000", id: 1, baseRatio: 1.0, type: "jacket" }
+        ],
+        hoodie: [
+          { name: "Hoodie Wolf Logo Black", img: "assets/tryon_hoodie_hd.png", thumb: "assets/prod_hoodie_black.png", price: "Rp 299.000", id: 4, baseRatio: 0.58, type: "hoodie" }
+        ],
+        tshirt: [
+          { name: "T-Shirt Faculty Streetwear", img: "assets/tryon_tshirt_hd.png", thumb: "assets/prod_tshirt.png", price: "Rp 149.000", id: 11, baseRatio: 0.79, type: "tshirt" },
+          { name: "Custom Jersey Angkatan", img: "assets/tryon_jersey_clean.png", thumb: "assets/prod_jersey.png", price: "Rp 249.000", id: 12, baseRatio: 0.82, type: "tshirt" }
+        ],
+        cap: [
+          { name: "Cap Classic Navy", img: "assets/tryon_cap_hd.png", thumb: "assets/prod_cap_navy.png", price: "Rp 149.000", id: 3, baseRatio: 0.72, type: "cap" }
+        ]
+      };
+
+      // Active state
+      let activeMerch = {
+        name: "Varsity Jacket Purple Edition",
+        id: 1,
+        type: "jacket",
+        baseRatio: 1.0,
+        imgElement: new Image()
+      };
+      activeMerch.imgElement.src = "assets/tryon_varsity_hd.png";
+
+      let activeSizeScale = 2.0; // Multiplier relative to detected shoulder width
+      let userOffsetY = 0;
+      let userExtraScale = 1.0;
+      let isWebcamActive = false;
+      let webcamStream = null;
+      let userUploadedImg = null;
+
+      // Smoothed transform for Instagram-filter fluidity (lerp)
+      const smoothTransform = {
+        x: 225,
+        y: 310,
+        width: 250,
+        height: 250,
+        angle: 0.04,
+        confidence: 1.0,
+        detected: true
+      };
+
+      const targetTransform = {
+        x: 225,
+        y: 310,
+        width: 250,
+        height: 250,
+        angle: 0.04,
+        confidence: 1.0,
+        detected: true,
+        landmarks: null
+      };
+
+      // ==================== MEDIAPIPE POSE INITIALIZATION ====================
+      let pose = null;
+      let isPoseReady = false;
+
+      try {
+        if (typeof Pose !== 'undefined') {
+          pose = new Pose({
+            locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`
+          });
+          pose.setOptions({
+            modelComplexity: 1,
+            smoothLandmarks: true,
+            enableSegmentation: false,
+            smoothSegmentation: false,
+            minDetectionConfidence: 0.5,
+            minTrackingConfidence: 0.5
+          });
+          pose.onResults(onPoseResults);
+          isPoseReady = true;
+        }
+      } catch (err) {
+        console.warn("MediaPipe Pose load warning:", err);
+      }
+
+      function onPoseResults(results) {
+        if (!results || !results.poseLandmarks) {
+          if (isWebcamActive) {
+            targetTransform.detected = false;
+          }
+          return;
+        }
+
+        const lm = results.poseLandmarks;
+        targetTransform.landmarks = lm;
+
+        // Landmarks index: 11 = left shoulder, 12 = right shoulder, 0 = nose
+        const leftSh = lm[11];
+        const rightSh = lm[12];
+        const nose = lm[0];
+
+        if (leftSh && rightSh && (leftSh.visibility > 0.35 || rightSh.visibility > 0.35)) {
+          // Note: When webcam is mirrored, MediaPipe landmark coordinates:
+          // Mirrored X = (1 - lm.x) * canvas.width
+          const lx = (1 - rightSh.x) * canvas.width;
+          const ly = rightSh.y * canvas.height;
+          const rx = (1 - leftSh.x) * canvas.width;
+          const ry = leftSh.y * canvas.height;
+
+          const shoulderDist = Math.hypot(rx - lx, ry - ly);
+          const midX = (lx + rx) / 2;
+          const midY = (ly + ry) / 2;
+          const tiltAngle = Math.atan2(ry - ly, rx - lx);
+
+          if (activeMerch.type === 'cap') {
+            const nx = nose ? (1 - nose.x) * canvas.width : midX;
+            const ny = nose ? nose.y * canvas.height : midY - 100;
+            const capW = shoulderDist * 0.95 * userExtraScale;
+            targetTransform.width = capW;
+            targetTransform.height = capW / activeMerch.baseRatio;
+            targetTransform.x = nx;
+            targetTransform.y = ny - (targetTransform.height * 0.45) + userOffsetY;
+            targetTransform.angle = tiltAngle * 0.75;
+          } else {
+            // Jacket / Hoodie / T-Shirt
+            const garmentW = shoulderDist * activeSizeScale * userExtraScale;
+            targetTransform.width = garmentW;
+            targetTransform.height = garmentW / activeMerch.baseRatio;
+            targetTransform.x = midX;
+            // Place top opening around neck/shoulders
+            targetTransform.y = midY + (targetTransform.height * 0.28) + userOffsetY;
+            targetTransform.angle = tiltAngle;
+          }
+
+          targetTransform.detected = true;
+          targetTransform.confidence = (leftSh.visibility + rightSh.visibility) / 2;
+        }
+      }
+
+      // ==================== CONTINUOUS AR RENDER LOOP ====================
+      let lastTime = 0;
+      let breathAngle = 0;
+
+      function renderARFrame(timestamp) {
+        requestAnimationFrame(renderARFrame);
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // 1. Draw Background Source (Mirrored Webcam OR Demo Model OR Uploaded Photo)
+        if (isWebcamActive && webcam.readyState >= 2) {
+          ctx.save();
+          ctx.translate(canvas.width, 0);
+          ctx.scale(-1, 1);
+          ctx.drawImage(webcam, 0, 0, canvas.width, canvas.height);
+          ctx.restore();
+        } else {
+          const srcImg = userUploadedImg || modelImg;
+          if (srcImg && srcImg.complete && srcImg.naturalWidth > 0) {
+            // Draw image with aspect cover
+            const hRatio = canvas.width / srcImg.naturalWidth;
+            const vRatio = canvas.height / srcImg.naturalHeight;
+            const ratio = Math.max(hRatio, vRatio);
+            const centerShiftX = (canvas.width - srcImg.naturalWidth * ratio) / 2;
+            const centerShiftY = (canvas.height - srcImg.naturalHeight * ratio) / 2;
+            ctx.drawImage(srcImg, 0, 0, srcImg.naturalWidth, srcImg.naturalHeight, centerShiftX, centerShiftY, srcImg.naturalWidth * ratio, srcImg.naturalHeight * ratio);
+          } else {
+            ctx.fillStyle = '#1B0E2B';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+          }
+
+          // If no webcam, simulate realistic natural pose tracking on demo model
+          if (!userUploadedImg) {
+            breathAngle += 0.04;
+            const breath = Math.sin(breathAngle) * 2.2;
+            const shoulderDist = 125;
+            const midX = 225;
+            const midY = 242 + breath;
+            const tilt = 0.038;
+
+            if (activeMerch.type === 'cap') {
+              const capW = shoulderDist * 0.95 * userExtraScale;
+              targetTransform.width = capW;
+              targetTransform.height = capW / activeMerch.baseRatio;
+              targetTransform.x = 224;
+              targetTransform.y = 152 + breath - (targetTransform.height * 0.45) + userOffsetY;
+              targetTransform.angle = tilt * 0.7;
+            } else {
+              const garmentW = shoulderDist * activeSizeScale * userExtraScale;
+              targetTransform.width = garmentW;
+              targetTransform.height = garmentW / activeMerch.baseRatio;
+              targetTransform.x = midX;
+              targetTransform.y = midY + (targetTransform.height * 0.28) + userOffsetY;
+              targetTransform.angle = tilt;
+            }
+            targetTransform.detected = true;
+          }
+        }
+
+        // 2. Exponential Lerp Smoothing (The Instagram Filter Secret)
+        const LERP = 0.35;
+        smoothTransform.x += (targetTransform.x - smoothTransform.x) * LERP;
+        smoothTransform.y += (targetTransform.y - smoothTransform.y) * LERP;
+        smoothTransform.width += (targetTransform.width - smoothTransform.width) * LERP;
+        smoothTransform.height += (targetTransform.height - smoothTransform.height) * LERP;
+        smoothTransform.angle += (targetTransform.angle - smoothTransform.angle) * LERP;
+
+        // 3. Draw AR Pose Keypoints HUD (If Skeleton Toggle is active)
+        if (toggleSkeleton && toggleSkeleton.checked) {
+          drawARSkeletonHUD(ctx);
+        }
+
+        // 4. Draw Transparent Clothing Merchandise onto User's Body
+        if (activeMerch.imgElement && activeMerch.imgElement.complete && activeMerch.imgElement.naturalWidth > 0) {
+          ctx.save();
+          ctx.translate(smoothTransform.x, smoothTransform.y);
+          ctx.rotate(smoothTransform.angle);
+
+          // Realistic soft drop shadow under garment
+          ctx.shadowColor = 'rgba(19, 7, 34, 0.45)';
+          ctx.shadowBlur = 14;
+          ctx.shadowOffsetY = 6;
+
+          const anchorY = activeMerch.type === 'cap' ? 0.75 : 0.42;
+          ctx.drawImage(
+            activeMerch.imgElement,
+            -smoothTransform.width / 2,
+            -smoothTransform.height * anchorY,
+            smoothTransform.width,
+            smoothTransform.height
+          );
+          ctx.restore();
+        }
+
+        // 5. Update Lock State HUD Text
+        if (isWebcamActive) {
+          if (targetTransform.detected) {
+            arLockState.textContent = 'BODY LOCKED (LIVE)';
+            arLockState.style.color = '#00FFA3';
+          } else {
+            arLockState.textContent = 'SEARCHING BODY...';
+            arLockState.style.color = '#FFD23F';
           }
         } else {
-          if (curStream) curStream.getTracks().forEach(t => t.stop());
-          webcam.style.display = 'none';
-          model.style.display = 'block';
-          streamActive = false;
-          btnWebcam.textContent = 'Nyalakan Webcam';
-          showToast('Kembali ke foto preview model.');
+          arLockState.textContent = userUploadedImg ? 'FOTO LOCKED' : 'DEMO MODEL LOCKED';
+          arLockState.style.color = '#00FFA3';
+        }
+      }
+
+      // Draw AR cyber skeleton tracking lines
+      function drawARSkeletonHUD(context) {
+        context.save();
+        context.lineWidth = 2.5;
+        context.strokeStyle = '#E8FF38';
+        context.fillStyle = '#E8FF38';
+        context.shadowColor = '#E8FF38';
+        context.shadowBlur = 8;
+
+        if (isWebcamActive && targetTransform.landmarks) {
+          const lm = targetTransform.landmarks;
+          const l11 = { x: (1 - lm[11].x) * canvas.width, y: lm[11].y * canvas.height };
+          const l12 = { x: (1 - lm[12].x) * canvas.width, y: lm[12].y * canvas.height };
+
+          // Shoulder bridge line
+          context.beginPath();
+          context.moveTo(l11.x, l11.y);
+          context.lineTo(l12.x, l12.y);
+          context.stroke();
+
+          // Joint circles
+          [l11, l12].forEach(pt => {
+            context.beginPath();
+            context.arc(pt.x, pt.y, 4.5, 0, Math.PI * 2);
+            context.fill();
+          });
+        } else {
+          // Default model skeleton points
+          const lx = smoothTransform.x - 55;
+          const rx = smoothTransform.x + 55;
+          const y = smoothTransform.y - (smoothTransform.height * 0.28);
+
+          context.beginPath();
+          context.moveTo(lx, y - 2);
+          context.lineTo(rx, y + 2);
+          context.stroke();
+
+          [ {x: lx, y: y - 2}, {x: rx, y: y + 2} ].forEach(pt => {
+            context.beginPath();
+            context.arc(pt.x, pt.y, 4, 0, Math.PI * 2);
+            context.fill();
+          });
+        }
+
+        // Small AR reticle at center
+        context.beginPath();
+        context.arc(smoothTransform.x, smoothTransform.y, 6, 0, Math.PI * 2);
+        context.stroke();
+        context.restore();
+      }
+
+      // Start render loop
+      requestAnimationFrame(renderARFrame);
+
+      // ==================== WEBCAM DETECTION PUMP ====================
+      let isDetecting = false;
+      async function webcamPoseLoop() {
+        if (!isWebcamActive) return;
+        if (webcam.readyState >= 2 && pose && !isDetecting) {
+          isDetecting = true;
+          try {
+            await pose.send({ image: webcam });
+          } catch(e) {
+            console.warn("Pose send frame error:", e);
+          }
+          isDetecting = false;
+        }
+        requestAnimationFrame(webcamPoseLoop);
+      }
+
+      // Webcam Toggle Button
+      btnToggleWebcam.addEventListener('click', async () => {
+        if (!isWebcamActive) {
+          try {
+            webcamStream = await navigator.mediaDevices.getUserMedia({
+              video: {
+                width: { ideal: 640 },
+                height: { ideal: 480 },
+                facingMode: 'user'
+              }
+            });
+            webcam.srcObject = webcamStream;
+            await webcam.play();
+            isWebcamActive = true;
+            btnToggleWebcam.textContent = 'Matikan Webcam AR';
+            arStatusText.textContent = 'Live AR: Webcam Aktif';
+            liveDot.style.background = '#00FFA3';
+            liveDot.style.boxShadow = '0 0 10px #00FFA3';
+            showToast('Kamera aktif! Filter AR melacak bahu & tubuhmu secara langsung.', '📷');
+            requestAnimationFrame(webcamPoseLoop);
+          } catch(err) {
+            console.error("Camera error:", err);
+            showToast('Izin kamera ditolak. Silakan gunakan model demo atau upload fotomu.', '⚠️');
+          }
+        } else {
+          stopWebcam();
         }
       });
 
-      // Photo upload
-      document.getElementById('tryonUploadInput').addEventListener('change', (e) => {
+      function stopWebcam() {
+        if (webcamStream) {
+          webcamStream.getTracks().forEach(t => t.stop());
+          webcamStream = null;
+        }
+        isWebcamActive = false;
+        btnToggleWebcam.textContent = 'Nyalakan Webcam AR';
+        arStatusText.textContent = userUploadedImg ? 'Live AR: Foto Pribadi' : 'Live AR: Model Demo';
+        liveDot.style.background = '#FF4565';
+        liveDot.style.boxShadow = 'none';
+        showToast('Webcam dimatikan. Kembali ke mode preview.', 'ℹ️');
+      }
+
+      // Photo Upload
+      uploadInput.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (file) {
+          if (isWebcamActive) stopWebcam();
           const reader = new FileReader();
           reader.onload = (ev) => {
-            webcam.style.display = 'none';
-            model.src = ev.target.result;
-            model.style.display = 'block';
-            showToast('Foto pribadi berhasil diunggah untuk Try-On!', '🖼️');
+            const img = new Image();
+            img.onload = async () => {
+              userUploadedImg = img;
+              arStatusText.textContent = 'Live AR: Foto Unggahan';
+              showToast('Foto pribadi berhasil dimuat! Baju disesuaikan dengan fotomu.', '🖼️');
+              if (pose) {
+                try {
+                  await pose.send({ image: img });
+                } catch(err) {
+                  console.warn("Pose detection on image:", err);
+                }
+              }
+            };
+            img.src = ev.target.result;
           };
           reader.readAsDataURL(file);
         }
       });
 
-      // Camera shutter & save buttons
-      document.getElementById('btnCamCapture').addEventListener('click', () => {
-        showToast('Foto look kamu berhasil di-capture!', '📸');
-      });
-      document.getElementById('btnCamSave').addEventListener('click', () => {
-        const activeItem = document.querySelector('.slider-item.active');
-        const prodName = activeItem ? activeItem.getAttribute('data-name') : 'Varsity Jacket Purple';
-        if (window.wolvyStore && window.wolvyStore.db.savedLooks) {
-          window.wolvyStore.db.savedLooks.unshift({
-            id: Date.now(),
-            title: prodName + ' Look',
-            date: 'Hari ini',
-            image: 'assets/tryon_girl.png',
-            tag: 'Virtual Try-On'
-          });
-          window.wolvyStore.save();
-        }
-        showToast('Look tersimpan ke profil Saved Looks! (PRD FR-14)', '⭐');
-      });
+      // Flip Camera Button
       document.getElementById('btnCamFlip').addEventListener('click', () => {
-        showToast('Kamera dibalik.', '🔄');
-      });
-      document.getElementById('btnScrollCam').addEventListener('click', () => {
-        document.getElementById('tryonPhoneScreen').scrollIntoView({ behavior: 'smooth' });
+        if (isWebcamActive) {
+          stopWebcam();
+        } else {
+          btnToggleWebcam.click();
+        }
       });
 
-      // Size chip scaler
-      const sizeScales = { 'XS': '52%', 'S': '55%', 'M': '58%', 'L': '62%', 'XL': '66%' };
+      // Scroll to Cam Button
+      const btnScroll = document.getElementById('btnScrollCam');
+      if (btnScroll) {
+        btnScroll.addEventListener('click', () => {
+          document.getElementById('tryonPhoneScreen').scrollIntoView({ behavior: 'smooth' });
+        });
+      }
+
+      // ==================== FINE TUNING SLIDERS ====================
+      sliderOffsetY.addEventListener('input', (e) => {
+        userOffsetY = Number(e.target.value);
+        labelOffsetY.textContent = `${userOffsetY > 0 ? '+' : ''}${userOffsetY} px`;
+      });
+
+      sliderExtraScale.addEventListener('input', (e) => {
+        userExtraScale = Number(e.target.value);
+        labelExtraScale.textContent = `${userExtraScale.toFixed(2)}x`;
+      });
+
+      // Size Chips
+      const sizeMultipliers = { 'XS': 1.7, 'S': 1.85, 'M': 2.0, 'L': 2.15, 'XL': 2.3 };
       document.querySelectorAll('.size-chip').forEach(chip => {
         chip.addEventListener('click', () => {
           document.querySelectorAll('.size-chip').forEach(c => c.classList.remove('active'));
           chip.classList.add('active');
           const sz = chip.textContent.trim();
-          if (overlayImg && sizeScales[sz]) {
-            overlayImg.style.width = sizeScales[sz];
-            showToast(`Ukuran ${sz} diterapkan pada visual!`, '📏');
+          if (sizeMultipliers[sz]) {
+            activeSizeScale = sizeMultipliers[sz];
+            showToast(`Ukuran fitting ${sz} diterapkan pada filter!`, '📏');
           }
         });
       });
 
-      // Merch category switcher
-      const merchCatalog = {
-        jacket: [
-          { name: "Varsity Jacket Purple Edition", img: "assets/varsity_transparent.png", thumb: "assets/prod_varsity.png", price: "Rp 399.000", id: 1 },
-          { name: "Varsity Jacket Navy Edition", img: "assets/varsity_transparent.png", thumb: "assets/prod_varsity.png", price: "Rp 399.000", id: 1 }
-        ],
-        hoodie: [
-          { name: "Hoodie Wolf Logo Black", img: "assets/prod_hoodie_black.png", thumb: "assets/prod_hoodie_black.png", price: "Rp 299.000", id: 4 }
-        ],
-        tshirt: [
-          { name: "T-Shirt Faculty Streetwear", img: "assets/prod_tshirt.png", thumb: "assets/prod_tshirt.png", price: "Rp 149.000", id: 11 },
-          { name: "Custom Jersey Angkatan", img: "assets/prod_jersey.png", thumb: "assets/prod_jersey.png", price: "Rp 249.000", id: 12 }
-        ],
-        cap: [
-          { name: "Cap Classic Navy", img: "assets/prod_cap_navy.png", thumb: "assets/prod_cap_navy.png", price: "Rp 149.000", id: 3 }
-        ]
-      };
-
+      // ==================== MERCHANDISE CATEGORY SWITCHER ====================
       const sliderContainer = document.querySelector('.merch-items-slider');
 
       document.querySelectorAll('.merch-type-btn').forEach(btn => {
@@ -739,7 +1170,7 @@
           const items = merchCatalog[type] || merchCatalog.jacket;
 
           sliderContainer.innerHTML = items.map((it, idx) => `
-            <div class="slider-item ${idx === 0 ? 'active' : ''}" data-img="${it.img}" data-name="${it.name}" data-id="${it.id}">
+            <div class="slider-item ${idx === 0 ? 'active' : ''}" data-img="${it.img}" data-name="${it.name}" data-id="${it.id}" data-type="${it.type}" data-ratio="${it.baseRatio}">
               ${idx === 0 ? '<div class="slider-item-check">&#10003;</div>' : ''}
               <img src="${it.thumb}" alt="${it.name}" class="slider-img">
               <h4 class="slider-title">${it.name}</h4>
@@ -747,48 +1178,142 @@
             </div>
           `).join('');
 
-          // Select first item by default
-          if (items[0] && overlayImg) {
-            overlayImg.src = items[0].img;
-            if (type === 'cap') {
-              overlayImg.style.bottom = '68%';
-              overlayImg.style.width = '30%';
-            } else {
-              overlayImg.style.bottom = '20%';
-              overlayImg.style.width = '58%';
-            }
+          // Auto-select first item in new category
+          if (items[0]) {
+            selectMerchItem(items[0].name, items[0].id, items[0].type, items[0].baseRatio, items[0].img);
           }
 
           // Re-bind click
-          sliderContainer.querySelectorAll('.slider-item').forEach(item => {
-            item.addEventListener('click', () => {
-              sliderContainer.querySelectorAll('.slider-item').forEach(i => {
-                i.classList.remove('active');
-                const ch = i.querySelector('.slider-item-check');
-                if (ch) ch.remove();
-              });
-              item.classList.add('active');
-              item.insertAdjacentHTML('afterbegin', '<div class="slider-item-check">&#10003;</div>');
-              const img = item.getAttribute('data-img');
-              const name = item.getAttribute('data-name');
-              if (overlayImg) overlayImg.src = img;
-              showToast(`Merchandise: ${name}`, '🧥');
-            });
-          });
+          bindSliderItems();
         });
       });
 
-      // Add to Cart from Try-On
-      document.getElementById('btnTryonAddToCart').addEventListener('click', () => {
-        const activeItem = document.querySelector('.slider-item.active');
-        const prodId = activeItem ? Number(activeItem.getAttribute('data-id')) || 1 : 1;
-        const prod = window.wolvyStore.getProductById(prodId) || window.wolvyStore.getProductById(1);
-        const activeSize = document.querySelector('.size-chip.active')?.textContent.trim() || 'M';
+      function selectMerchItem(name, id, type, ratio, imgSrc) {
+        activeMerch.name = name;
+        activeMerch.id = Number(id) || 1;
+        activeMerch.type = type;
+        activeMerch.baseRatio = Number(ratio) || 1.0;
+        activeMerch.imgElement = new Image();
+        activeMerch.imgElement.src = imgSrc;
+        showToast(`Filter berganti ke: ${name}`, '✨');
+      }
 
-        window.wolvyStore.addToCart(prod, activeSize, "Purple", 1);
-        document.getElementById('cartBadge').textContent = window.wolvyStore.getCartCount();
-        showToast(`🛒 ${prod.name} (${activeSize}) berhasil ditambahkan ke keranjang belanja!`);
+      function bindSliderItems() {
+        sliderContainer.querySelectorAll('.slider-item').forEach(item => {
+          item.addEventListener('click', () => {
+            sliderContainer.querySelectorAll('.slider-item').forEach(i => {
+              i.classList.remove('active');
+              const ch = i.querySelector('.slider-item-check');
+              if (ch) ch.remove();
+            });
+            item.classList.add('active');
+            item.insertAdjacentHTML('afterbegin', '<div class="slider-item-check">&#10003;</div>');
+
+            const name = item.getAttribute('data-name');
+            const id = item.getAttribute('data-id');
+            const type = item.getAttribute('data-type') || 'jacket';
+            const ratio = item.getAttribute('data-ratio') || '1.0';
+            const img = item.getAttribute('data-img');
+
+            selectMerchItem(name, id, type, ratio, img);
+          });
+        });
+      }
+      bindSliderItems();
+
+      // Panel Tab Switcher
+      document.querySelectorAll('.panel-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          document.querySelectorAll('.panel-tab').forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          const which = tab.getAttribute('data-tab');
+          if (which === 'adjust') {
+            const tuneEl = document.getElementById('toggleSkeleton');
+            if (tuneEl) tuneEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            showToast('Panel AR Fitting aktif! Kamu bisa atur posisi & skala baju.', '⚙️');
+          } else {
+            const catEl = document.querySelector('.merch-type-selector');
+            if (catEl) catEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            showToast('Pilih merchandise kampus yang ingin dicoba.', '🧥');
+          }
+        });
       });
+
+      // ==================== SHUTTER CAPTURE & SNAPSHOT MODAL ====================
+      function takeSnapshot() {
+        // Trigger white flash animation
+        shutterFlash.style.opacity = '0.9';
+        setTimeout(() => { shutterFlash.style.opacity = '0'; }, 160);
+
+        // Capture high-res snapshot from canvas
+        const dataURL = canvas.toDataURL('image/jpeg', 0.95);
+        snapshotPreviewImg.src = dataURL;
+        btnDownloadSnapshot.href = dataURL;
+        btnDownloadSnapshot.setAttribute('download', `wolvy-look-${Date.now()}.jpg`);
+
+        // Automatically persist into Saved Looks (PRD FR-14)
+        if (window.wolvyStore && window.wolvyStore.db.savedLooks) {
+          window.wolvyStore.db.savedLooks.unshift({
+            id: Date.now(),
+            title: activeMerch.name + ' Look',
+            date: 'Hari ini',
+            image: dataURL,
+            tag: 'Virtual Try-On AR'
+          });
+          window.wolvyStore.save();
+        }
+
+        // Open modal
+        snapshotModal.classList.add('active');
+        showToast('Foto AR berhasil diambil dan disimpan ke profil!', '📸');
+      }
+
+      document.getElementById('btnCamCapture').addEventListener('click', takeSnapshot);
+
+      document.getElementById('btnCamSave').addEventListener('click', () => {
+        takeSnapshot();
+      });
+
+      btnCloseSnapshot.addEventListener('click', () => {
+        snapshotModal.classList.remove('active');
+      });
+
+      snapshotModal.addEventListener('click', (e) => {
+        if (e.target === snapshotModal) {
+          snapshotModal.classList.remove('active');
+        }
+      });
+
+      btnSaveSnapshot.addEventListener('click', () => {
+        showToast('Look tersimpan di profil "Saved Looks" kamu! (PRD FR-14)', '⭐');
+        snapshotModal.classList.remove('active');
+      });
+
+      btnBuySnapshot.addEventListener('click', () => {
+        const prod = window.wolvyStore ? (window.wolvyStore.getProductById(activeMerch.id) || window.wolvyStore.getProductById(1)) : null;
+        const activeSize = document.querySelector('.size-chip.active')?.textContent.trim() || 'M';
+        if (prod && window.wolvyStore) {
+          window.wolvyStore.addToCart(prod, activeSize, "Purple", 1);
+          document.getElementById('cartBadge').textContent = window.wolvyStore.getCartCount();
+          showToast(`🛒 ${prod.name} (${activeSize}) ditambahkan! Menuju checkout...`);
+          setTimeout(() => {
+            window.location.href = 'checkout.html';
+          }, 600);
+        }
+      });
+
+      // Add to Cart button in side panel
+      document.getElementById('btnTryonAddToCart').addEventListener('click', () => {
+        const prod = window.wolvyStore ? (window.wolvyStore.getProductById(activeMerch.id) || window.wolvyStore.getProductById(1)) : null;
+        const activeSize = document.querySelector('.size-chip.active')?.textContent.trim() || 'M';
+        if (prod && window.wolvyStore) {
+          window.wolvyStore.addToCart(prod, activeSize, "Purple", 1);
+          document.getElementById('cartBadge').textContent = window.wolvyStore.getCartCount();
+          showToast(`🛒 ${prod.name} (${activeSize}) berhasil ditambahkan ke keranjang belanja!`);
+        }
+      });
+    });
   </script>
 </body>
 </html>
+
