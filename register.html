@@ -132,57 +132,41 @@
       <img src="assets/wolvy_logo_clean.png" alt="WOLVY" class="auth-logo">
     </a>
 
-    <h1 class="auth-title">Daftar Akun Mahasiswa</h1>
+    <h1 class="auth-title">Daftar Akun Customer</h1>
     <p class="auth-subtitle">Gabung ke komunitas streetwear kampus WOLVY</p>
 
+    <div id="registerAlert" style="display:none; padding:12px 14px; border-radius:var(--radius-md); font-size:0.85rem; margin-bottom:18px; text-align:center;"></div>
+
     <form onsubmit="handleRegisterSubmit(event)">
+      <div class="form-group-dark">
+        <label class="form-label-dark" for="regEmail">Email Aktif *</label>
+        <input type="email" id="regEmail" class="form-input-dark" placeholder="nama@email.com atau nama@kampus.ac.id" required>
+      </div>
+
       <div class="form-row-auth">
+        <div>
+          <label class="form-label-dark" for="regUsername">Username *</label>
+          <input type="text" id="regUsername" class="form-input-dark" placeholder="Contoh: dimas_wolvy" pattern="^[a-zA-Z0-9_]{3,20}$" title="3-20 karakter, huruf/angka/underscore" required>
+        </div>
         <div>
           <label class="form-label-dark" for="regName">Nama Lengkap</label>
-          <input type="text" id="regName" class="form-input-dark" placeholder="Nama mahasiswa" required>
-        </div>
-        <div>
-          <label class="form-label-dark" for="regNim">NIM Kampus</label>
-          <input type="text" id="regNim" class="form-input-dark" placeholder="Contoh: 220108..." required>
-        </div>
-      </div>
-
-      <div class="form-group-dark">
-        <label class="form-label-dark" for="regFaculty">Fakultas / Program Studi</label>
-        <select id="regFaculty" class="form-select-dark" required>
-          <option value="Fakultas Ilmu Komputer (FIK)">Fakultas Ilmu Komputer (FIK)</option>
-          <option value="Fakultas Teknik (FT)">Fakultas Teknik (FT)</option>
-          <option value="Fakultas Ekonomi & Bisnis (FEB)">Fakultas Ekonomi & Bisnis (FEB)</option>
-          <option value="Fakultas Seni Rupa & Desain (FSRD)">Fakultas Seni Rupa & Desain (FSRD)</option>
-          <option value="Fakultas Ilmu Sosial & Ilmu Politik (FISIP)">Fakultas Ilmu Sosial & Ilmu Politik (FISIP)</option>
-          <option value="Fakultas Kedokteran (FK)">Fakultas Kedokteran (FK)</option>
-        </select>
-      </div>
-
-      <div class="form-row-auth">
-        <div>
-          <label class="form-label-dark" for="regEmail">Email Kampus</label>
-          <input type="email" id="regEmail" class="form-input-dark" placeholder="nama@kampus.ac.id" required>
-        </div>
-        <div>
-          <label class="form-label-dark" for="regPhone">No. WhatsApp</label>
-          <input type="tel" id="regPhone" class="form-input-dark" placeholder="08..." required>
+          <input type="text" id="regName" class="form-input-dark" placeholder="Nama mahasiswa / customer">
         </div>
       </div>
 
       <div class="form-row-auth">
         <div>
-          <label class="form-label-dark" for="regPassword">Password</label>
-          <input type="password" id="regPassword" class="form-input-dark" placeholder="Minimal 6 karakter" required>
+          <label class="form-label-dark" for="regPassword">Password *</label>
+          <input type="password" id="regPassword" class="form-input-dark" placeholder="Minimal 6 karakter" minlength="6" required>
         </div>
         <div>
-          <label class="form-label-dark" for="regPasswordConfirm">Konfirmasi Password</label>
-          <input type="password" id="regPasswordConfirm" class="form-input-dark" placeholder="Ulangi password" required>
+          <label class="form-label-dark" for="regPasswordConfirm">Konfirmasi Password *</label>
+          <input type="password" id="regPasswordConfirm" class="form-input-dark" placeholder="Ulangi password" minlength="6" required>
         </div>
       </div>
 
-      <button type="submit" class="btn-auth-submit">
-        Daftar Akun Mahasiswa ⚡
+      <button type="submit" class="btn-auth-submit" id="btnSubmitRegister">
+        Daftar Akun Sekarang ⚡
       </button>
     </form>
 
@@ -191,34 +175,73 @@
     </div>
   </div>
 
+  <!-- CDN Supabase JS & Auth Helpers -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
   <script src="store.js"></script>
   <script>
-    function handleRegisterSubmit(e) {
+    async function handleRegisterSubmit(e) {
       e.preventDefault();
+      const btn = document.getElementById('btnSubmitRegister');
+      const alertBox = document.getElementById('registerAlert');
+
+      const email = document.getElementById('regEmail').value.trim();
+      const username = document.getElementById('regUsername').value.trim();
+      const fullName = document.getElementById('regName').value.trim() || username;
       const p1 = document.getElementById('regPassword').value;
       const p2 = document.getElementById('regPasswordConfirm').value;
+
       if (p1 !== p2) {
-        alert('Password konfirmasi tidak cocok!');
+        showAlert('Password dan Konfirmasi Password tidak sama!', 'error');
         return;
       }
 
-      const name = document.getElementById('regName').value;
-      const email = document.getElementById('regEmail').value;
-      const faculty = document.getElementById('regFaculty').value;
+      btn.disabled = true;
+      btn.innerText = 'Memproses Pendaftaran...';
+      showAlert('Mendaftarkan akun ke backend...', 'info');
 
-      // Update store user
-      wolvyStore.db.user = {
-        isLoggedIn: true,
-        name,
-        email,
-        faculty,
-        role: 'pelanggan',
-        avatar: '🐺'
-      };
-      wolvyStore.save();
+      try {
+        const res = await window.wolvyAuth.register({
+          email,
+          username,
+          password: p1,
+          fullName
+        });
 
-      alert(`🎉 Pendaftaran Berhasil! Selamat datang di keluarga besar WOLVY, ${name}!`);
-      window.location.href = 'index.html';
+        if (res.success) {
+          showAlert(res.message, 'success');
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 1200);
+        } else {
+          showAlert(res.message, 'error');
+          btn.disabled = false;
+          btn.innerText = 'Daftar Akun Sekarang ⚡';
+        }
+      } catch (err) {
+        showAlert('Terjadi kesalahan koneksi: ' + err.message, 'error');
+        btn.disabled = false;
+        btn.innerText = 'Daftar Akun Sekarang ⚡';
+      }
+    }
+
+    function showAlert(msg, type) {
+      const box = document.getElementById('registerAlert');
+      box.style.display = 'block';
+      box.innerText = msg;
+      if (type === 'error') {
+        box.style.background = 'rgba(239, 68, 68, 0.2)';
+        box.style.border = '1px solid #EF4444';
+        box.style.color = '#FCA5A5';
+      } else if (type === 'success') {
+        box.style.background = 'rgba(16, 185, 129, 0.2)';
+        box.style.border = '1px solid #10B981';
+        box.style.color = '#6EE7B7';
+      } else {
+        box.style.background = 'rgba(232, 255, 56, 0.15)';
+        box.style.border = '1px solid var(--color-neon-yellow)';
+        box.style.color = '#FFFFFF';
+      }
     }
   </script>
 </body>

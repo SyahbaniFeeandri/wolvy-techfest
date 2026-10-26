@@ -76,6 +76,36 @@
       border-color: var(--color-neon-yellow);
       box-shadow: 0 0 0 3px rgba(232, 255, 56, 0.15);
     }
+    .auth-tabs {
+      display: flex;
+      background: rgba(19, 7, 34, 0.7);
+      padding: 4px;
+      border-radius: var(--radius-pill);
+      margin-bottom: 24px;
+      border: 1px solid rgba(205, 184, 244, 0.25);
+    }
+    .auth-tab-btn {
+      flex: 1;
+      padding: 10px 14px;
+      border: none;
+      background: transparent;
+      color: var(--color-lavender);
+      font-size: 0.85rem;
+      font-weight: 700;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .auth-tab-btn.active {
+      background: var(--color-neon-yellow);
+      color: #120624;
+      box-shadow: 0 4px 12px rgba(232, 255, 56, 0.35);
+    }
     .btn-auth-submit {
       width: 100%;
       padding: 14px;
@@ -100,8 +130,8 @@
 
     /* Demo Quick Login Box for judges */
     .demo-login-box {
-      margin-top: 28px;
-      padding-top: 20px;
+      margin-top: 24px;
+      padding-top: 18px;
       border-top: 1px dashed rgba(205, 184, 244, 0.25);
     }
     .demo-label {
@@ -111,7 +141,7 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
       text-align: center;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       display: block;
     }
     .demo-btns-grid {
@@ -155,25 +185,37 @@
       <img src="assets/wolvy_logo_clean.png" alt="WOLVY" class="auth-logo">
     </a>
 
-    <h1 class="auth-title">Masuk Akun Mahasiswa</h1>
-    <p class="auth-subtitle">Kelola pesanan merchandise almamater kampusmu</p>
+    <!-- Mode Selector Tabs: Customer vs Admin -->
+    <div class="auth-tabs">
+      <button type="button" class="auth-tab-btn active" id="tabCustomer" onclick="switchLoginMode('pelanggan')">
+        <span>🛍️ Customer</span>
+      </button>
+      <button type="button" class="auth-tab-btn" id="tabAdmin" onclick="switchLoginMode('admin')">
+        <span>🛡️ Admin Toko</span>
+      </button>
+    </div>
+
+    <h1 class="auth-title" id="loginHeaderTitle">Masuk Akun Customer</h1>
+    <p class="auth-subtitle" id="loginHeaderSubtitle">Akses katalog belanja dan kelola pesanan merchandise kampus</p>
+
+    <div id="loginAlert" style="display:none; padding:12px 14px; border-radius:var(--radius-md); font-size:0.85rem; margin-bottom:18px; text-align:center;"></div>
 
     <form onsubmit="handleLoginSubmit(event)">
       <div class="form-group-dark">
-        <label class="form-label-dark" for="loginEmail">Email Kampus / NIM</label>
-        <input type="text" id="loginEmail" class="form-input-dark" value="aulia.rahma@kampus.ac.id" placeholder="nama@kampus.ac.id" required>
+        <label class="form-label-dark" for="loginIdentifier" id="lblIdentifier">Email atau Username</label>
+        <input type="text" id="loginIdentifier" class="form-input-dark" value="aulia" placeholder="Masukkan email atau username" required>
       </div>
 
       <div class="form-group-dark">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
           <label class="form-label-dark" for="loginPassword" style="margin-bottom:0;">Password</label>
-          <a href="#" style="font-size:0.75rem; color:var(--color-lavender); text-decoration:none;">Lupa Password?</a>
+          <a href="#" onclick="alert('Untuk reset password silakan hubungi CS WhatsApp WOLVY atau lakukan melalui dashboard Supabase Auth.')" style="font-size:0.75rem; color:var(--color-lavender); text-decoration:none;">Lupa Password?</a>
         </div>
-        <input type="password" id="loginPassword" class="form-input-dark" value="password123" required>
+        <input type="password" id="loginPassword" class="form-input-dark" value="password123" placeholder="Masukkan password" required>
       </div>
 
-      <button type="submit" class="btn-auth-submit">
-        Masuk Sekarang ⚡
+      <button type="submit" class="btn-auth-submit" id="btnSubmitLogin">
+        Masuk Sebagai Customer ⚡
       </button>
     </form>
 
@@ -181,44 +223,127 @@
     <div class="demo-login-box">
       <span class="demo-label">⭐ Quick Login Demo Lomba (1-Klik)</span>
       <div class="demo-btns-grid">
-        <button type="button" class="btn-demo-quick" onclick="quickLogin('pelanggan')">
-          👤 Mahasiswa Demo<br><span style="font-size:0.7rem; color:var(--color-lavender);">Aulia (FIK)</span>
+        <button type="button" class="btn-demo-quick" onclick="quickFillAndLogin('pelanggan')">
+          👤 Customer Demo<br><span style="font-size:0.7rem; color:var(--color-lavender);">User: aulia</span>
         </button>
-        <button type="button" class="btn-demo-quick" onclick="quickLogin('admin')">
-          🛡️ Admin Toko<br><span style="font-size:0.7rem; color:var(--color-lavender);">Dashboard FR-09</span>
+        <button type="button" class="btn-demo-quick" onclick="quickFillAndLogin('admin')">
+          🛡️ Admin Demo<br><span style="font-size:0.7rem; color:var(--color-lavender);">User: admin</span>
         </button>
       </div>
     </div>
 
-    <div class="auth-footer">
-      Belum punya akun? <a href="register.html">Daftar Akun Baru</a>
+    <div class="auth-footer" id="loginFooterRegister">
+      Belum punya akun? <a href="register.html">Daftar Customer Baru</a>
     </div>
   </div>
 
+  <!-- CDN Supabase JS & Auth Helpers -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
   <script src="store.js"></script>
   <script>
-    function handleLoginSubmit(e) {
-      e.preventDefault();
-      const email = document.getElementById('loginEmail').value;
-      if (email.includes('admin')) {
-        wolvyStore.setRole('admin');
-        alert('Selamat datang kembali, Administrator WOLVY!');
-        window.location.href = 'admin.html';
+    let currentMode = 'pelanggan'; // 'pelanggan' | 'admin'
+
+    // Periksa query parameter ?role=admin
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('role') === 'admin') {
+        switchLoginMode('admin');
+      }
+    });
+
+    function switchLoginMode(mode) {
+      currentMode = mode;
+      const tabCust = document.getElementById('tabCustomer');
+      const tabAdm = document.getElementById('tabAdmin');
+      const title = document.getElementById('loginHeaderTitle');
+      const subtitle = document.getElementById('loginHeaderSubtitle');
+      const btn = document.getElementById('btnSubmitLogin');
+      const identifierInput = document.getElementById('loginIdentifier');
+      const footReg = document.getElementById('loginFooterRegister');
+      const alertBox = document.getElementById('loginAlert');
+      if (alertBox) alertBox.style.display = 'none';
+
+      if (mode === 'admin') {
+        tabAdm.classList.add('active');
+        tabCust.classList.remove('active');
+        title.innerText = 'Login Administrator';
+        subtitle.innerText = 'Khusus tim operasional & manajemen toko WOLVY';
+        btn.innerText = 'Masuk Dashboard Admin 🛡️';
+        identifierInput.value = 'admin';
+        footReg.style.display = 'none';
       } else {
-        wolvyStore.setRole('pelanggan');
-        alert('Selamat datang kembali di WOLVY Campus Store!');
-        window.location.href = 'index.html';
+        tabCust.classList.add('active');
+        tabAdm.classList.remove('active');
+        title.innerText = 'Masuk Akun Customer';
+        subtitle.innerText = 'Akses katalog belanja dan kelola pesanan merchandise kampus';
+        btn.innerText = 'Masuk Sebagai Customer ⚡';
+        identifierInput.value = 'aulia';
+        footReg.style.display = 'block';
       }
     }
 
-    function quickLogin(role) {
-      wolvyStore.setRole(role);
-      if (role === 'admin') {
-        alert('Masuk sebagai Admin Toko. Membuka dashboard kelola stok & pesanan.');
-        window.location.href = 'admin.html';
+    async function handleLoginSubmit(e) {
+      e.preventDefault();
+      const identifier = document.getElementById('loginIdentifier').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const btn = document.getElementById('btnSubmitLogin');
+
+      btn.disabled = true;
+      btn.innerText = 'Memverifikasi Kredensial...';
+      showAlert('Menghubungkan ke sistem otentikasi...', 'info');
+
+      try {
+        const res = await window.wolvyAuth.login(identifier, password, currentMode);
+        if (res.success) {
+          showAlert(res.message, 'success');
+          setTimeout(() => {
+            if (res.role === 'admin') {
+              window.location.href = 'admin.html';
+            } else {
+              window.location.href = 'index.html';
+            }
+          }, 1000);
+        } else {
+          showAlert(res.message, 'error');
+          btn.disabled = false;
+          btn.innerText = currentMode === 'admin' ? 'Masuk Dashboard Admin 🛡️' : 'Masuk Sebagai Customer ⚡';
+        }
+      } catch (err) {
+        showAlert('Terjadi kesalahan login: ' + err.message, 'error');
+        btn.disabled = false;
+        btn.innerText = currentMode === 'admin' ? 'Masuk Dashboard Admin 🛡️' : 'Masuk Sebagai Customer ⚡';
+      }
+    }
+
+    function quickFillAndLogin(mode) {
+      switchLoginMode(mode);
+      if (mode === 'admin') {
+        document.getElementById('loginIdentifier').value = 'admin';
+        document.getElementById('loginPassword').value = 'password123';
       } else {
-        alert('Masuk sebagai Mahasiswa (Aulia Rahma - FIK). Membuka beranda toko.');
-        window.location.href = 'index.html';
+        document.getElementById('loginIdentifier').value = 'aulia';
+        document.getElementById('loginPassword').value = 'password123';
+      }
+      handleLoginSubmit(new Event('submit'));
+    }
+
+    function showAlert(msg, type) {
+      const box = document.getElementById('loginAlert');
+      box.style.display = 'block';
+      box.innerText = msg;
+      if (type === 'error') {
+        box.style.background = 'rgba(239, 68, 68, 0.2)';
+        box.style.border = '1px solid #EF4444';
+        box.style.color = '#FCA5A5';
+      } else if (type === 'success') {
+        box.style.background = 'rgba(16, 185, 129, 0.2)';
+        box.style.border = '1px solid #10B981';
+        box.style.color = '#6EE7B7';
+      } else {
+        box.style.background = 'rgba(232, 255, 56, 0.15)';
+        box.style.border = '1px solid var(--color-neon-yellow)';
+        box.style.color = '#FFFFFF';
       }
     }
   </script>

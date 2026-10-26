@@ -2340,6 +2340,35 @@ button {
   transform: translateY(-2px);
 }
 
+.footer-social-pills {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.sosmed-pill-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(205, 184, 244, 0.08);
+  padding: 8px 14px;
+  border-radius: var(--radius-pill);
+  color: var(--color-white);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  border: 1px solid rgba(205, 184, 244, 0.18);
+}
+
+.sosmed-pill-link:hover {
+  background: var(--color-neon-yellow);
+  color: #120624;
+  border-color: var(--color-neon-yellow);
+  transform: translateY(-2px);
+}
+
 .footer-sub-bar {
   background: #0B0317;
   padding: 14px 0;
