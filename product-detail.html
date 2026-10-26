@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Varsity Jacket Purple Edition — Detail Produk WOLVY</title>
+  <meta name="description" content="Detail spesifikasi Varsity Jacket Purple Edition. Custom nama dan angkatan, rating 4.8 dari 104 ulasan mahasiswa.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Permanent+Marker&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .pdetail-layout {
+      padding: 100px 0 80px 0;
+      background: #FAF8FF;
+      color: var(--color-text-dark);
+    }
+    .pdetail-breadcrumb {
+      display: flex;
+      gap: 8px;
+      font-size: 0.85rem;
+      color: #7B689E;
+      margin-bottom: 24px;
+    }
+    .pdetail-breadcrumb a:hover {
+      color: var(--color-dark-purple);
+      text-decoration: underline;
+    }
+    .pdetail-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 40px;
+    }
+    /* Gallery */
+    .pdetail-gallery-wrap {
+      display: flex;
+      gap: 16px;
+    }
+    .gallery-thumbs {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 75px;
+    }
+    .gallery-thumb {
+      width: 75px;
+      height: 75px;
+      border-radius: 12px;
+      border: 2px solid transparent;
+      background: #FFFFFF;
+      padding: 4px;
+      cursor: pointer;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(98,45,170,0.06);
+    }
+    .gallery-thumb.active {
+      border-color: var(--color-dark-purple);
+    }
+    .gallery-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .gallery-main-view {
+      flex: 1;
+      background: #FFFFFF;
+      border-radius: var(--radius-xl);
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      border: 1px solid rgba(205, 184, 244, 0.35);
+      box-shadow: 0 10px 30px rgba(98, 45, 170, 0.08);
+      min-height: 440px;
+    }
+    .gallery-main-img {
+      max-height: 420px;
+      width: 100%;
+      object-fit: contain;
+      border-radius: var(--radius-lg);
+    }
+    .gallery-tryon-pill {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      background: rgba(20, 8, 38, 0.85);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--color-neon-yellow);
+      color: #FFFFFF;
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      font-size: 0.82rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .gallery-tryon-pill:hover {
+      background: var(--color-dark-purple);
+      transform: translateY(-2px);
+    }
+
+    /* Product Details & Customizer Panel */
+    .pdetail-info-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .pdetail-title {
+      font-family: var(--font-heading);
+      font-size: 2.1rem;
+      font-weight: 800;
+      color: var(--color-dark-purple);
+      line-height: 1.15;
+    }
+    .pdetail-rating-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.9rem;
+    }
+    .pdetail-price {
+      font-family: var(--font-heading);
+      font-size: 1.9rem;
+      font-weight: 900;
+      color: var(--color-dark-purple);
+    }
+    
+    /* Custom & Preview Box (Column 3 in reference docx) */
+    .custom-preview-box {
+      background: #FFFFFF;
+      border-radius: var(--radius-xl);
+      padding: 20px;
+      border: 1.5px solid rgba(205, 184, 244, 0.4);
+      box-shadow: 0 6px 20px rgba(98, 45, 170, 0.06);
+    }
+    .cp-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .cp-title {
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--color-dark-purple);
+    }
+    .cp-tabs {
+      display: flex;
+      gap: 8px;
+    }
+    .cp-tab-btn {
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      background: #EDE6FB;
+      color: var(--color-dark-purple);
+      cursor: pointer;
+    }
+    .cp-tab-btn.active {
+      background: var(--color-dark-purple);
+      color: var(--color-white);
+    }
+    .cp-body-grid {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 16px;
+      align-items: center;
+    }
+    .cp-garment-mockup {
+      width: 100%;
+      height: 140px;
+      background: #F4EFFF;
+      border-radius: 12px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border: 1px solid rgba(205, 184, 244, 0.3);
+    }
+    .cp-mockup-img {
+      width: 85%;
+      height: 85%;
+      object-fit: contain;
+    }
+    .cp-preview-text-overlay {
+      position: absolute;
+      top: 40%;
+      width: 70%;
+      text-align: center;
+      font-family: var(--font-heading);
+      font-weight: 900;
+      font-size: 0.75rem;
+      color: #E8FF38;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+      line-height: 1.1;
+    }
+    .cp-form-fields {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .cp-input {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1.5px solid rgba(205, 184, 244, 0.5);
+      border-radius: 8px;
+      font-size: 0.82rem;
+      color: var(--color-dark-purple);
+      outline: none;
+    }
+    .cp-preview-btn {
+      padding: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      background: var(--color-neon-yellow);
+      color: var(--color-text-dark);
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    /* Deskripsi & Checklist */
+    .pdetail-desc-card {
+      background: #FFFFFF;
+      border-radius: var(--radius-xl);
+      padding: 24px;
+      border: 1px solid rgba(205, 184, 244, 0.35);
+      margin-top: 30px;
+    }
+    .pdetail-desc-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .pdetail-desc-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.92rem;
+      color: #5D4B80;
+    }
+    .pdetail-desc-icon {
+      color: #10B981;
+      font-size: 1.1rem;
+    }
+
+    /* Community Look Showcase */
+    .community-look-preview {
+      margin-top: 30px;
+    }
+    .clook-title {
+      font-family: var(--font-heading);
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--color-dark-purple);
+      margin-bottom: 12px;
+    }
+    .clook-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .clook-item {
+      height: 90px;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+    }
+    .clook-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .clook-overlay-more {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(37, 18, 63, 0.7);
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.1rem;
+    }
+
+    /* Reviews section */
+    .reviews-section-card {
+      background: #FFFFFF;
+      border-radius: var(--radius-xl);
+      padding: 24px;
+      border: 1px solid rgba(205, 184, 244, 0.35);
+      margin-top: 24px;
+    }
+    .review-score-flex {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .big-score-num {
+      font-family: var(--font-heading);
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--color-dark-purple);
+      line-height: 1;
+    }
+    .score-breakdown-bars {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .score-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: #6C5B8E;
+    }
+    .bar-line {
+      flex: 1;
+      height: 6px;
+      background: #EDE6FB;
+      border-radius: 4px;
+      margin: 0 10px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      background: var(--color-dark-purple);
+      border-radius: 4px;
+    }
+    .user-review-bubble {
+      background: #FAF7FF;
+      border-radius: 14px;
+      padding: 16px;
+      margin-top: 14px;
+    }
+    .urb-author {
+      font-weight: 800;
+      font-size: 0.88rem;
+      color: var(--color-dark-purple);
+    }
+    .urb-date {
+      font-size: 0.72rem;
+      color: #8C7CA8;
+    }
+    .urb-comment {
+      font-size: 0.84rem;
+      color: #5D4B80;
+      margin-top: 6px;
+    }
+
+    @media (max-width: 900px) {
+      .pdetail-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== HEADER ==================== -->
+  <header class="header" id="mainHeader">
+    <div class="nav-container">
+      <a href="index.html" class="brand-logo" aria-label="WOLVY Home">
+        <img src="assets/wolvy_logo_clean.png" alt="WOLVY Logo" class="brand-logo-img">
+      </a>
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="shop.html" class="nav-link active">Shop</a>
+        <a href="tryon.html" class="nav-link nav-highlight">
+          Try On <span class="badge-pill">LIVE CV</span>
+        </a>
+        <a href="index.html#custom-merch" class="nav-link">Custom Merch</a>
+        <a href="community.html" class="nav-link">Community</a>
+        <a href="about.html" class="nav-link">About</a>
+      </nav>
+      <div class="nav-actions">
+        <a href="wishlist.html" class="icon-btn" aria-label="Wishlist">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          <span class="badge-count" id="wishlistCount">4</span>
+        </a>
+        <a href="cart.html" class="icon-btn cart-btn" aria-label="Keranjang">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          <span class="badge-count" id="cartBadge">3</span>
+        </a>
+        <a href="orders.html" class="icon-btn" title="Pesanan Saya">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== MAIN PRODUCT DETAIL ==================== -->
+  <main class="pdetail-layout">
+    <div class="section-container">
+      <!-- Breadcrumbs -->
+      <nav class="pdetail-breadcrumb">
+        <a href="index.html">Home</a> &rsaquo;
+        <a href="shop.html">Shop</a> &rsaquo;
+        <a href="shop.html?cat=apparel">Apparel</a> &rsaquo;
+        <span id="breadcrumbCurrent">Varsity Jacket Purple Edition</span>
+      </nav>
+
+      <div class="pdetail-grid">
+        
+        <!-- LEFT: GALLERY & DESCRIPTION -->
+        <div class="pdetail-left-col">
+          <div class="pdetail-gallery-wrap">
+            <div class="gallery-thumbs">
+              <div class="gallery-thumb active" data-img="assets/tryon_girl.png">
+                <img src="assets/fotomodeltry.jpeg" alt="Model Try-On Preview">
+              </div>
+              <div class="gallery-thumb" data-img="assets/p_varsity.png">
+                <img src="assets/varsity.jpg" alt="Jacket Front View">
+              </div>
+              <div class="gallery-thumb" data-img="assets/p_hoodie.png">
+                <img src="assets/hoodie.jpg" alt="Jacket Detail">
+              </div>
+            </div>
+
+            <div class="gallery-main-view">
+              <img src="assets/fotomodeltry.jpeg" alt="Product Main Image" id="mainGalleryImg" class="gallery-main-img">
+              <a href="tryon.html?product=1" class="gallery-tryon-pill">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E8FF38" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
+                <span>Coba di Wajah &amp; Badanmu (Try-On)</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Description Box from Reference -->
+          <div class="pdetail-desc-card">
+            <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 800; color: var(--color-dark-purple);">Deskripsi Produk</h3>
+            <p style="font-size: 0.9rem; color: #5D4B80; margin-top: 8px; line-height: 1.6;" id="prodFullDesc">
+              Varsity jacket edisi khusus kampus dengan desain modern dan bahan premium yang nyaman digunakan sehari-hari. Tersedia dalam berbagai ukuran dan warna.
+            </p>
+            <ul class="pdetail-desc-list">
+              <li class="pdetail-desc-item">
+                <span class="pdetail-desc-icon">✓</span>
+                <strong>Bahan fleece cotton premium &amp; tahan lama</strong>
+              </li>
+              <li class="pdetail-desc-item">
+                <span class="pdetail-desc-icon">✓</span>
+                <strong>Desain eksklusif kampus bersertifikat WOLVY</strong>
+              </li>
+              <li class="pdetail-desc-item">
+                <span class="pdetail-desc-icon">✓</span>
+                <strong>Bisa custom teks nama &amp; tahun angkatan</strong>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Community Looks ("Lihat Preview di Kamu") -->
+          <div class="community-look-preview">
+            <h4 class="clook-title">Lihat Preview di Kamu</h4>
+            <div class="clook-grid">
+              <div class="clook-item"><img src="assets/fotomodeltry.jpeg" alt="Student Look"></div>
+              <div class="clook-item"><img src="assets/detail_hero.png" alt="Student Look"></div>
+              <div class="clook-item"><img src="assets/varsity.jpg" alt="Student Look"></div>
+              <div class="clook-item">
+                <img src="assets/hero_student_wolf.png" alt="Student Look">
+                <div class="clook-overlay-more">+12</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: PRODUCT OPTIONS & CUSTOM PREVIEW -->
+        <div class="pdetail-info-panel">
+          <div>
+            <span class="badge-pill" style="margin-bottom: 8px;">Koleksi Resmi Kampus</span>
+            <h1 class="pdetail-title" id="prodTitle">Varsity Jacket Purple Edition</h1>
+            <div class="pdetail-rating-row" style="margin-top: 6px;">
+              <span class="star-icon">★</span>
+              <strong id="prodRating">4.8</strong>
+              <span style="color: #7B689E;">(104 ulasan mahasiswa)</span>
+              <span style="color: #10B981; font-weight: 700; margin-left: auto;" id="prodStock">Stok: 24 pcs</span>
+            </div>
+          </div>
+
+          <div class="pdetail-price" id="prodPrice">Rp 399.000</div>
+
+          <!-- Color Swatches -->
+          <div>
+            <label style="font-size: 0.85rem; font-weight: 700; color: #5D4B80; display: block; margin-bottom: 8px;">Pilihan Warna:</label>
+            <div style="display: flex; gap: 10px;">
+              <span class="color-swatch-dot active" style="background:#4B287D; width:28px; height:28px;" title="Purple"></span>
+              <span class="color-swatch-dot" style="background:#1C2A4A; width:28px; height:28px;" title="Navy"></span>
+              <span class="color-swatch-dot" style="background:#111111; width:28px; height:28px;" title="Black"></span>
+            </div>
+          </div>
+
+          <!-- Size Chips -->
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <label style="font-size: 0.85rem; font-weight: 700; color: #5D4B80;">Pilih Ukuran:</label>
+              <a href="#" style="font-size: 0.78rem; font-weight: 700; color: var(--color-dark-purple); text-decoration: underline;" id="sizeChartLink">Size Chart</a>
+            </div>
+            <div class="size-options">
+              <button class="size-chip" data-s="S">S</button>
+              <button class="size-chip active" data-s="M">M</button>
+              <button class="size-chip" data-s="L">L</button>
+              <button class="size-chip" data-s="XL">XL</button>
+              <button class="size-chip" data-s="XXL">XXL</button>
+            </div>
+          </div>
+
+          <!-- Main CTA: Add to Cart -->
+          <button class="btn btn-primary" id="btnDetailAddToCart" style="width: 100%; padding: 16px; font-size: 1.05rem;">
+            Tambah ke Keranjang &rarr;
+          </button>
+
+          <a href="tryon.html" class="btn btn-outline" style="width: 100%; padding: 13px; font-size: 0.95rem; text-align: center; text-decoration: none; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <span>📸</span> Coba di Virtual Try-On Live
+          </a>
+
+          <button type="button" class="btn" id="btnDetailWishlist" style="width: 100%; padding: 12px; font-size: 0.9rem; margin-top: 8px; background: #F4EFFF; color: var(--color-dark-purple); border: 1.5px solid rgba(205, 184, 244, 0.4); border-radius: var(--radius-pill); cursor: pointer; font-weight: 700;">
+            ❤️ Simpan ke Wishlist Favorit
+          </button>
+
+          <!-- Custom & Preview Box (Identical to Column 3 in reference docx) -->
+          <div class="custom-preview-box">
+            <div class="cp-header">
+              <h4 class="cp-title">Custom &amp; Preview</h4>
+              <div class="cp-tabs">
+                <button class="cp-tab-btn active" data-tab="back">Belakang</button>
+                <button class="cp-tab-btn" data-tab="front">Depan</button>
+              </div>
+            </div>
+
+            <div class="cp-body-grid">
+              <div class="cp-garment-mockup">
+                <img src="assets/prod_hoodie_black.png" alt="Back Mockup" class="cp-mockup-img" id="cpGarmentImg">
+                <div class="cp-preview-text-overlay" id="cpTextOverlay">
+                  AULIA<br>2024
+                </div>
+              </div>
+
+              <div class="cp-form-fields">
+                <input type="text" class="cp-input" id="cpTextInput" placeholder="Your Text Here" value="AULIA">
+                <input type="text" class="cp-input" id="cpYearInput" placeholder="Contoh: 2024" value="2024">
+                <button class="cp-preview-btn" id="cpApplyBtn">Preview Custom</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Reviews Breakdown Card -->
+          <div class="reviews-section-card">
+            <div class="review-score-flex">
+              <div>
+                <span class="big-score-num">4.8</span>
+                <div style="color: #EAB308; font-size: 0.9rem;">★★★★★</div>
+              </div>
+              <div class="score-breakdown-bars">
+                <div class="score-row"><span>Kualitas</span><div class="bar-line"><div class="bar-fill" style="width: 98%;"></div></div><span>4.9</span></div>
+                <div class="score-row"><span>Desain</span><div class="bar-line"><div class="bar-fill" style="width: 96%;"></div></div><span>4.8</span></div>
+                <div class="score-row"><span>Pengiriman</span><div class="bar-line"><div class="bar-fill" style="width: 92%;"></div></div><span>4.6</span></div>
+                <div class="score-row"><span>Layanan</span><div class="bar-line"><div class="bar-fill" style="width: 98%;"></div></div><span>4.9</span></div>
+              </div>
+            </div>
+
+            <div class="user-review-bubble">
+              <div style="display: flex; justify-content: space-between;">
+                <span class="urb-author">Aulia Rahma (TI '22)</span>
+                <span class="urb-date">12 Apr 2025</span>
+              </div>
+              <div style="color: #EAB308; font-size: 0.75rem; margin-top: 2px;">★★★★★</div>
+              <p class="urb-comment">"Jaketnya keren banget! Bahannya tebal dan nyaman. Suka banget sama bordiran logo serigalanya!"</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="footer-strip">
+    <div class="footer-container">
+      <div class="footer-brand-side">
+        <div class="footer-logo-pack">
+          <img src="assets/mascot.png" alt="WOLVY Mascot Logo" class="footer-mascot-img">
+          <span class="footer-brand-title">WOLVY</span>
+        </div>
+        <div class="footer-tagline-text">
+          More Than Merchandise,<br>It's Your Campus Story.
+        </div>
+      </div>
+      <div class="footer-links-side">
+        <a href="index.html">Home</a>
+        <a href="shop.html">Shop All</a>
+        <a href="tryon.html">Try-On CV</a>
+        <a href="orders.html">Pesanan Saya</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="store.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const prodId = Number(urlParams.get('id')) || 1;
+      const product = window.wolvyStore.getProductById(prodId) || window.wolvyStore.getProductById(1);
+
+      // Populate details
+      document.getElementById('breadcrumbCurrent').textContent = product.name;
+      document.getElementById('prodTitle').textContent = product.name;
+      document.getElementById('prodPrice').textContent = window.wolvyStore.formatPrice(product.price);
+      document.getElementById('prodRating').textContent = product.rating;
+      document.getElementById('prodStock').textContent = `Stok: ${product.stock} pcs`;
+      document.getElementById('prodFullDesc').textContent = product.description;
+      document.getElementById('mainGalleryImg').src = product.image;
+
+      // Update badge counts
+      document.getElementById('cartBadge').textContent = window.wolvyStore.getCartCount();
+      document.getElementById('wishlistCount').textContent = window.wolvyStore.getWishlist().length;
+
+      function showToast(msg, icon = '🐺') {
+        const c = document.getElementById('toastContainer');
+        const t = document.createElement('div');
+        t.className = 'toast';
+        t.innerHTML = `<span>${icon}</span><span>${msg}</span>`;
+        c.appendChild(t);
+        setTimeout(() => t.remove(), 2800);
+      }
+
+      // Size chip selection
+      let selectedSize = "M";
+      document.querySelectorAll('.size-chip').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.size-chip').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          selectedSize = btn.getAttribute('data-s');
+        });
+      });
+
+      // Gallery thumb selection
+      document.querySelectorAll('.gallery-thumb').forEach(thumb => {
+        thumb.addEventListener('click', () => {
+          document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
+          thumb.classList.add('active');
+          document.getElementById('mainGalleryImg').src = thumb.getAttribute('data-img');
+        });
+      });
+
+      // Custom & Preview button
+      const cpTextInput = document.getElementById('cpTextInput');
+      const cpYearInput = document.getElementById('cpYearInput');
+      const cpTextOverlay = document.getElementById('cpTextOverlay');
+      const cpApplyBtn = document.getElementById('cpApplyBtn');
+
+      cpApplyBtn.addEventListener('click', () => {
+        const text = cpTextInput.value.trim().toUpperCase() || 'WOLVY';
+        const year = cpYearInput.value.trim() || '2025';
+        cpTextOverlay.innerHTML = `${text}<br>${year}`;
+        showToast('Preview bordir nama & tahun diperbarui!', '✨');
+      });
+
+      // Add to Cart Action
+      document.getElementById('btnDetailAddToCart').addEventListener('click', () => {
+        window.wolvyStore.addToCart(product, selectedSize, "Purple", 1);
+        document.getElementById('cartBadge').textContent = window.wolvyStore.getCartCount();
+        showToast(`${product.name} (Ukuran ${selectedSize}) berhasil masuk keranjang!`, '🛒');
+      });
+
+      // Color swatch selection
+      let selectedColor = "Purple";
+      document.querySelectorAll('.color-swatch-dot').forEach(dot => {
+        dot.addEventListener('click', () => {
+          document.querySelectorAll('.color-swatch-dot').forEach(d => d.classList.remove('active'));
+          dot.classList.add('active');
+          selectedColor = dot.getAttribute('title') || 'Standard';
+          showToast(`Varian warna: ${selectedColor}`, '🎨');
+        });
+      });
+
+      // Wishlist button action
+      document.getElementById('btnDetailWishlist').addEventListener('click', () => {
+        const added = window.wolvyStore.toggleWishlist(product.id);
+        document.getElementById('wishlistCount').textContent = window.wolvyStore.getWishlist().length;
+        if (added) {
+          showToast(`${product.name} disimpan ke Wishlist!`, '❤️');
+        } else {
+          showToast(`${product.name} dihapus dari Wishlist.`, '🤍');
+        }
+      });
+
+      // Size chart modal trigger
+      document.getElementById('sizeChartLink').addEventListener('click', (e) => {
+        e.preventDefault();
+        alert("PANDUAN UKURAN (SIZE CHART - CM):\nS: Lebar 50, Panjang 66\nM: Lebar 53, Panjang 69\nL: Lebar 56, Panjang 72\nXL: Lebar 59, Panjang 75\nXXL: Lebar 62, Panjang 78");
+      });
+    });
+  </script>
+</body>
+</html>

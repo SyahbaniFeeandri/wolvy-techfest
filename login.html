@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Masuk Akun — WOLVY Campus Streetwear</title>
+  <meta name="description" content="Masuk ke akun mahasiswa WOLVY untuk mengakses keranjang, checkout, dan riwayat pesanan merchandise kampus.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Permanent+Marker&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .auth-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at top right, #25123F 0%, #130722 100%);
+      padding: 40px 20px;
+      color: #FFFFFF;
+    }
+    .auth-card {
+      background: rgba(37, 18, 63, 0.7);
+      backdrop-filter: blur(16px);
+      border: 1.5px solid rgba(205, 184, 244, 0.25);
+      border-radius: var(--radius-2xl);
+      padding: 40px;
+      max-width: 460px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      position: relative;
+    }
+    .auth-logo {
+      display: block;
+      margin: 0 auto 24px auto;
+      height: 48px;
+      object-fit: contain;
+    }
+    .auth-title {
+      font-family: var(--font-heading);
+      font-size: 1.8rem;
+      font-weight: 900;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .auth-subtitle {
+      text-align: center;
+      color: var(--color-lavender);
+      font-size: 0.88rem;
+      margin-bottom: 28px;
+    }
+    .form-group-dark {
+      margin-bottom: 18px;
+    }
+    .form-label-dark {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--color-lavender);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .form-input-dark {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(19, 7, 34, 0.6);
+      border: 1.5px solid rgba(205, 184, 244, 0.3);
+      border-radius: var(--radius-md);
+      color: #FFFFFF;
+      font-size: 0.92rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-input-dark:focus {
+      border-color: var(--color-neon-yellow);
+      box-shadow: 0 0 0 3px rgba(232, 255, 56, 0.15);
+    }
+    .btn-auth-submit {
+      width: 100%;
+      padding: 14px;
+      background: var(--color-neon-yellow);
+      color: #000000;
+      border: none;
+      border-radius: var(--radius-pill);
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: all 0.2s;
+      box-shadow: 0 8px 20px rgba(232, 255, 56, 0.3);
+    }
+    .btn-auth-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 25px rgba(232, 255, 56, 0.5);
+    }
+
+    /* Demo Quick Login Box for judges */
+    .demo-login-box {
+      margin-top: 28px;
+      padding-top: 20px;
+      border-top: 1px dashed rgba(205, 184, 244, 0.25);
+    }
+    .demo-label {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: var(--color-neon-yellow);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      text-align: center;
+      margin-bottom: 12px;
+      display: block;
+    }
+    .demo-btns-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .btn-demo-quick {
+      padding: 10px 12px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(205, 184, 244, 0.3);
+      border-radius: var(--radius-md);
+      color: #FFFFFF;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .btn-demo-quick:hover {
+      background: rgba(205, 184, 244, 0.2);
+      border-color: var(--color-lavender);
+    }
+    .auth-footer {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--color-lavender);
+    }
+    .auth-footer a {
+      color: var(--color-neon-yellow);
+      text-decoration: none;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body class="auth-page">
+
+  <div class="auth-card">
+    <a href="index.html">
+      <img src="assets/wolvy_logo_clean.png" alt="WOLVY" class="auth-logo">
+    </a>
+
+    <h1 class="auth-title">Masuk Akun Mahasiswa</h1>
+    <p class="auth-subtitle">Kelola pesanan merchandise almamater kampusmu</p>
+
+    <form onsubmit="handleLoginSubmit(event)">
+      <div class="form-group-dark">
+        <label class="form-label-dark" for="loginEmail">Email Kampus / NIM</label>
+        <input type="text" id="loginEmail" class="form-input-dark" value="aulia.rahma@kampus.ac.id" placeholder="nama@kampus.ac.id" required>
+      </div>
+
+      <div class="form-group-dark">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <label class="form-label-dark" for="loginPassword" style="margin-bottom:0;">Password</label>
+          <a href="#" style="font-size:0.75rem; color:var(--color-lavender); text-decoration:none;">Lupa Password?</a>
+        </div>
+        <input type="password" id="loginPassword" class="form-input-dark" value="password123" required>
+      </div>
+
+      <button type="submit" class="btn-auth-submit">
+        Masuk Sekarang ⚡
+      </button>
+    </form>
+
+    <!-- 1-Click Demo Login for Competition Judges -->
+    <div class="demo-login-box">
+      <span class="demo-label">⭐ Quick Login Demo Lomba (1-Klik)</span>
+      <div class="demo-btns-grid">
+        <button type="button" class="btn-demo-quick" onclick="quickLogin('pelanggan')">
+          👤 Mahasiswa Demo<br><span style="font-size:0.7rem; color:var(--color-lavender);">Aulia (FIK)</span>
+        </button>
+        <button type="button" class="btn-demo-quick" onclick="quickLogin('admin')">
+          🛡️ Admin Toko<br><span style="font-size:0.7rem; color:var(--color-lavender);">Dashboard FR-09</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="auth-footer">
+      Belum punya akun? <a href="register.html">Daftar Akun Baru</a>
+    </div>
+  </div>
+
+  <script src="store.js"></script>
+  <script>
+    function handleLoginSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value;
+      if (email.includes('admin')) {
+        wolvyStore.setRole('admin');
+        alert('Selamat datang kembali, Administrator WOLVY!');
+        window.location.href = 'admin.html';
+      } else {
+        wolvyStore.setRole('pelanggan');
+        alert('Selamat datang kembali di WOLVY Campus Store!');
+        window.location.href = 'index.html';
+      }
+    }
+
+    function quickLogin(role) {
+      wolvyStore.setRole(role);
+      if (role === 'admin') {
+        alert('Masuk sebagai Admin Toko. Membuka dashboard kelola stok & pesanan.');
+        window.location.href = 'admin.html';
+      } else {
+        alert('Masuk sebagai Mahasiswa (Aulia Rahma - FIK). Membuka beranda toko.');
+        window.location.href = 'index.html';
+      }
+    }
+  </script>
+</body>
+</html>

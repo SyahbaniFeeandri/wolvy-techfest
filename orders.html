@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pesanan Saya — WOLVY Campus Streetwear</title>
+  <meta name="description" content="Pantau status dan riwayat pemesanan merchandise kampus WOLVY secara real-time dari pemrosesan hingga siap diambil di kampus.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Permanent+Marker&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .orders-layout {
+      padding: 110px 0 80px 0;
+      background: #FAF8FF;
+      color: var(--color-text-dark);
+      min-height: 85vh;
+    }
+    .page-header-box {
+      margin-bottom: 30px;
+    }
+    .page-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .page-main-title {
+      font-family: var(--font-heading);
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--color-dark-purple);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .orders-filter-tabs {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-top: 20px;
+      border-bottom: 1.5px solid #EBE3F8;
+    }
+    .order-tab-btn {
+      padding: 10px 20px;
+      background: #FFFFFF;
+      border: 1.5px solid rgba(205, 184, 244, 0.4);
+      border-radius: var(--radius-pill);
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #6C568E;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+    .order-tab-btn:hover {
+      border-color: var(--color-mid-purple);
+      color: var(--color-dark-purple);
+    }
+    .order-tab-btn.active {
+      background: var(--color-dark-purple);
+      color: #FFFFFF;
+      border-color: var(--color-dark-purple);
+      box-shadow: 0 4px 12px rgba(37, 18, 63, 0.2);
+    }
+
+    /* Order Cards */
+    .orders-list-container {
+      margin-top: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .order-card {
+      background: #FFFFFF;
+      border-radius: var(--radius-xl);
+      border: 1.5px solid rgba(205, 184, 244, 0.35);
+      box-shadow: 0 8px 25px rgba(98, 45, 170, 0.06);
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .order-card:hover {
+      box-shadow: 0 12px 30px rgba(98, 45, 170, 0.1);
+    }
+    .order-card-header {
+      background: #F8F4FF;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      border-bottom: 1px solid #ECE2FB;
+    }
+    .och-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 0.88rem;
+    }
+    .order-id-tag {
+      font-family: var(--font-heading);
+      font-weight: 900;
+      color: var(--color-dark-purple);
+      letter-spacing: 0.5px;
+    }
+    .order-date-tag {
+      color: #7B689E;
+    }
+
+    /* Status Badges */
+    .status-badge {
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .status-badge.diproses {
+      background: #FFF4D9;
+      color: #B57400;
+      border: 1px solid #FFE08A;
+    }
+    .status-badge.dikirim {
+      background: #EDE4FF;
+      color: #551D9B;
+      border: 1px solid #D5BFF8;
+    }
+    .status-badge.selesai {
+      background: #E3FCEF;
+      color: #00875A;
+      border: 1px solid #ABF5D1;
+    }
+    .status-badge.dibatalkan {
+      background: #FFEBE6;
+      color: #DE350B;
+      border: 1px solid #FFBDAD;
+    }
+
+    .order-card-body {
+      padding: 24px;
+    }
+    .order-items-sublist {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .order-item-row {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .oir-img {
+      width: 72px;
+      height: 72px;
+      object-fit: contain;
+      background: #F4EFFF;
+      border-radius: 12px;
+      border: 1px solid rgba(205, 184, 244, 0.3);
+    }
+    .oir-info {
+      flex: 1;
+    }
+    .oir-name {
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--color-dark-purple);
+      margin-bottom: 4px;
+    }
+    .oir-meta {
+      font-size: 0.8rem;
+      color: #7B689E;
+    }
+    .oir-price {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--color-dark-purple);
+      text-align: right;
+    }
+
+    .order-card-footer {
+      background: #FFFFFF;
+      padding: 16px 24px;
+      border-top: 1px solid #F0E8FF;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .ocf-total {
+      font-size: 0.9rem;
+      color: #6C568E;
+    }
+    .ocf-total strong {
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: var(--color-dark-purple);
+      margin-left: 6px;
+    }
+    .ocf-actions {
+      display: flex;
+      gap: 10px;
+    }
+    .btn-track {
+      padding: 8px 18px;
+      background: var(--color-neon-yellow);
+      color: #000000;
+      border-radius: var(--radius-pill);
+      font-size: 0.85rem;
+      font-weight: 800;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-track:hover {
+      box-shadow: 0 4px 12px rgba(232, 255, 56, 0.4);
+      transform: translateY(-1px);
+    }
+    .btn-secondary-order {
+      padding: 8px 16px;
+      background: #F4EFFF;
+      color: var(--color-dark-purple);
+      border-radius: var(--radius-pill);
+      font-size: 0.85rem;
+      font-weight: 700;
+      border: 1px solid rgba(205, 184, 244, 0.4);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-secondary-order:hover {
+      background: #EDE4FF;
+    }
+
+    /* Modal Tracking */
+    .track-modal-backdrop {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(19, 7, 34, 0.75);
+      backdrop-filter: blur(8px);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .track-modal-backdrop.open {
+      display: flex;
+    }
+    .track-modal-box {
+      background: #FFFFFF;
+      border-radius: var(--radius-xl);
+      padding: 32px;
+      max-width: 520px;
+      width: 100%;
+      position: relative;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    }
+    .timeline-wrap {
+      margin: 24px 0;
+      position: relative;
+      padding-left: 32px;
+    }
+    .timeline-wrap::before {
+      content: '';
+      position: absolute;
+      left: 11px;
+      top: 6px;
+      bottom: 6px;
+      width: 3px;
+      background: #EDE4FF;
+    }
+    .timeline-step {
+      position: relative;
+      margin-bottom: 24px;
+    }
+    .timeline-step:last-child {
+      margin-bottom: 0;
+    }
+    .t-dot {
+      position: absolute;
+      left: -32px;
+      top: 0;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #EDE4FF;
+      color: #7B689E;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 800;
+      border: 3px solid #FFFFFF;
+      box-shadow: 0 0 0 2px #EDE4FF;
+    }
+    .timeline-step.completed .t-dot {
+      background: var(--color-neon-yellow);
+      color: #000000;
+      box-shadow: 0 0 0 2px var(--color-neon-yellow);
+    }
+    .timeline-step.active .t-dot {
+      background: var(--color-mid-purple);
+      color: #FFFFFF;
+      box-shadow: 0 0 0 3px rgba(157, 107, 240, 0.3);
+    }
+    .t-title {
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: var(--color-dark-purple);
+    }
+    .t-desc {
+      font-size: 0.8rem;
+      color: #7B689E;
+      margin-top: 3px;
+    }
+
+    /* Empty state */
+    .orders-empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      background: #FFFFFF;
+      border-radius: var(--radius-xl);
+      border: 1.5px dashed rgba(205, 184, 244, 0.5);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== HEADER ==================== -->
+  <header class="header" id="mainHeader">
+    <div class="nav-container">
+      <a href="index.html" class="brand-logo" aria-label="WOLVY Home">
+        <img src="assets/wolvy_logo_clean.png" alt="WOLVY Logo" class="brand-logo-img">
+      </a>
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="shop.html" class="nav-link">Shop</a>
+        <a href="tryon.html" class="nav-link nav-highlight">
+          Try On <span class="badge-pill">LIVE CV</span>
+        </a>
+        <a href="index.html#custom-merch" class="nav-link">Custom Merch</a>
+        <a href="community.html" class="nav-link">Community</a>
+        <a href="about.html" class="nav-link">About</a>
+      </nav>
+      <div class="nav-actions">
+        <a href="orders.html" class="nav-link" style="font-size:0.85rem; font-weight:700; color:var(--color-neon-yellow); margin-right:12px;">
+          Pesanan Saya
+        </a>
+        <a href="admin.html" class="nav-link" style="font-size:0.85rem; font-weight:700; color:#CDB8F4; margin-right:12px;">
+          Admin Toko
+        </a>
+        <a href="wishlist.html" class="icon-btn" aria-label="Wishlist">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          <span class="badge-count" id="wishlistCount">4</span>
+        </a>
+        <a href="cart.html" class="icon-btn cart-btn" aria-label="Keranjang">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          <span class="badge-count" id="cartBadge">3</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== MAIN ORDERS ==================== -->
+  <main class="orders-layout">
+    <div class="section-container">
+      
+      <div class="page-header-box">
+        <div class="page-title-row">
+          <h1 class="page-main-title">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+            Pesanan Saya
+          </h1>
+          <a href="shop.html" class="btn btn-primary" style="font-size:0.85rem; padding:10px 20px;">
+            + Belanja Merchandise Lagi
+          </a>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="orders-filter-tabs">
+          <button class="order-tab-btn active" onclick="filterOrders('ALL', this)">Semua Pesanan (<span id="countAll">0</span>)</button>
+          <button class="order-tab-btn" onclick="filterOrders('DIPROSES', this)">Diproses (<span id="countDiproses">0</span>)</button>
+          <button class="order-tab-btn" onclick="filterOrders('DIKIRIM', this)">Dikirim / Siap Ambil (<span id="countDikirim">0</span>)</button>
+          <button class="order-tab-btn" onclick="filterOrders('SELESAI', this)">Selesai (<span id="countSelesai">0</span>)</button>
+          <button class="order-tab-btn" onclick="filterOrders('DIBATALKAN', this)">Dibatalkan (<span id="countDibatalkan">0</span>)</button>
+        </div>
+      </div>
+
+      <!-- Orders List Container -->
+      <div class="orders-list-container" id="ordersListContainer">
+        <!-- Rendered via JS -->
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ==================== MODAL LACAK STATUS PESANAN ==================== -->
+  <div class="track-modal-backdrop" id="trackModal">
+    <div class="track-modal-box">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h3 style="font-family:var(--font-heading); font-size:1.3rem; font-weight:800; color:var(--color-dark-purple);">
+          Lacak Pengiriman Kampus
+        </h3>
+        <button onclick="closeTrackModal()" style="background:none; border:none; font-size:1.5rem; cursor:pointer; color:#7B689E;">&times;</button>
+      </div>
+      <p style="font-size:0.82rem; color:#7B689E; margin-top:4px;">
+        ID Pesanan: <strong style="color:var(--color-dark-purple);" id="modalOrderId">#ORD20250012</strong>
+      </p>
+
+      <div class="timeline-wrap" id="modalTimelineContent">
+        <!-- Dynamic steps -->
+      </div>
+
+      <div style="background:#F7F3FF; padding:16px; border-radius:12px; margin-top:20px;">
+        <div style="font-size:0.75rem; text-transform:uppercase; font-weight:800; color:#7B689E; margin-bottom:4px;">
+          Lokasi Pengambilan / Tujuan:
+        </div>
+        <div style="font-size:0.9rem; font-weight:800; color:var(--color-dark-purple);" id="modalPickupLoc">
+          Sekretariat BEM Gedung Mahasiswa Lantai 1
+        </div>
+      </div>
+
+      <button type="button" class="btn btn-primary" onclick="closeTrackModal()" style="width:100%; margin-top:20px; font-size:0.9rem;">
+        Tutup Pelacakan
+      </button>
+    </div>
+  </div>
+
+  <footer class="footer-strip">
+    <div class="section-container footer-content">
+      <div class="footer-copy">
+        © 2026 WOLVY Campus Streetwear · All Rights Reserved. Built for Web Development Competition.
+      </div>
+      <div class="footer-links">
+        <a href="shop.html">Shop</a>
+        <a href="tryon.html">Virtual Try-On</a>
+        <a href="orders.html">Status Pesanan</a>
+        <a href="admin.html">Admin Dashboard</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="store.js"></script>
+  <script>
+    let activeFilter = 'ALL';
+
+    function getStatusClass(status) {
+      switch (status) {
+        case 'DIPROSES': return 'diproses';
+        case 'DIKIRIM': return 'dikirim';
+        case 'SELESAI': return 'selesai';
+        case 'DIBATALKAN': return 'dibatalkan';
+        default: return 'diproses';
+      }
+    }
+
+    function renderOrders() {
+      const allOrders = wolvyStore.getOrders();
+      const container = document.getElementById('ordersListContainer');
+      const badge = document.getElementById('cartBadge');
+      if (badge) badge.innerText = wolvyStore.getCartCount();
+      const wishlistCountEl = document.getElementById('wishlistCount');
+      if (wishlistCountEl) wishlistCountEl.innerText = wolvyStore.getWishlist().length;
+
+      // Update counters
+      document.getElementById('countAll').innerText = allOrders.length;
+      document.getElementById('countDiproses').innerText = allOrders.filter(o => o.status === 'DIPROSES').length;
+      document.getElementById('countDikirim').innerText = allOrders.filter(o => o.status === 'DIKIRIM').length;
+      document.getElementById('countSelesai').innerText = allOrders.filter(o => o.status === 'SELESAI').length;
+      document.getElementById('countDibatalkan').innerText = allOrders.filter(o => o.status === 'DIBATALKAN').length;
+
+      const filtered = activeFilter === 'ALL' 
+        ? allOrders 
+        : allOrders.filter(o => o.status === activeFilter);
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="orders-empty-state">
+            <div style="font-size:3rem; margin-bottom:12px;">📦</div>
+            <h3 style="font-family:var(--font-heading); font-size:1.3rem; font-weight:800; color:var(--color-dark-purple); margin-bottom:6px;">
+              Belum ada pesanan dengan status ini
+            </h3>
+            <p style="font-size:0.85rem; color:#7B689E; margin-bottom:18px;">
+              Yuk temukan merchandise kampus impianmu dan buat penampilan kuliahmu makin kece!
+            </p>
+            <a href="shop.html" class="btn btn-primary" style="font-size:0.85rem; padding:10px 24px;">
+              Jelajahi Katalog Merchandise
+            </a>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map(order => `
+        <div class="order-card">
+          <div class="order-card-header">
+            <div class="och-left">
+              <span class="order-id-tag">#${order.orderId}</span>
+              <span class="order-date-tag">📅 ${order.date}</span>
+              <span style="color:#7B689E; font-size:0.8rem;">Metode: ${order.paymentMethod || 'QRIS Instan'}</span>
+            </div>
+            <span class="status-badge ${getStatusClass(order.status)}">
+              ● ${order.status}
+            </span>
+          </div>
+
+          <div class="order-card-body">
+            <div class="order-items-sublist">
+              ${order.items.map(item => `
+                <div class="order-item-row">
+                  <img src="${item.image || 'assets/prod_varsity.png'}" alt="${item.name}" class="oir-img">
+                  <div class="oir-info">
+                    <div class="oir-name">${item.name}</div>
+                    <div class="oir-meta">Varian: ${item.color || 'Standard'}, Size: ${item.size || 'M'} · Qty: ${item.qty} pcs</div>
+                  </div>
+                  <div class="oir-price">${wolvyStore.formatPrice((item.price || 0) * (item.qty || 1))}</div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <div class="order-card-footer">
+            <div class="ocf-total">
+              Total Pembayaran: <strong>${wolvyStore.formatPrice(order.total)}</strong>
+            </div>
+            <div class="ocf-actions">
+              <button class="btn-track" onclick="openTrackModal('${order.orderId}')">
+                Lacak Status ⚡
+              </button>
+              <button type="button" class="btn-secondary-order" onclick="reorderItems('${order.orderId}')">
+                Beli Lagi ↻
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterOrders(status, el) {
+      activeFilter = status;
+      document.querySelectorAll('.order-tab-btn').forEach(btn => btn.classList.remove('active'));
+      el.classList.add('active');
+      renderOrders();
+    }
+
+    function openTrackModal(orderId) {
+      const order = wolvyStore.getOrders().find(o => o.orderId === orderId);
+      if (!order) return;
+
+      document.getElementById('modalOrderId').innerText = '#' + order.orderId;
+      document.getElementById('modalPickupLoc').innerText = order.pickupLocation || 'Sekretariat BEM Gedung Mahasiswa Lantai 1';
+
+      const s = order.status;
+      const isDiproses = s === 'DIPROSES';
+      const isDikirim = s === 'DIKIRIM';
+      const isSelesai = s === 'SELESAI';
+
+      document.getElementById('modalTimelineContent').innerHTML = `
+        <div class="timeline-step completed">
+          <div class="t-dot">✓</div>
+          <div class="t-title">Pembayaran Simulasi Terkonfirmasi</div>
+          <div class="t-desc">Pembayaran otomatis diverifikasi sistem WOLVY. (${order.date})</div>
+        </div>
+        <div class="timeline-step ${isDiproses ? 'active' : 'completed'}">
+          <div class="t-dot">${isDiproses ? '●' : '✓'}</div>
+          <div class="t-title">Pesanan Sedang Dikemas</div>
+          <div class="t-desc">Tim merchandise kampus sedang menyiapkan apparel dan melakukan quality control.</div>
+        </div>
+        <div class="timeline-step ${isDikirim ? 'active' : (isSelesai ? 'completed' : '')}">
+          <div class="t-dot">${isSelesai ? '✓' : (isDikirim ? '●' : '3')}</div>
+          <div class="t-title">Siap Diambil di Titik Kampus / Sedang Dikirim</div>
+          <div class="t-desc">Paket telah tiba di lokasi pickup atau diserahkan ke kurir pengantaran.</div>
+        </div>
+        <div class="timeline-step ${isSelesai ? 'completed' : ''}">
+          <div class="t-dot">${isSelesai ? '✓' : '4'}</div>
+          <div class="t-title">Pesanan Diterima Mahasiswa</div>
+          <div class="t-desc">Merchandise telah diterima dalam kondisi baik. Selamat bergaya dengan WOLVY!</div>
+        </div>
+      `;
+
+      document.getElementById('trackModal').classList.add('open');
+    }
+
+    function closeTrackModal() {
+      document.getElementById('trackModal').classList.remove('open');
+    }
+
+    function reorderItems(orderId) {
+      const order = wolvyStore.getOrders().find(o => o.orderId === orderId);
+      if (order && order.items) {
+        order.items.forEach(it => {
+          wolvyStore.addToCart({
+            id: it.productId || 1,
+            name: it.name,
+            price: it.price || 0,
+            image: it.image
+          }, it.size || 'M', it.color || 'Standard', it.qty || 1);
+        });
+        alert('Produk berhasil dimasukkan kembali ke keranjang belanja!');
+        window.location.href = 'cart.html';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderOrders();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WOLVY — More Than Merchandise, It's Your Campus Story</title>
+  <meta name="description" content="Platform e-commerce merchandise streetwear kampus dengan fitur Virtual Try-On berbasis Computer Vision dan personalisasi desain custom.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Permanent+Marker&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ==================== HEADER & NAVBAR ==================== -->
+  <header class="header" id="mainHeader">
+    <div class="nav-container">
+      <!-- Brand Logo -->
+      <a href="#" class="brand-logo" aria-label="WOLVY Home">
+        <img src="assets/wolvy_logo_clean.png" alt="WOLVY Logo" class="brand-logo-img">
+      </a>
+
+      <!-- Desktop Navigation Links -->
+      <nav class="nav-menu" id="navMenu">
+        <a href="index.html" class="nav-link active">Home</a>
+        <a href="shop.html" class="nav-link">Shop</a>
+        <a href="tryon.html" class="nav-link nav-highlight">
+          Try On <span class="badge-pill">LIVE CV</span>
+        </a>
+        <a href="#custom-merch" class="nav-link">Custom Merch</a>
+        <a href="community.html" class="nav-link">Community</a>
+        <a href="about.html" class="nav-link">About</a>
+      </nav>
+
+      <!-- Right Utility Actions -->
+      <div class="nav-actions">
+        <!-- Search Trigger -->
+        <button class="icon-btn" id="searchBtn" aria-label="Cari produk" title="Cari (Ctrl+K)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </button>
+
+        <!-- Wishlist Trigger -->
+        <a href="wishlist.html" class="icon-btn" id="wishlistBtn" aria-label="Wishlist" title="Wishlist favorit">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+          <span class="badge-count" id="wishlistCount">3</span>
+        </a>
+
+        <!-- Cart Trigger -->
+        <button class="icon-btn cart-btn" id="cartBtn" aria-label="Keranjang belanja" title="Keranjang Belanja">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+          </svg>
+          <span class="badge-count" id="cartBadge">2</span>
+        </button>
+
+        <!-- Profile / Auth Trigger -->
+        <button class="icon-btn profile-btn" id="userBtn" aria-label="Akun pengguna" title="Akun Demo & Admin">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </button>
+
+        <!-- Mobile Hamburger Toggle -->
+        <button class="hamburger-btn" id="mobileMenuBtn" aria-label="Buka menu navigasi">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== HERO SECTION ==================== -->
+  <section class="hero-section" id="hero">
+    <div class="hero-bg-energy"></div>
+    <div class="hero-container">
+      <!-- Left Content -->
+      <div class="hero-content">
+        <!-- Neon Crown Accent -->
+        <div class="hero-doodle-crown">
+          <svg width="34" height="26" viewBox="0 0 40 30" fill="none" stroke="#E8FF38" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 24L7 6L16 16L24 6L33 16L38 24H2Z"></path>
+          </svg>
+        </div>
+
+        <h1 class="hero-title">
+          More Than Merchandise,<br>
+          <span class="text-neon">It's Your Story</span>
+        </h1>
+
+        <p class="hero-subtitle">
+          Merchandise kampus yang bukan cuma bikin kamu tampil keren, tapi juga jadi bagian dari perjalananmu.
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="hero-actions">
+          <a href="#bestseller" class="btn btn-primary" id="heroShopBtn">
+            Shop Now
+          </a>
+          <a href="#custom-merch" class="btn btn-outline" id="heroCustomBtn">
+            Customize Your Own
+          </a>
+        </div>
+
+        <!-- Micro Features Indicator -->
+        <div class="hero-meta-strip">
+          <div class="meta-item">
+            <span class="meta-dot"></span>
+            <span>Batch #04 Drop Aktif</span>
+          </div>
+          <div class="meta-divider">•</div>
+          <div class="meta-item">
+            <span>Free Campus Delivery</span>
+          </div>
+          <div class="meta-divider">•</div>
+          <div class="meta-item">
+            <span class="text-neon">★ 4.9/5 Rating</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Visual (Exact reference artwork: Student + Wolf Mascot + Yellow Doodles) -->
+      <div class="hero-visual-wrapper">
+        <div class="hero-visual-card">
+          <img src="assets/hero_clean_hd.png" alt="WOLVY Student Model & Mascot" class="hero-main-img">
+          
+          <div class="floating-badge badge-bot-left" id="tryOnPillBadge">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E8FF38" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
+            <span>Virtual Try-On Siap</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SHOP BY CATEGORY ==================== -->
+  <section class="categories-section" id="categories">
+    <div class="section-container">
+      <div class="section-header">
+        <h2 class="section-title">Shop by Category</h2>
+        <a href="shop.html" class="section-link">View All &rarr;</a>
+      </div>
+
+      <!-- Categories Grid (6 Cards with Soft Lavender Pods) -->
+      <div class="categories-grid">
+        <div class="category-card" data-category="apparel">
+          <div class="category-icon-box">
+            <img src="assets/varsity.jpg" alt="Apparel" class="category-img">
+          </div>
+          <span class="category-label">Apparel</span>
+        </div>
+
+        <div class="category-card" data-category="accessories">
+          <div class="category-icon-box">
+            <img src="assets/topi.jpg" alt="Accessories" class="category-img">
+          </div>
+          <span class="category-label">Accessories</span>
+        </div>
+
+        <div class="category-card" data-category="stationery">
+          <div class="category-icon-box">
+            <img src="assets/tumbler.jpg" alt="Stationery" class="category-img">
+          </div>
+          <span class="category-label">Stationery</span>
+        </div>
+
+        <div class="category-card" data-category="custom">
+          <div class="category-icon-box">
+            <img src="assets/notebook.jpg" alt="Custom Merch" class="category-img">
+          </div>
+          <span class="category-label">Custom Merch</span>
+        </div>
+
+        <div class="category-card" data-category="limited">
+          <div class="category-icon-box">
+            <img src="assets/limitededition.jpg" alt="Limited Edition" class="category-img">
+          </div>
+          <span class="category-label">Limited Edition</span>
+        </div>
+
+        <div class="category-card" data-category="campuskit">
+          <div class="category-icon-box">
+            <img src="assets/campuskit.jpg" alt="Campus Kit" class="category-img">
+          </div>
+          <span class="category-label">Campus Kit</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== BEST SELLER SECTION ==================== -->
+  <section class="bestseller-section" id="bestseller">
+    <div class="section-container">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Best Seller</h2>
+          <p class="section-desc">Koleksi favorit mahasiswa paling dicari semester ini.</p>
+        </div>
+        <div class="category-filter-chips">
+          <button class="chip-btn active" data-filter="all">Semua</button>
+          <button class="chip-btn" data-filter="apparel">Apparel</button>
+          <button class="chip-btn" data-filter="accessories">Accessories</button>
+          <button class="chip-btn" data-filter="stationery">Stationery</button>
+        </div>
+      </div>
+
+      <!-- Product & Drop Grid -->
+      <div class="bestseller-grid">
+        <!-- Product 1: Varsity Jacket Purple Edition -->
+        <div class="product-card" data-cat="apparel">
+          <div class="product-thumb">
+            <span class="product-tag tag-bestseller">Best Seller</span>
+            <button class="btn-wishlist" aria-label="Tambah ke wishlist" data-id="1">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+            </button>
+            <img src="assets/varsity.jpg" alt="Varsity Jacket Purple Edition" class="product-img">
+            <div class="product-quick-overlay">
+              <button class="btn-quick-view" data-product="1">Quick View</button>
+            </div>
+          </div>
+          <div class="product-info">
+            <div class="product-rating">
+              <span class="star-icon">★</span>
+              <span class="rating-val">4.9</span>
+              <span class="rating-count">(120 terjual)</span>
+            </div>
+            <h3 class="product-title">Varsity Jacket Purple Edition</h3>
+            <p class="product-variant-hint">Purple Edition · Wolvy Emblem</p>
+            <div class="product-price-row">
+              <span class="product-price">Rp 399.000</span>
+              <button class="btn-add-cart" data-id="1" data-name="Varsity Jacket Purple Edition" data-price="399000" data-img="assets/p_varsity.png">
+                + Keranjang
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 2: Tote Bag Campus -->
+        <div class="product-card" data-cat="accessories">
+          <div class="product-thumb">
+            <button class="btn-wishlist" aria-label="Tambah ke wishlist" data-id="2">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+            </button>
+            <img src="assets/totebag.jpg" alt="Tote Bag Campus" class="product-img">
+            <div class="product-quick-overlay">
+              <button class="btn-quick-view" data-product="2">Quick View</button>
+            </div>
+          </div>
+          <div class="product-info">
+            <div class="product-rating">
+              <span class="star-icon">★</span>
+              <span class="rating-val">4.8</span>
+              <span class="rating-count">(95 terjual)</span>
+            </div>
+            <h3 class="product-title">Tote Bag Campus</h3>
+            <p class="product-variant-hint">Heavy Canvas · Laptop Fit</p>
+            <div class="product-price-row">
+              <span class="product-price">Rp 139.000</span>
+              <button class="btn-add-cart" data-id="2" data-name="Tote Bag Campus" data-price="139000" data-img="assets/p_totebag.png">
+                + Keranjang
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 3: Cap Classic Purple -->
+        <div class="product-card" data-cat="accessories">
+          <div class="product-thumb">
+            <button class="btn-wishlist" aria-label="Tambah ke wishlist" data-id="3">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+            </button>
+            <img src="assets/topi.jpg" alt="Cap Classic Navy" class="product-img">
+            <div class="product-quick-overlay">
+              <button class="btn-quick-view" data-product="3">Quick View</button>
+            </div>
+          </div>
+          <div class="product-info">
+            <div class="product-rating">
+              <span class="star-icon">★</span>
+              <span class="rating-val">4.9</span>
+              <span class="rating-count">(88 terjual)</span>
+            </div>
+            <h3 class="product-title">Cap Classic Navy</h3>
+            <p class="product-variant-hint">Bordir 3D · Adjustable Strap</p>
+            <div class="product-price-row">
+              <span class="product-price">Rp 149.000</span>
+              <button class="btn-add-cart" data-id="3" data-name="Cap Classic Navy" data-price="149000" data-img="assets/p_cap.png">
+                + Keranjang
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 4: Hoodie -->
+        <div class="product-card" data-cat="apparel">
+          <div class="product-thumb">
+            <button class="btn-wishlist" aria-label="Tambah ke wishlist" data-id="4">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+            </button>
+            <img src="assets/hoodie.jpg" alt="Hoodie Wolf Logo Black" class="product-img">
+            <div class="product-quick-overlay">
+              <button class="btn-quick-view" data-product="4">Quick View</button>
+            </div>
+          </div>
+          <div class="product-info">
+            <div class="product-rating">
+              <span class="star-icon">★</span>
+              <span class="rating-val">4.8</span>
+              <span class="rating-count">(110 terjual)</span>
+            </div>
+            <h3 class="product-title">Hoodie Wolf Logo Black</h3>
+            <p class="product-variant-hint">Cotton Fleece 330gsm</p>
+            <div class="product-price-row">
+              <span class="product-price">Rp 299.000</span>
+              <button class="btn-add-cart" data-id="4" data-name="Hoodie Wolf Logo Black" data-price="299000" data-img="assets/p_hoodie.png">
+                + Keranjang
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 5: Campus Drop Limited Edition Card (Countdown & Mascot) -->
+        <div class="campus-drop-card" id="dropCard">
+          <div class="drop-card-doodle-crown">
+            <svg width="28" height="22" viewBox="0 0 40 30" fill="none" stroke="#E8FF38" stroke-width="3">
+              <path d="M2 24L7 6L16 16L24 6L33 16L38 24H2Z"></path>
+            </svg>
+          </div>
+          
+          <h3 class="drop-card-title">Campus Drop<br>Limited Edition</h3>
+          
+          <!-- Live Countdown Timer -->
+          <div class="drop-countdown" id="dropCountdown">
+            <div class="time-block">
+              <span class="time-num" id="cdDays">03</span>
+              <span class="time-label">Hari</span>
+            </div>
+            <span class="time-sep">:</span>
+            <div class="time-block">
+              <span class="time-num" id="cdHours">12</span>
+              <span class="time-label">Jam</span>
+            </div>
+            <span class="time-sep">:</span>
+            <div class="time-block">
+              <span class="time-num" id="cdMins">45</span>
+              <span class="time-label">Menit</span>
+            </div>
+            <span class="time-sep">:</span>
+            <div class="time-block">
+              <span class="time-num" id="cdSecs">27</span>
+              <span class="time-label">Detik</span>
+            </div>
+          </div>
+
+          <p class="drop-card-subtext">Don't miss out!</p>
+
+          <a href="#tryon" class="btn btn-primary drop-btn">
+            View Collection
+          </a>
+
+          <!-- Peeking Wolf Mascot from Reference -->
+          <div class="drop-mascot-peek">
+            <img src="assets/mascot.png" alt="Wolf Mascot" class="mascot-peek-img">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== VALUE PROPOSITION / TRUST BAR ==================== -->
+  <section class="trust-bar-section">
+    <div class="section-container">
+      <div class="trust-bar-container">
+        <!-- Feature 1: Custom Your Merch -->
+        <div class="trust-item">
+          <div class="trust-icon">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#25123F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9"></path>
+              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+            </svg>
+          </div>
+          <div class="trust-text">
+            <strong class="trust-title">Custom Your Merch</strong>
+            <span class="trust-desc">Desain sesuai gayamu</span>
+          </div>
+        </div>
+
+        <!-- Feature 2: Group Order -->
+        <div class="trust-item">
+          <div class="trust-icon">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#25123F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </div>
+          <div class="trust-text">
+            <strong class="trust-title">Group Order</strong>
+            <span class="trust-desc">Untuk organisasi/angkatan</span>
+          </div>
+        </div>
+
+        <!-- Feature 3: Campus Pickup -->
+        <div class="trust-item">
+          <div class="trust-icon">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#25123F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+          </div>
+          <div class="trust-text">
+            <strong class="trust-title">Campus Pickup</strong>
+            <span class="trust-desc">Ambil langsung di kampus</span>
+          </div>
+        </div>
+
+        <!-- Feature 4: Secure Payment -->
+        <div class="trust-item">
+          <div class="trust-icon">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#25123F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              <path d="M9 12l2 2 4-4"></path>
+            </svg>
+          </div>
+          <div class="trust-text">
+            <strong class="trust-title">Secure Payment</strong>
+            <span class="trust-desc">QRIS & berbagai metode</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== CAMPUS LIFESTYLE BANNER ==================== -->
+  <section class="campus-banner-section">
+    <div class="section-container">
+      <a href="#tryon" class="lifestyle-banner-link" title="Join the Pack - Virtual Try On">
+        <img src="assets/campus_lifestyle_banner.png" alt="Your Campus Your Style - Join the Pack" class="lifestyle-banner-img">
+      </a>
+    </div>
+  </section>
+
+  <!-- ==================== VIRTUAL TRY-ON SPOTLIGHT (PRD FR-12 & Reference) ==================== -->
+  <section class="tryon-spotlight-section" id="tryon">
+    <div class="section-container">
+      <!-- Section Header -->
+      <div class="tryon-intro">
+        <span class="badge-pill-neon">FITUR UNGGULAN · COMPUTER VISION</span>
+        <h2 class="tryon-headline">TRY IT ON BEFORE YOU BUY</h2>
+        <p class="tryon-subtext">
+          Lihat langsung bagaimana merchandise WOLVY cocok di kamu! Coba fitur Virtual Try-On berbasis pose estimation dan temukan gaya terbaikmu.
+        </p>
+      </div>
+
+      <!-- Try-On Interactive Showcase Card (From Image 2 in Reference) -->
+      <div class="tryon-studio-card">
+        <!-- 3-Step Flow Guide -->
+        <div class="tryon-steps-bar">
+          <div class="step-card active">
+            <span class="step-num">1</span>
+            <div class="step-desc">
+              <strong>Pilih Produk</strong>
+              <span>Pilih merchandise yang ingin kamu coba</span>
+            </div>
+          </div>
+          <div class="step-arrow">&rarr;</div>
+          <div class="step-card">
+            <span class="step-num">2</span>
+            <div class="step-desc">
+              <strong>Aktifkan Kamera</strong>
+              <span>Izinkan akses kamera atau upload foto</span>
+            </div>
+          </div>
+          <div class="step-arrow">&rarr;</div>
+          <div class="step-card">
+            <span class="step-num">3</span>
+            <div class="step-desc">
+              <strong>Lihat &amp; Simpan</strong>
+              <span>Screenshot atau simpan look kamu</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Try-On Interactive Main Grid -->
+        <div class="tryon-main-grid">
+          <!-- Left: Live Try-On Camera Canvas -->
+          <div class="tryon-viewport-container">
+            <div class="tryon-phone-frame">
+              <div class="phone-notch">
+                <span class="camera-lens"></span>
+                <span class="speaker"></span>
+              </div>
+              <div class="phone-screen" id="phoneScreen">
+                <div class="live-status-pill">
+                  <span class="live-dot"></span> Live Preview
+                </div>
+                
+                <!-- Display Image / Video -->
+                <img src="assets/fotomodeltry.jpeg" alt="Virtual Try-On Model Preview" id="tryonModelImg" class="tryon-model-image">
+                <video id="webcamVideo" autoplay playsinline muted style="display: none;"></video>
+                <canvas id="poseCanvas"></canvas>
+
+                <!-- Product Overlay on Model -->
+                <div class="tryon-overlay-layer" id="tryonOverlay">
+                  <img src="assets/varsity.jpg" alt="Overlay Apparel" id="tryonOverlayAsset" class="overlay-item">
+                </div>
+
+                <!-- Phone Camera Controls Overlay -->
+                <div class="phone-camera-bar">
+                  <button class="cam-action-btn" id="flipCamBtn" title="Ganti Kamera">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                  </button>
+                  <button class="cam-shutter-btn" id="captureLookBtn" title="Ambil Foto Look">
+                    <span class="shutter-inner"></span>
+                  </button>
+                  <button class="cam-action-btn" id="saveLookBtn" title="Simpan Look">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                  </button>
+                </div>
+              </div>
+              <div class="phone-privacy-hint">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E8FF38" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                <span>Foto diproses lokal secara aman di browsermu</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Interactive Product & Outfit Customizer -->
+          <div class="tryon-control-panel">
+            <div class="panel-tabs">
+              <button class="panel-tab active" data-tab="merch">Merch</button>
+              <button class="panel-tab" data-tab="outfit">Outfit Set</button>
+            </div>
+
+            <!-- Merch Type Selector -->
+            <div class="merch-type-selector">
+              <button class="merch-type-btn active" data-type="jacket">
+                <span class="type-icon">🧥</span>
+                <span>Jacket</span>
+              </button>
+              <button class="merch-type-btn" data-type="hoodie">
+                <span class="type-icon">👕</span>
+                <span>Hoodie</span>
+              </button>
+              <button class="merch-type-btn" data-type="tshirt">
+                <span class="type-icon">🎽</span>
+                <span>T-Shirt</span>
+              </button>
+              <button class="merch-type-btn" data-type="cap">
+                <span class="type-icon">🧢</span>
+                <span>Cap</span>
+              </button>
+              <button class="merch-type-btn" data-type="totebag">
+                <span class="type-icon">👜</span>
+                <span>Tote Bag</span>
+              </button>
+            </div>
+
+            <!-- Merch Options Slider Cards -->
+            <div class="merch-items-slider">
+              <!-- Item 1 (Selected) -->
+              <div class="slider-item active" data-product-id="1" data-name="Varsity Jacket Purple Edition" data-price="Rp 399.000" data-img="assets/p_varsity.png">
+                <div class="slider-item-check">&#10003;</div>
+                <img src="assets/varsity.jpg" alt="Varsity Jacket" class="slider-img">
+                <div class="slider-meta">
+                  <h4 class="slider-title">Varsity Jacket Purple Edition</h4>
+                  <span class="slider-price">Rp 399.000</span>
+                  <div class="color-dots">
+                    <span class="c-dot purple"></span>
+                    <span class="c-dot yellow"></span>
+                    <span class="c-dot white"></span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Item 2 -->
+              <div class="slider-item" data-product-id="4" data-name="Hoodie Wolf Logo Navy" data-price="Rp 299.000" data-img="assets/p_hoodie.png">
+                <img src="assets/hoodie.jpg" alt="Hoodie Wolf Logo" class="slider-img">
+                <div class="slider-meta">
+                  <h4 class="slider-title">Hoodie Wolf Logo Navy</h4>
+                  <span class="slider-price">Rp 299.000</span>
+                  <div class="color-dots">
+                    <span class="c-dot navy"></span>
+                    <span class="c-dot black"></span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Item 3 -->
+              <div class="slider-item" data-product-id="11" data-name="T-Shirt Faculty Streetwear" data-price="Rp 149.000" data-img="assets/p_tshirt.png">
+                <img src="assets/kaos.jpg" alt="T-Shirt Classic" class="slider-img">
+                <div class="slider-meta">
+                  <h4 class="slider-title">T-Shirt Faculty</h4>
+                  <span class="slider-price">Rp 149.000</span>
+                  <div class="color-dots">
+                    <span class="c-dot black"></span>
+                    <span class="c-dot white"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ukuran Selector -->
+            <div class="size-selector-row">
+              <label class="size-label">Ukuran:</label>
+              <div class="size-options">
+                <button class="size-chip">XS</button>
+                <button class="size-chip">S</button>
+                <button class="size-chip active">M</button>
+                <button class="size-chip">L</button>
+                <button class="size-chip">XL</button>
+                <button class="size-chip">XXL</button>
+              </div>
+            </div>
+
+            <!-- Action Button: Apply to Preview -->
+            <button class="btn btn-primary btn-apply-preview" id="applyPreviewBtn">
+              Terapkan ke Preview &rarr;
+            </button>
+
+            <!-- Camera / Photo Upload Fallback Card -->
+            <div class="upload-alternative-card">
+              <div class="upload-text">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#CDB8F4" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                <div>
+                  <strong>Nyalakan Kamera Web atau Unggah Foto</strong>
+                  <p>Coba langsung dengan webcam laptop atau upload foto sendiri</p>
+                </div>
+              </div>
+              <div class="upload-btns">
+                <button class="btn btn-sm btn-outline" id="toggleWebcamBtn">
+                  Aktifkan Webcam
+                </button>
+                <label class="btn btn-sm btn-outline btn-file-label">
+                  Upload Foto
+                  <input type="file" id="photoUploadInput" accept="image/*" style="display: none;">
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== DESIGN YOUR OWN MERCH (STUDIO) ==================== -->
+  <section class="custom-studio-section" id="custom-merch">
+    <div class="section-container">
+      <!-- Studio Header -->
+      <div class="studio-header">
+        <div>
+          <h2 class="studio-title">Design Your Own Merch</h2>
+          <p class="studio-subtitle">Jadilah kreatif dan buat merchandise sesuai gayamu!</p>
+        </div>
+        <div class="studio-badge-tag">
+          <span class="doodle-text">Be Creative!</span>
+        </div>
+      </div>
+
+      <!-- Studio 4-Steps Bar -->
+      <div class="studio-stepper">
+        <div class="step-node active">
+          <span class="node-circle">1</span>
+          <span class="node-name">Pilih Produk</span>
+        </div>
+        <div class="node-line"></div>
+        <div class="step-node active">
+          <span class="node-circle">2</span>
+          <span class="node-name">Desain</span>
+        </div>
+        <div class="node-line"></div>
+        <div class="step-node">
+          <span class="node-circle">3</span>
+          <span class="node-name">Preview</span>
+        </div>
+        <div class="node-line"></div>
+        <div class="step-node">
+          <span class="node-circle">4</span>
+          <span class="node-name">Checkout</span>
+        </div>
+      </div>
+
+      <!-- Studio Editor Container -->
+      <div class="studio-workspace-card">
+        <!-- Column 1: Product Category Selector -->
+        <div class="studio-col-products">
+          <h4 class="studio-panel-title">Pilih Produk</h4>
+          <ul class="studio-product-list">
+            <li class="studio-prod-item active" data-type="tshirt">
+              <span class="item-icon">👕</span>
+              <span>T-shirt</span>
+            </li>
+            <li class="studio-prod-item" data-type="hoodie">
+              <span class="item-icon">🧥</span>
+              <span>Hoodie</span>
+            </li>
+            <li class="studio-prod-item" data-type="jaket">
+              <span class="item-icon">🎽</span>
+              <span>Jaket</span>
+            </li>
+            <li class="studio-prod-item" data-type="totebag">
+              <span class="item-icon">👜</span>
+              <span>Tote Bag</span>
+            </li>
+            <li class="studio-prod-item" data-type="tumbler">
+              <span class="item-icon">🥤</span>
+              <span>Tumbler</span>
+            </li>
+            <li class="studio-prod-item" data-type="topi">
+              <span class="item-icon">🧢</span>
+              <span>Topi</span>
+            </li>
+            <li class="studio-prod-item" data-type="lainnya">
+              <span class="item-icon">✨</span>
+              <span>Lainnya</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Column 2: Live Canvas & Product Mockup -->
+        <div class="studio-col-canvas">
+          <div class="mockup-stage" id="mockupStage">
+            <!-- T-Shirt Background Mockup -->
+            <img src="assets/tshirt_mockup_clean.jpg" alt="Product Mockup Canvas" class="mockup-garment" id="mockupGarmentImg">
+
+            <!-- Interactive Customizable Text Area -->
+            <div class="mockup-print-area" id="printArea">
+              <div class="custom-print-text" id="livePrintText">
+                YOUR DESIGN HERE
+              </div>
+              <div class="custom-print-sub" id="livePrintSub">
+                WOLVY CAMPUS 2025
+              </div>
+            </div>
+
+            <!-- Peeking Wolf Crest at Bottom Left -->
+            <div class="mockup-watermark">
+              <img src="assets/mascot.png" alt="Wolvy Emblem" class="watermark-wolf">
+            </div>
+          </div>
+
+          <!-- Preview Thumbnails (Front / Back / Model) -->
+          <div class="mockup-thumb-bar">
+            <span class="thumb-label">Preview:</span>
+            <div class="thumb-group">
+              <button class="thumb-btn active" data-angle="front">
+                <img src="assets/kaos.jpg" alt="Tampak Depan">
+              </button>
+              <button class="thumb-btn" data-angle="back">
+                <img src="assets/hoodie.jpg alt="Tampak Belakang">
+              </button>
+              <button class="thumb-btn" data-angle="model">
+                <img src="assets/varsity.jpg" alt="Di Model">
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Column 3: Customization Design Tools -->
+        <div class="studio-col-tools">
+          <h4 class="studio-panel-title">Tambah Desain</h4>
+
+          <!-- Tool Tabs -->
+          <div class="tool-tabs">
+            <button class="tool-tab active" data-tool="text">Teks</button>
+            <button class="tool-tab" data-tool="gambar">Gambar</button>
+            <button class="tool-tab" data-tool="stiker">Stiker</button>
+          </div>
+
+          <!-- Text Input Control -->
+          <div class="tool-control-group">
+            <label class="control-label" for="customTextInput">Teks Personalisasi:</label>
+            <input type="text" id="customTextInput" class="tool-input-text" placeholder="Tulis teks di sini..." value="YOUR DESIGN HERE">
+          </div>
+
+          <!-- Subtext Input Control -->
+          <div class="tool-control-group">
+            <label class="control-label" for="customSubTextInput">Nama Fakultas / Angkatan:</label>
+            <input type="text" id="customSubTextInput" class="tool-input-text" placeholder="Contoh: TEKNIK 2024" value="WOLVY CAMPUS 2025">
+          </div>
+
+          <!-- Font Style Choices -->
+          <div class="tool-control-group">
+            <label class="control-label">Pilihan Font:</label>
+            <div class="font-selector-grid">
+              <button class="font-btn active" data-font="Outfit">Aa <span class="font-name">Modern</span></button>
+              <button class="font-btn" data-font="'Permanent Marker'">Aa <span class="font-name">Street</span></button>
+              <button class="font-btn" data-font="'Caveat'">Aa <span class="font-name">Doodle</span></button>
+              <button class="font-btn" data-font="'Plus Jakarta Sans'">Aa <span class="font-name">Clean</span></button>
+            </div>
+          </div>
+
+          <!-- Color Swatches -->
+          <div class="tool-control-group">
+            <label class="control-label">Warna Teks &amp; Aksen:</label>
+            <div class="color-palette-swatches">
+              <button class="swatch-circle active" style="background-color: #120624;" data-color="#120624" title="Dark Navy"></button>
+              <button class="swatch-circle" style="background-color: #5828A8;" data-color="#5828A8" title="Purple"></button>
+              <button class="swatch-circle" style="background-color: #FF5A1F;" data-color="#FF5A1F" title="Orange"></button>
+              <button class="swatch-circle" style="background-color: #D97706;" data-color="#D97706" title="Amber"></button>
+              <button class="swatch-circle" style="background-color: #E8FF38;" data-color="#E8FF38" title="Neon Yellow"></button>
+              <button class="swatch-circle" style="background-color: #06B6D4;" data-color="#06B6D4" title="Cyan"></button>
+              <button class="swatch-circle" style="background-color: #FFFFFF; border: 1px solid #ccc;" data-color="#FFFFFF" title="White"></button>
+            </div>
+          </div>
+
+          <!-- Alignment Buttons -->
+          <div class="tool-control-group">
+            <label class="control-label">Perataan Teks:</label>
+            <div class="align-btn-group">
+              <button class="align-btn active" data-align="center">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="10" x2="6" y2="10"></line><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="14" x2="3" y2="14"></line><line x1="18" y1="18" x2="6" y2="18"></line></svg>
+              </button>
+              <button class="align-btn" data-align="left">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="17" y1="10" x2="3" y2="10"></line><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="14" x2="3" y2="14"></line><line x1="17" y1="18" x2="3" y2="18"></line></svg>
+              </button>
+              <button class="align-btn" data-align="right">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="21" y1="10" x2="7" y2="10"></line><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="14" x2="3" y2="14"></line><line x1="21" y1="18" x2="7" y2="18"></line></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Submit CTA Button -->
+          <button class="btn btn-primary btn-submit-design" id="submitDesignBtn">
+            Lanjut ke Preview &rarr;
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== CAMPUS COMMUNITY & STORIES ==================== -->
+  <section class="community-section" id="community">
+    <div class="section-container">
+      <div class="community-header">
+        <div>
+          <span class="badge-pill">WOLVY CAMPUS PACK</span>
+          <h2 class="section-title">Campus Community</h2>
+          <p class="community-subtitle">Bukan cuma soal belanja, tapi juga tentang berbagi cerita, ide, dan semangat.</p>
+        </div>
+        <a href="#custom-merch" class="btn btn-primary btn-gabung">Gabung Sekarang &rarr;</a>
+      </div>
+
+      <!-- Quick Action Navigation Tabs -->
+      <div class="community-nav-pills">
+        <button class="com-pill active">
+          <span class="pill-icon">💬</span>
+          <div>
+            <strong>Diskusi &amp; Forum</strong>
+            <span>Tanya, jawab, dan sharing</span>
+          </div>
+        </button>
+        <button class="com-pill">
+          <span class="pill-icon">🗳️</span>
+          <div>
+            <strong>Voting Desain</strong>
+            <span>Pilih desain favoritmu</span>
+          </div>
+        </button>
+        <button class="com-pill">
+          <span class="pill-icon">🏆</span>
+          <div>
+            <strong>Event Kampus</strong>
+            <span>Ikuti event dan kompetisi</span>
+          </div>
+        </button>
+        <button class="com-pill">
+          <span class="pill-icon">🎓</span>
+          <div>
+            <strong>Komunitas Angkatan</strong>
+            <span>Temukan teman seangkatan</span>
+          </div>
+        </button>
+      </div>
+
+      <!-- Discussions & Events 2-Col Grid -->
+      <div class="community-grid-2">
+        <!-- Trending Discussions -->
+        <div class="community-card">
+          <div class="card-title-row">
+            <h3 class="card-heading">Trending Discussion</h3>
+            <a href="#" class="card-more-link">Lihat Semua &rarr;</a>
+          </div>
+          <div class="discussion-list">
+            <div class="disc-item">
+              <div class="disc-avatar">🐺</div>
+              <div class="disc-body">
+                <h4 class="disc-title">Ide Desain Kaos Angkatan 2025</h4>
+                <div class="disc-meta">Oleh @Fahri · 224 Komentar · 394 Likes</div>
+              </div>
+            </div>
+            <div class="disc-item">
+              <div class="disc-avatar">🎓</div>
+              <div class="disc-body">
+                <h4 class="disc-title">Rekomendasi Merchandise untuk Sidang Skripsi</h4>
+                <div class="disc-meta">Oleh @Nisa · 136 Komentar · 350 Likes</div>
+              </div>
+            </div>
+            <div class="disc-item">
+              <div class="disc-avatar">📸</div>
+              <div class="disc-body">
+                <h4 class="disc-title">Spot Foto OOTD Kampus Paling Estetik</h4>
+                <div class="disc-meta">Oleh @Kiki · 140 Komentar · 542 Likes</div>
+              </div>
+            </div>
+            <div class="disc-item">
+              <div class="disc-avatar">⚡</div>
+              <div class="disc-body">
+                <h4 class="disc-title">Group Order Hoodie Fakultas Teknik Informatika</h4>
+                <div class="disc-meta">Oleh @Bima · 98 Komentar · 120 Terdaftar</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Upcoming Events -->
+        <div class="community-card">
+          <div class="card-title-row">
+            <h3 class="card-heading">Event Mendatang</h3>
+            <a href="#" class="card-more-link">Lihat Semua &rarr;</a>
+          </div>
+          <div class="event-list">
+            <div class="event-item">
+              <div class="event-date-badge">
+                <span class="e-day">18</span>
+                <span class="e-mon">NOV</span>
+              </div>
+              <div class="event-body">
+                <h4 class="event-title">Campus Fest 2025</h4>
+                <p class="event-venue">18 Nov 2025 · Lapangan Utama Kampus</p>
+                <a href="#" class="event-cta">Daftar Sekarang &rarr;</a>
+              </div>
+            </div>
+            <div class="event-item">
+              <div class="event-date-badge">
+                <span class="e-day">25</span>
+                <span class="e-mon">NOV</span>
+              </div>
+              <div class="event-body">
+                <h4 class="event-title">Workshop UI/UX Streetwear Design</h4>
+                <p class="event-venue">25 Nov 2025 · Lab Komputer 3</p>
+                <a href="#" class="event-cta">Daftar Sekarang &rarr;</a>
+              </div>
+            </div>
+            <div class="event-item">
+              <div class="event-date-badge">
+                <span class="e-day">02</span>
+                <span class="e-mon">DES</span>
+              </div>
+              <div class="event-body">
+                <h4 class="event-title">Bazar Merchandise &amp; Creative Showcase</h4>
+                <p class="event-venue">02 Des 2025 · Selasar Gedung A</p>
+                <a href="#" class="event-cta">Lihat Detail &rarr;</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== ABOUT US SECTION (From Reference) ==================== -->
+  <section class="about-section" id="about">
+    <div class="section-container">
+      <div class="about-card-hero">
+        <div class="about-text-side">
+          <span class="badge-pill">ABOUT US</span>
+          <h2 class="about-title">
+            More Than Merchandise,<br>
+            <span class="text-neon">We're a Campus Movement.</span>
+          </h2>
+          <p class="about-body">
+            WOLVY lahir dari semangat sekelompok mahasiswa yang percaya bahwa kampus bukan hanya tempat belajar, tapi juga tempat tumbuh, berkarya, dan membangun mimpi.
+          </p>
+          <p class="about-body">
+            Kami menghadirkan merchandise yang merepresentasikan identitas, gaya hidup, dan cerita dari setiap mahasiswa. Dari desain streetwear, personalisasi, hingga komunitas yang solid, WOLVY ada untuk menemani setiap langkahmu.
+          </p>
+          <a href="#bestseller" class="btn btn-primary btn-our-story">Our Story &rarr;</a>
+        </div>
+
+        <!-- Stats Numbers Grid -->
+        <div class="about-stats-grid">
+          <div class="stat-card">
+            <span class="stat-number">10+</span>
+            <span class="stat-label">Koleksi Eksklusif</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-number">5.000+</span>
+            <span class="stat-label">Pelanggan Setia</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-number">15+</span>
+            <span class="stat-label">Fakultas Terlibat</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-number">1</span>
+            <span class="stat-label">Tujuan Bersama</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Core Values -->
+      <div class="values-grid">
+        <div class="value-item">
+          <span class="value-icon">💎</span>
+          <h4 class="value-name">Authentic</h4>
+          <p class="value-desc">Jujur &amp; transparan dalam kualitas dan layanan kampus</p>
+        </div>
+        <div class="value-item">
+          <span class="value-icon">💡</span>
+          <h4 class="value-name">Creative</h4>
+          <p class="value-desc">Selalu berinovasi dengan cutting edge tech &amp; desain</p>
+        </div>
+        <div class="value-item">
+          <span class="value-icon">🤝</span>
+          <h4 class="value-name">Inclusive</h4>
+          <p class="value-desc">Terbuka untuk semua fakultas, ormawa, dan mahasiswa</p>
+        </div>
+        <div class="value-item">
+          <span class="value-icon">🌱</span>
+          <h4 class="value-name">Sustainable</h4>
+          <p class="value-desc">Bahan berkualitas tinggi, awet, dan ramah lingkungan</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER (Identical to reference strip) ==================== -->
+  <footer class="footer-strip" id="footer">
+    <div class="footer-container">
+      <!-- Left Mascot & Tagline -->
+      <div class="footer-brand-side">
+        <div class="footer-crown-doodle">
+          <svg width="24" height="18" viewBox="0 0 40 30" fill="none" stroke="#E8FF38" stroke-width="3">
+            <path d="M2 24L7 6L16 16L24 6L33 16L38 24H2Z"></path>
+          </svg>
+        </div>
+        <div class="footer-logo-pack">
+          <img src="assets/mascot.png" alt="WOLVY Mascot Logo" class="footer-mascot-img">
+          <span class="footer-brand-title">WOLVY</span>
+        </div>
+        <div class="footer-tagline-text">
+          More Than Merchandise,<br>It's Your Campus Story.
+        </div>
+      </div>
+
+      <!-- Quick Nav Links -->
+      <div class="footer-links-side">
+        <a href="#hero">Home</a>
+        <a href="#categories">Shop</a>
+        <a href="#tryon">Virtual Try-On</a>
+        <a href="#custom-merch">Custom Studio</a>
+        <a href="#community">Community</a>
+        <a href="#about">About Us</a>
+      </div>
+
+      <!-- Social Media Icons (Instagram, TikTok, X, YouTube) -->
+      <div class="footer-social-side">
+        <a href="https://instagram.com" target="_blank" rel="noopener" class="social-icon" aria-label="Instagram">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+        </a>
+        <a href="https://tiktok.com" target="_blank" rel="noopener" class="social-icon" aria-label="TikTok">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 2.89 3.49 2.75 1.5-.06 2.79-1.14 3.12-2.6.09-.43.12-.87.12-1.31V.02z"/></svg>
+        </a>
+        <a href="https://twitter.com" target="_blank" rel="noopener" class="social-icon" aria-label="X Twitter">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+        <a href="https://youtube.com" target="_blank" rel="noopener" class="social-icon" aria-label="YouTube">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
+        </a>
+        <div class="footer-doodle-right">
+          <svg width="20" height="24" viewBox="0 0 24 30" fill="none" stroke="#E8FF38" stroke-width="3">
+            <path d="M14 2L2 16H12L10 28L22 14H12L14 2Z"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer-sub-bar">
+      <div class="section-container sub-flex">
+        <p>&copy; 2025 WOLVY Official Campus Streetwear. All rights reserved.</p>
+        <p class="sub-credit">PRD Full-Stack Web Development Competition · HTML &amp; CSS Pure Performance</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== SHOPPING CART DRAWER (Interactive) ==================== -->
+  <aside class="cart-drawer" id="cartDrawer" aria-hidden="true">
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <div class="cart-panel">
+      <div class="cart-header">
+        <div class="cart-title-wrap">
+          <h3 class="cart-title">Keranjang Belanja</h3>
+          <span class="cart-count-pill" id="cartDrawerCount">2 Item</span>
+        </div>
+        <button class="cart-close-btn" id="cartCloseBtn" aria-label="Tutup Keranjang">&times;</button>
+      </div>
+
+      <!-- Cart Items List -->
+      <div class="cart-items" id="cartItemsList">
+        <!-- Item 1 -->
+        <div class="cart-item" data-id="1">
+          <img src="assets/p_varsity.png" alt="Varsity Jacket" class="cart-item-img">
+          <div class="cart-item-details">
+            <h4 class="cart-item-title">Varsity Jacket Purple Edition</h4>
+            <span class="cart-item-variant">Ukuran: M · Warna: Purple</span>
+            <div class="cart-item-price">Rp 399.000</div>
+            <div class="qty-control">
+              <button class="qty-btn qty-minus" data-id="1">-</button>
+              <span class="qty-val">1</span>
+              <button class="qty-btn qty-plus" data-id="1">+</button>
+            </div>
+          </div>
+          <button class="cart-item-remove" data-id="1" title="Hapus Item">&times;</button>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="cart-item" data-id="2">
+          <img src="assets/p_totebag.png" alt="Tote Bag Campus" class="cart-item-img">
+          <div class="cart-item-details">
+            <h4 class="cart-item-title">Tote Bag Campus</h4>
+            <span class="cart-item-variant">Warna: Off-White</span>
+            <div class="cart-item-price">Rp 139.000</div>
+            <div class="qty-control">
+              <button class="qty-btn qty-minus" data-id="2">-</button>
+              <span class="qty-val">1</span>
+              <button class="qty-btn qty-plus" data-id="2">+</button>
+            </div>
+          </div>
+          <button class="cart-item-remove" data-id="2" title="Hapus Item">&times;</button>
+        </div>
+      </div>
+
+      <!-- Cart Summary Footer -->
+      <div class="cart-footer">
+        <div class="cart-summary-row">
+          <span>Subtotal</span>
+          <span class="cart-subtotal" id="cartSubtotal">Rp 538.000</span>
+        </div>
+        <div class="cart-summary-row">
+          <span>Ongkir Kampus</span>
+          <span class="text-neon">GRATIS (Pickup)</span>
+        </div>
+        <div class="cart-summary-row cart-total-row">
+          <span>Total Pembayaran</span>
+          <span class="cart-total-price" id="cartTotalPrice">Rp 538.000</span>
+        </div>
+
+        <a href="checkout.html" class="btn btn-primary btn-checkout-trigger" id="checkoutBtn" style="text-decoration:none; display:flex; justify-content:center; align-items:center;">
+          Checkout Pesanan &rarr;
+        </a>
+        <a href="cart.html" style="display:block; text-align:center; font-size:0.82rem; color:var(--color-lavender); text-decoration:underline; margin-top:8px;">
+          Buka Halaman Keranjang Lengkap
+        </a>
+        <p class="cart-footer-note">Simulasi transaksi instan via QRIS / Virtual Account</p>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ==================== QUICK VIEW PRODUCT MODAL ==================== -->
+  <div class="modal" id="quickViewModal" aria-hidden="true">
+    <div class="modal-backdrop" id="quickViewBackdrop"></div>
+    <div class="modal-dialog modal-product">
+      <button class="modal-close-btn" id="quickViewCloseBtn">&times;</button>
+      <div class="modal-product-content">
+        <div class="modal-product-gallery">
+          <img src="assets/p_varsity.png" alt="Product Quick View" id="qvImage" class="qv-main-img">
+          <div class="qv-tag-pill">Stok Tersedia: 24 pcs</div>
+        </div>
+        <div class="modal-product-details">
+          <span class="badge-pill">OFFICIAL MERCHANDISE</span>
+          <h3 class="qv-title" id="qvTitle">Varsity Jacket Purple Edition</h3>
+          <div class="qv-rating">
+            <span class="star-icon">★</span> 4.9 (120 Ulasan Mahasiswa)
+          </div>
+          <div class="qv-price" id="qvPrice">Rp 399.000</div>
+          
+          <p class="qv-desc">
+            Varsity jacket edisi khusus kampus dengan desain modern dan bahan fleece cotton premium yang tebal namun sejuk digunakan saat kuliah maupun nongkrong.
+          </p>
+
+          <div class="qv-sizes">
+            <label>Pilih Ukuran:</label>
+            <div class="qv-size-group">
+              <button class="size-chip">S</button>
+              <button class="size-chip active">M</button>
+              <button class="size-chip">L</button>
+              <button class="size-chip">XL</button>
+              <button class="size-chip">XXL</button>
+            </div>
+          </div>
+
+          <div class="qv-actions">
+            <button class="btn btn-primary" id="qvAddToCartBtn">Tambah ke Keranjang</button>
+            <a href="#tryon" class="btn btn-outline" id="qvTryOnBtn">Coba Virtual Try-On</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SEARCH MODAL ==================== -->
+  <div class="modal" id="searchModal" aria-hidden="true">
+    <div class="modal-backdrop" id="searchBackdrop"></div>
+    <div class="modal-dialog modal-search">
+      <div class="search-input-wrap">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#CDB8F4" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" id="searchInput" placeholder="Cari varsity, totebag, hoodie, topi kampus..." autocomplete="off">
+        <button class="search-close-x" id="searchCloseBtn">&times;</button>
+      </div>
+      <div class="search-suggestions">
+        <span class="suggest-label">Paling Sering Dicari:</span>
+        <div class="suggest-tags">
+          <button class="tag-chip">Varsity Jacket Purple</button>
+          <button class="tag-chip">Hoodie Wolf Logo</button>
+          <button class="tag-chip">Cap Navy</button>
+          <button class="tag-chip">Tumbler Wolf</button>
+          <button class="tag-chip">Tote Bag Campus</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== USER PROFILE & DEMO MODAL ==================== -->
+  <div class="modal" id="userModal" aria-hidden="true">
+    <div class="modal-backdrop" id="userBackdrop"></div>
+    <div class="modal-dialog modal-user">
+      <button class="modal-close-btn" id="userCloseBtn">&times;</button>
+      <div class="user-modal-header">
+        <div class="user-avatar-large">🐺</div>
+        <h3 class="user-name-title">Akun Demo Mahasiswa</h3>
+        <p class="user-email-subtitle">mahasiswa.demo@kampus.ac.id</p>
+        <span class="badge-pill-neon">Pelanggan Aktif</span>
+      </div>
+      <div class="user-menu-list">
+        <a href="orders.html" class="user-menu-link" id="userOrdersLink">
+          <span>📦 Pesanan Saya (Riwayat &amp; Status)</span>
+          <span class="menu-arrow">&rarr;</span>
+        </a>
+        <a href="wishlist.html" class="user-menu-link" id="userWishlistLink">
+          <span>❤️ Wishlist Favorit</span>
+          <span class="menu-arrow">&rarr;</span>
+        </a>
+        <a href="tryon.html" class="user-menu-link">
+          <span>📸 Virtual Try-On Live</span>
+          <span class="menu-arrow">&rarr;</span>
+        </a>
+        <a href="admin.html" class="user-menu-link" style="color:var(--color-neon-yellow);">
+          <span>🛡️ Dashboard Admin Toko (FR-09..FR-11)</span>
+          <span class="menu-arrow">&rarr;</span>
+        </a>
+        <a href="login.html" class="user-menu-link" style="color:#CDB8F4;">
+          <span>🚪 Ganti Akun / Logout (FR-04)</span>
+          <span class="menu-arrow">&rarr;</span>
+        </a>
+        <div class="user-role-switch">
+          <div class="switch-info">
+            <strong>Role Demo Lomba:</strong>
+            <span>Akses langsung panel kelola</span>
+          </div>
+          <a href="admin.html" class="btn btn-sm btn-outline" style="text-decoration:none;">Buka Admin</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

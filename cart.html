@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Keranjang Belanja — WOLVY Campus Streetwear</title>
+  <meta name="description" content="Periksa dan atur keranjang belanja merchandise kampusmu sebelum melanjutkan ke checkout dan pembayaran.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Permanent+Marker&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .cart-page-layout {
+      padding: 110px 0 80px 0;
+      background: #FAF8FF;
+      color: var(--color-text-dark);
+      min-height: 80vh;
+    }
+    .cart-steps-header {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 36px;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+    .c-step {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #9C8BB8;
+    }
+    .c-step.active {
+      color: var(--color-dark-purple);
+    }
+    .c-step-num {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #EDE4FF;
+      color: var(--color-dark-purple);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+    }
+    .c-step.active .c-step-num {
+      background: var(--color-neon-yellow);
+      box-shadow: 0 0 10px rgba(232, 255, 56, 0.4);
+    }
+    .cart-grid-2 {
+      display: grid;
+      grid-template-columns: 1.3fr 0.8fr;
+      gap: 36px;
+      align-items: start;
+    }
+    .cart-box-card {
+      background: #FFFFFF;
+      border-radius: var(--radius-xl);
+      padding: 28px;
+      border: 1.5px solid rgba(205, 184, 244, 0.35);
+      box-shadow: 0 8px 25px rgba(98, 45, 170, 0.06);
+    }
+    .cart-box-title {
+      font-family: var(--font-heading);
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--color-dark-purple);
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .cart-table-item {
+      display: grid;
+      grid-template-columns: 80px 1fr auto;
+      gap: 16px;
+      align-items: center;
+      padding: 16px 0;
+      border-bottom: 1px solid #F0E8FF;
+    }
+    .cart-table-item:last-child {
+      border-bottom: none;
+    }
+    .cti-img {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      background: #F4EFFF;
+      border-radius: 12px;
+    }
+    .cti-title {
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--color-dark-purple);
+    }
+    .cti-variant {
+      font-size: 0.78rem;
+      color: #7B689E;
+      margin: 4px 0;
+    }
+    .cti-price {
+      font-weight: 800;
+      color: var(--color-dark-purple);
+      font-size: 0.95rem;
+    }
+    .cti-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 12px;
+    }
+    .coupon-box {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .coupon-input {
+      flex: 1;
+      padding: 10px 14px;
+      border: 1.5px solid rgba(205, 184, 244, 0.5);
+      border-radius: var(--radius-md);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      outline: none;
+    }
+    .btn-apply-coupon {
+      padding: 10px 18px;
+      background: var(--color-dark-purple);
+      color: #FFFFFF;
+      font-size: 0.82rem;
+      font-weight: 700;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+    }
+    .payment-methods-strip {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid #ECE4FB;
+    }
+    .pm-icons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    .pm-badge {
+      background: #F4EFFF;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--color-dark-purple);
+      border: 1px solid rgba(205, 184, 244, 0.4);
+    }
+
+    @media (max-width: 900px) {
+      .cart-grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== HEADER ==================== -->
+  <header class="header" id="mainHeader">
+    <div class="nav-container">
+      <a href="index.html" class="brand-logo" aria-label="WOLVY Home">
+        <img src="assets/wolvy_logo_clean.png" alt="WOLVY Logo" class="brand-logo-img">
+      </a>
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="shop.html" class="nav-link">Shop</a>
+        <a href="tryon.html" class="nav-link nav-highlight">
+          Try On <span class="badge-pill">LIVE CV</span>
+        </a>
+        <a href="index.html#custom-merch" class="nav-link">Custom Merch</a>
+        <a href="community.html" class="nav-link">Community</a>
+        <a href="about.html" class="nav-link">About</a>
+      </nav>
+      <div class="nav-actions">
+        <a href="wishlist.html" class="icon-btn" aria-label="Wishlist">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          <span class="badge-count" id="wishlistCount">4</span>
+        </a>
+        <a href="cart.html" class="icon-btn cart-btn" aria-label="Keranjang">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          <span class="badge-count" id="cartBadge">3</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== CART PAGE ==================== -->
+  <main class="cart-page-layout">
+    <div class="section-container">
+      
+      <!-- Stepper Header -->
+      <div class="cart-steps-header">
+        <div class="c-step active">
+          <span class="c-step-num">1</span>
+          <span>Keranjang Belanja</span>
+        </div>
+        <div style="color:#CDB8F4;">&rarr;</div>
+        <div class="c-step">
+          <span class="c-step-num">2</span>
+          <span>Pengiriman &amp; Checkout</span>
+        </div>
+        <div style="color:#CDB8F4;">&rarr;</div>
+        <div class="c-step">
+          <span class="c-step-num">3</span>
+          <span>Simulasi Pembayaran</span>
+        </div>
+      </div>
+
+      <div class="cart-grid-2">
+        <!-- Left: Cart Items List -->
+        <div class="cart-box-card">
+          <div class="cart-box-title">
+            <span>Daftar Merchandise</span>
+            <button id="btnClearCart" style="font-size:0.8rem; color:#E53E3E; font-weight:700; cursor:pointer;">Hapus Semua</button>
+          </div>
+
+          <div id="cartTableBody">
+            <!-- Dynamic Cart Items via store.js -->
+          </div>
+        </div>
+
+        <!-- Right: Summary Box -->
+        <div class="cart-box-card">
+          <h3 class="cart-box-title">Ringkasan Belanja</h3>
+
+          <!-- Coupon Code -->
+          <div class="coupon-box">
+            <input type="text" class="coupon-input" id="couponInput" placeholder="Kode Promo: WOLVYMABA">
+            <button class="btn-apply-coupon" id="btnApplyCoupon">Klaim</button>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:12px; font-size:0.92rem; color:#5D4B80;">
+            <div style="display:flex; justify-content:space-between;">
+              <span>Subtotal Produk (<span id="summaryTotalItems">3</span> barang)</span>
+              <strong id="summarySubtotal" style="color:var(--color-dark-purple);">Rp 627.000</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between;">
+              <span>Diskon Kampus</span>
+              <span id="summaryDiscount" style="color:#10B981; font-weight:700;">- Rp 0</span>
+            </div>
+            <div style="display:flex; justify-content:space-between;">
+              <span>Pengiriman Kampus</span>
+              <span style="color:#10B981; font-weight:700;">GRATIS (Pickup)</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-top:12px; padding-top:12px; border-top:1.5px dashed #ECE4FB; font-size:1.25rem; font-weight:900; color:var(--color-dark-purple);">
+              <span>Total Pembayaran</span>
+              <span id="summaryFinalTotal" style="color:var(--color-dark-purple);">Rp 627.000</span>
+            </div>
+          </div>
+
+          <a href="checkout.html" class="btn btn-primary" style="width:100%; margin-top:24px; padding:16px; font-size:1rem; text-align:center;">
+            Lanjut ke Checkout &rarr;
+          </a>
+
+          <!-- Payment Methods Accepted -->
+          <div class="payment-methods-strip">
+            <span style="font-size:0.78rem; font-weight:700; color:#7B689E; display:block;">Metode Pembayaran Resmi:</span>
+            <div class="pm-icons">
+              <span class="pm-badge">QRIS</span>
+              <span class="pm-badge">BCA VA</span>
+              <span class="pm-badge">Mandiri VA</span>
+              <span class="pm-badge">GoPay</span>
+              <span class="pm-badge">OVO</span>
+              <span class="pm-badge">ShopeePay</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="footer-strip">
+    <div class="footer-container">
+      <div class="footer-brand-side">
+        <div class="footer-logo-pack">
+          <img src="assets/mascot.png" alt="WOLVY Mascot Logo" class="footer-mascot-img">
+          <span class="footer-brand-title">WOLVY</span>
+        </div>
+        <div class="footer-tagline-text">
+          More Than Merchandise,<br>It's Your Campus Story.
+        </div>
+      </div>
+      <div class="footer-links-side">
+        <a href="index.html">Home</a>
+        <a href="shop.html">Shop All</a>
+        <a href="tryon.html">Try-On CV</a>
+        <a href="orders.html">Pesanan Saya</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="store.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const tableBody = document.getElementById('cartTableBody');
+      const summaryTotalItems = document.getElementById('summaryTotalItems');
+      const summarySubtotal = document.getElementById('summarySubtotal');
+      const summaryFinalTotal = document.getElementById('summaryFinalTotal');
+      const summaryDiscount = document.getElementById('summaryDiscount');
+      const couponInput = document.getElementById('couponInput');
+      const btnApplyCoupon = document.getElementById('btnApplyCoupon');
+      const btnClearCart = document.getElementById('btnClearCart');
+
+      let discountAmount = 0;
+
+      function showToast(msg, icon = '🐺') {
+        const c = document.getElementById('toastContainer');
+        const t = document.createElement('div');
+        t.className = 'toast';
+        t.innerHTML = `<span>${icon}</span><span>${msg}</span>`;
+        c.appendChild(t);
+        setTimeout(() => t.remove(), 2800);
+      }
+
+      function renderCartPage() {
+        const cart = window.wolvyStore.getCart();
+        const totalCount = window.wolvyStore.getCartCount();
+        const subtotal = window.wolvyStore.getCartSubtotal();
+        const finalTotal = Math.max(0, subtotal - discountAmount);
+
+        document.getElementById('cartBadge').textContent = totalCount;
+        document.getElementById('wishlistCount').textContent = window.wolvyStore.getWishlist().length;
+        summaryTotalItems.textContent = totalCount;
+        summarySubtotal.textContent = window.wolvyStore.formatPrice(subtotal);
+        summaryFinalTotal.textContent = window.wolvyStore.formatPrice(finalTotal);
+
+        if (cart.length === 0) {
+          tableBody.innerHTML = `
+            <div style="text-align:center; padding: 50px 0; color: #8F72CA;">
+              <div style="font-size: 3rem; margin-bottom: 12px;">🛍️</div>
+              <h3>Keranjang Belanjamu Masih Kosong</h3>
+              <p style="margin: 8px 0 20px 0; font-size: 0.9rem;">Temukan koleksi varsity jacket dan streetwear kampus terbaik.</p>
+              <a href="shop.html" class="btn btn-primary">Mulai Belanja &rarr;</a>
+            </div>
+          `;
+          return;
+        }
+
+        tableBody.innerHTML = cart.map(item => `
+          <div class="cart-table-item" data-id="${item.id}">
+            <img src="${item.image}" alt="${item.name}" class="cti-img">
+            <div>
+              <h4 class="cti-title">${item.name}</h4>
+              <div class="cti-variant">Ukuran: ${item.size} · Warna: ${item.color}</div>
+              <div class="cti-price">${window.wolvyStore.formatPrice(item.price)}</div>
+            </div>
+            <div class="cti-actions">
+              <div class="qty-control">
+                <button class="qty-btn" onclick="modifyQty(${item.id}, ${item.qty - 1})">-</button>
+                <span class="qty-val">${item.qty}</span>
+                <button class="qty-btn" onclick="modifyQty(${item.id}, ${item.qty + 1})">+</button>
+              </div>
+              <button onclick="deleteItem(${item.id})" style="color:#E53E3E; font-size:0.75rem; font-weight:700; cursor:pointer;">Hapus</button>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      window.modifyQty = (id, newQty) => {
+        window.wolvyStore.updateCartQty(id, newQty);
+        renderCartPage();
+      };
+
+      window.deleteItem = (id) => {
+        window.wolvyStore.removeFromCart(id);
+        renderCartPage();
+        showToast('Item berhasil dihapus');
+      };
+
+      btnClearCart.addEventListener('click', () => {
+        if (confirm('Yakin ingin mengosongkan seluruh keranjang belanja?')) {
+          window.wolvyStore.clearCart();
+          renderCartPage();
+          showToast('Keranjang telah dikosongkan.');
+        }
+      });
+
+      btnApplyCoupon.addEventListener('click', () => {
+        const code = couponInput.value.trim().toUpperCase();
+        if (code === 'WOLVYMABA' || code === 'WOLVYCAMPUS') {
+          discountAmount = 25000;
+          summaryDiscount.textContent = `- Rp 25.000 (Voucher Mahasiswa)`;
+          renderCartPage();
+          showToast('Kupon berhasil diklaim! Hemat Rp 25.000', '🎉');
+        } else {
+          showToast('Kode voucher tidak valid atau telah kedaluwarsa.', '⚠️');
+        }
+      });
+
+      renderCartPage();
+    });
+  </script>
+</body>
+</html>

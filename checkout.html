@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout & Pembayaran — WOLVY Campus Streetwear</title>
+  <meta name="description" content="Selesaikan pemesanan merchandise kampus WOLVY dengan validasi stok otomatis dan simulasi pembayaran QRIS atau Virtual Account.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Permanent+Marker&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .checkout-layout {
+      padding: 110px 0 80px 0;
+      background: #FAF8FF;
+      color: var(--color-text-dark);
+      min-height: 85vh;
+    }
+    .checkout-steps {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 36px;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+    .c-step {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #9C8BB8;
+    }
+    .c-step.active {
+      color: var(--color-dark-purple);
+    }
+    .c-step-num {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #EDE4FF;
+      color: var(--color-dark-purple);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+    }
+    .c-step.active .c-step-num {
+      background: var(--color-neon-yellow);
+      box-shadow: 0 0 10px rgba(232, 255, 56, 0.4);
+    }
+    .checkout-grid {
+      display: grid;
+      grid-template-columns: 1.35fr 0.85fr;
+      gap: 36px;
+      align-items: start;
+    }
+    .form-card {
+      background: #FFFFFF;
+      border-radius: var(--radius-xl);
+      padding: 28px;
+      border: 1.5px solid rgba(205, 184, 244, 0.35);
+      box-shadow: 0 8px 25px rgba(98, 45, 170, 0.06);
+      margin-bottom: 24px;
+    }
+    .form-card-title {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--color-dark-purple);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .form-row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--color-dark-purple);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .form-input, .form-select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid rgba(205, 184, 244, 0.5);
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+      font-family: inherit;
+      background: #FCFAFF;
+      color: var(--color-dark-purple);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-input:focus, .form-select:focus {
+      border-color: var(--color-mid-purple);
+      box-shadow: 0 0 0 3px rgba(157, 107, 240, 0.15);
+      background: #FFFFFF;
+    }
+    .option-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .option-card-radio {
+      border: 1.5px solid rgba(205, 184, 244, 0.4);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: #FCFAFF;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .option-card-radio:hover {
+      border-color: var(--color-mid-purple);
+      background: #FAF5FF;
+    }
+    .option-card-radio.active {
+      border-color: var(--color-mid-purple);
+      background: #F4EBFF;
+      box-shadow: 0 4px 15px rgba(98, 45, 170, 0.08);
+    }
+    .option-card-radio input[type="radio"] {
+      margin-top: 3px;
+      accent-color: var(--color-mid-purple);
+    }
+    .option-info-title {
+      font-weight: 800;
+      font-size: 0.92rem;
+      color: var(--color-dark-purple);
+      margin-bottom: 4px;
+    }
+    .option-info-desc {
+      font-size: 0.78rem;
+      color: #7B689E;
+      line-height: 1.4;
+    }
+    .payment-options-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    .payment-option-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1.5px solid rgba(205, 184, 244, 0.4);
+      border-radius: var(--radius-lg);
+      padding: 14px 18px;
+      cursor: pointer;
+      background: #FCFAFF;
+      transition: all 0.2s ease;
+    }
+    .payment-option-item.active {
+      border-color: var(--color-mid-purple);
+      background: #F4EBFF;
+    }
+    .payment-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .payment-title {
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: var(--color-dark-purple);
+    }
+    .payment-tag {
+      font-size: 0.7rem;
+      background: var(--color-neon-yellow);
+      color: #000;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 800;
+    }
+
+    /* Simulation Notice */
+    .sim-alert {
+      background: #FFFBE6;
+      border: 1.5px solid #FFE58F;
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      font-size: 0.82rem;
+      color: #874D00;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Order Summary Column */
+    .summary-card {
+      background: #FFFFFF;
+      border-radius: var(--radius-xl);
+      padding: 28px;
+      border: 1.5px solid rgba(205, 184, 244, 0.35);
+      box-shadow: 0 8px 25px rgba(98, 45, 170, 0.06);
+      position: sticky;
+      top: 100px;
+    }
+    .summary-title {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--color-dark-purple);
+      margin-bottom: 20px;
+    }
+    .summary-items-list {
+      max-height: 260px;
+      overflow-y: auto;
+      margin-bottom: 20px;
+      padding-right: 6px;
+    }
+    .checkout-item-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid #F0E8FF;
+    }
+    .cir-img {
+      width: 52px;
+      height: 52px;
+      background: #F4EFFF;
+      border-radius: 8px;
+      object-fit: contain;
+    }
+    .cir-info {
+      flex: 1;
+    }
+    .cir-name {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--color-dark-purple);
+      line-height: 1.3;
+    }
+    .cir-meta {
+      font-size: 0.75rem;
+      color: #7B689E;
+    }
+    .cir-price {
+      font-weight: 800;
+      font-size: 0.88rem;
+      color: var(--color-dark-purple);
+    }
+    .sum-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.88rem;
+      margin-bottom: 12px;
+      color: #6C568E;
+    }
+    .sum-row.total-row {
+      border-top: 1.5px dashed #E0D3F5;
+      padding-top: 14px;
+      margin-top: 14px;
+      font-size: 1.2rem;
+      font-weight: 900;
+      color: var(--color-dark-purple);
+    }
+    .sum-val-neon {
+      color: #4B287D;
+      font-weight: 900;
+    }
+    .btn-pay-now {
+      width: 100%;
+      padding: 16px;
+      background: var(--color-neon-yellow);
+      color: #000000;
+      border-radius: var(--radius-pill);
+      font-family: var(--font-heading);
+      font-size: 1.05rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      margin-top: 24px;
+      box-shadow: 0 8px 20px rgba(232, 255, 56, 0.35);
+      border: none;
+    }
+    .btn-pay-now:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 25px rgba(232, 255, 56, 0.5);
+    }
+    .security-note {
+      font-size: 0.72rem;
+      color: #9C8BB8;
+      text-align: center;
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    /* Modal Simulasi Bayar QRIS / VA */
+    .pay-modal-backdrop {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(19, 7, 34, 0.75);
+      backdrop-filter: blur(8px);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .pay-modal-backdrop.open {
+      display: flex;
+    }
+    .pay-modal-box {
+      background: #FFFFFF;
+      border-radius: var(--radius-xl);
+      padding: 32px;
+      max-width: 460px;
+      width: 100%;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+      animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes popIn {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .qr-frame {
+      width: 200px;
+      height: 200px;
+      margin: 20px auto;
+      padding: 12px;
+      background: #FFFFFF;
+      border: 2px dashed #9D6BF0;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 20px rgba(157, 107, 240, 0.15);
+    }
+    .qr-frame svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    @media (max-width: 900px) {
+      .checkout-grid {
+        grid-template-columns: 1fr;
+      }
+      .form-row-2, .option-cards {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== HEADER ==================== -->
+  <header class="header" id="mainHeader">
+    <div class="nav-container">
+      <a href="index.html" class="brand-logo" aria-label="WOLVY Home">
+        <img src="assets/wolvy_logo_clean.png" alt="WOLVY Logo" class="brand-logo-img">
+      </a>
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="shop.html" class="nav-link">Shop</a>
+        <a href="tryon.html" class="nav-link nav-highlight">
+          Try On <span class="badge-pill">LIVE CV</span>
+        </a>
+        <a href="index.html#custom-merch" class="nav-link">Custom Merch</a>
+        <a href="community.html" class="nav-link">Community</a>
+        <a href="about.html" class="nav-link">About</a>
+      </nav>
+      <div class="nav-actions">
+        <a href="orders.html" class="nav-link" style="font-size:0.85rem; font-weight:700; color:var(--color-neon-yellow); margin-right:12px;">
+          Pesanan Saya
+        </a>
+        <a href="wishlist.html" class="icon-btn" aria-label="Wishlist">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          <span class="badge-count" id="wishlistCount">4</span>
+        </a>
+        <a href="cart.html" class="icon-btn cart-btn" aria-label="Keranjang">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          <span class="badge-count" id="cartBadge">3</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== MAIN CHECKOUT ==================== -->
+  <main class="checkout-layout">
+    <div class="section-container">
+      
+      <!-- Stepper -->
+      <div class="checkout-steps">
+        <div class="c-step"><span class="c-step-num">✓</span> 1. Keranjang</div>
+        <div class="c-step active"><span class="c-step-num">2</span> 2. Checkout & Pengiriman</div>
+        <div class="c-step"><span class="c-step-num">3</span> 3. Pesanan Selesai</div>
+      </div>
+
+      <div class="sim-alert">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        <span><strong>Mode Simulasi Demo:</strong> Transaksi ini adalah simulasi perlombaan sesuai PRD (FR-07). Tidak ada uang nyata yang ditarik, dan stok produk akan langsung berkurang secara otomatis.</span>
+      </div>
+
+      <div class="checkout-grid">
+        <!-- LEFT: FORM DATA & SELECTIONS -->
+        <div class="checkout-forms">
+          
+          <!-- 1. Data Pemesan -->
+          <div class="form-card">
+            <h2 class="form-card-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              1. Informasi Pemesan (Mahasiswa)
+            </h2>
+            <div class="form-row-2">
+              <div class="form-group">
+                <label class="form-label" for="buyerName">Nama Lengkap</label>
+                <input type="text" id="buyerName" class="form-input" value="Aulia Rahma" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="buyerNim">NIM / Identitas Kampus</label>
+                <input type="text" id="buyerNim" class="form-input" value="2201082045" placeholder="Contoh: 2201082045">
+              </div>
+            </div>
+            <div class="form-row-2">
+              <div class="form-group">
+                <label class="form-label" for="buyerEmail">Email Kampus</label>
+                <input type="email" id="buyerEmail" class="form-input" value="aulia.rahma@kampus.ac.id" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="buyerPhone">No. WhatsApp</label>
+                <input type="tel" id="buyerPhone" class="form-input" value="081234567890" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="buyerFaculty">Fakultas / Program Studi</label>
+              <select id="buyerFaculty" class="form-select">
+                <option value="Fakultas Ilmu Komputer (FIK)" selected>Fakultas Ilmu Komputer (FIK)</option>
+                <option value="Fakultas Teknik (FT)">Fakultas Teknik (FT)</option>
+                <option value="Fakultas Ekonomi & Bisnis (FEB)">Fakultas Ekonomi & Bisnis (FEB)</option>
+                <option value="Fakultas Seni Rupa & Desain (FSRD)">Fakultas Seni Rupa & Desain (FSRD)</option>
+                <option value="Fakultas Ilmu Sosial & Ilmu Politik (FISIP)">Fakultas Ilmu Sosial & Ilmu Politik (FISIP)</option>
+                <option value="Fakultas Kedokteran (FK)">Fakultas Kedokteran (FK)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- 2. Metode Pengiriman / Pengambilan -->
+          <div class="form-card">
+            <h2 class="form-card-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+              2. Metode Pengambilan & Pengiriman
+            </h2>
+            <div class="option-cards" style="margin-bottom: 16px;">
+              <label class="option-card-radio active" id="optPickupLabel">
+                <input type="radio" name="shippingType" value="pickup" checked onchange="toggleShippingType('pickup')">
+                <div>
+                  <div class="option-info-title">Pickup Kampus (Gratis)</div>
+                  <div class="option-info-desc">Ambil langsung di titik kumpul kampus WOLVY tanpa biaya kirim.</div>
+                </div>
+              </label>
+              <label class="option-card-radio" id="optDeliveryLabel">
+                <input type="radio" name="shippingType" value="delivery" onchange="toggleShippingType('delivery')">
+                <div>
+                  <div class="option-info-title">Kirim ke Kos / Rumah</div>
+                  <div class="option-info-desc">Ekspedisi J&T / SiCepat ke seluruh area kampus & kota (Rp 10.000).</div>
+                </div>
+              </label>
+            </div>
+
+            <!-- Detail Pickup Box -->
+            <div id="pickupDetailBox" class="form-group">
+              <label class="form-label" for="pickupSpot">Pilih Titik Pengambilan di Kampus</label>
+              <select id="pickupSpot" class="form-select">
+                <option value="Sekretariat BEM Gedung Mahasiswa Lantai 1">Sekretariat BEM Gedung Mahasiswa Lantai 1 (09:00 - 16:00 WIB)</option>
+                <option value="Pickup Kampus - Pos Satpam Gerbang Depan">Pickup Kampus - Pos Satpam Gerbang Depan (24 Jam)</option>
+                <option value="Pickup Kampus - Perpustakaan Pusat Lantai 1">Pickup Kampus - Perpustakaan Pusat Lantai 1 (10:00 - 15:00 WIB)</option>
+                <option value="Sekretariat Jurusan Informatika">Sekretariat Jurusan Informatika (Gedung D Lt. 2)</option>
+              </select>
+            </div>
+
+            <!-- Detail Alamat Box -->
+            <div id="deliveryDetailBox" class="form-group" style="display: none;">
+              <label class="form-label" for="deliveryAddress">Alamat Lengkap Pengiriman</label>
+              <textarea id="deliveryAddress" class="form-input" rows="3" placeholder="Masukkan nama kos, jalan, nomor rumah, RT/RW, dan patokan..."></textarea>
+            </div>
+          </div>
+
+          <!-- 3. Metode Pembayaran -->
+          <div class="form-card">
+            <h2 class="form-card-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+              3. Metode Pembayaran Simulasi
+            </h2>
+            <div class="payment-options-grid">
+              <label class="payment-option-item active" onclick="selectPaymentMethod('qris', this)">
+                <div class="payment-left">
+                  <input type="radio" name="payMethod" value="QRIS" checked>
+                  <div>
+                    <div class="payment-title">QRIS Instan (Semua E-Wallet & Mobile Banking)</div>
+                    <div style="font-size:0.78rem; color:#7B689E;">BCA, Mandiri, GoPay, OVO, Dana, ShopeePay</div>
+                  </div>
+                </div>
+                <span class="payment-tag">REKOMENDASI</span>
+              </label>
+
+              <label class="payment-option-item" onclick="selectPaymentMethod('va_bca', this)">
+                <div class="payment-left">
+                  <input type="radio" name="payMethod" value="Bank Transfer BCA Virtual Account">
+                  <div>
+                    <div class="payment-title">BCA Virtual Account</div>
+                    <div style="font-size:0.78rem; color:#7B689E;">Verifikasi otomatis 24 jam</div>
+                  </div>
+                </div>
+                <span style="font-size:0.78rem; font-weight:700; color:var(--color-dark-purple);">BCA</span>
+              </label>
+
+              <label class="payment-option-item" onclick="selectPaymentMethod('gopay', this)">
+                <div class="payment-left">
+                  <input type="radio" name="payMethod" value="GoPay / E-Wallet">
+                  <div>
+                    <div class="payment-title">GoPay / QRIS E-Wallet</div>
+                    <div style="font-size:0.78rem; color:#7B689E;">Bayar langsung via aplikasi Gojek</div>
+                  </div>
+                </div>
+                <span style="font-size:0.78rem; font-weight:700; color:#00AED6;">GoPay</span>
+              </label>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT: ORDER SUMMARY -->
+        <div class="checkout-summary-wrap">
+          <div class="summary-card">
+            <h3 class="summary-title">Ringkasan Pesanan</h3>
+            
+            <div class="summary-items-list" id="checkoutItemsContainer">
+              <!-- Rendered via JS from store -->
+            </div>
+
+            <div class="sum-row">
+              <span>Subtotal Item (<span id="checkoutTotalQty">3</span> pcs)</span>
+              <span id="checkoutSubtotal">Rp 627.000</span>
+            </div>
+            <div class="sum-row">
+              <span>Biaya Pengiriman</span>
+              <span id="checkoutShippingFee" style="color:#008A27; font-weight:800;">GRATIS</span>
+            </div>
+            <div class="sum-row">
+              <span>Voucher Diskon</span>
+              <span id="checkoutDiscount" style="color:#9D6BF0;">- Rp 0</span>
+            </div>
+            <div class="sum-row total-row">
+              <span>Total Tagihan</span>
+              <span class="sum-val-neon" id="checkoutGrandTotal">Rp 627.000</span>
+            </div>
+
+            <button type="button" class="btn-pay-now" id="btnTriggerPay" onclick="openPaymentSimulation()">
+              Bayar Sekarang (Simulasi) ⚡
+            </button>
+
+            <div class="security-note">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              <span>Enkripsi 256-bit · Terhubung ke PostgreSQL & Local Store</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ==================== MODAL SIMULASI PEMBAYARAN ==================== -->
+  <div class="pay-modal-backdrop" id="payModalBackdrop">
+    <div class="pay-modal-box">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <span class="payment-tag" style="background:#4B287D; color:#FFF;">SIMULASI PEMBAYARAN DEMO</span>
+        <button onclick="closePaymentModal()" style="background:none; border:none; font-size:1.4rem; cursor:pointer; color:#7B689E;">&times;</button>
+      </div>
+      <h3 style="font-family:var(--font-heading); font-size:1.3rem; font-weight:800; color:var(--color-dark-purple);" id="payModalTitle">
+        Scan QRIS WOLVY
+      </h3>
+      <p style="font-size:0.82rem; color:#7B689E; margin-top:4px;">
+        Total Tagihan: <strong style="color:var(--color-dark-purple); font-size:1rem;" id="modalTotalAmount">Rp 627.000</strong>
+      </p>
+
+      <!-- QR Frame -->
+      <div class="qr-frame" id="qrContainer">
+        <!-- SVG QR Mockup with Wolf Logo center -->
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <!-- QR pattern simulation -->
+          <rect width="100" height="100" fill="#FFFFFF"/>
+          <!-- Position detection patterns -->
+          <rect x="5" y="5" width="26" height="26" fill="#130722" rx="4"/>
+          <rect x="9" y="9" width="18" height="18" fill="#FFFFFF" rx="2"/>
+          <rect x="13" y="13" width="10" height="10" fill="#4B287D" rx="1"/>
+
+          <rect x="69" y="5" width="26" height="26" fill="#130722" rx="4"/>
+          <rect x="73" y="9" width="18" height="18" fill="#FFFFFF" rx="2"/>
+          <rect x="77" y="13" width="10" height="10" fill="#4B287D" rx="1"/>
+
+          <rect x="5" y="69" width="26" height="26" fill="#130722" rx="4"/>
+          <rect x="9" y="73" width="18" height="18" fill="#FFFFFF" rx="2"/>
+          <rect x="13" y="77" width="10" height="10" fill="#4B287D" rx="1"/>
+
+          <!-- Random QR matrix data blocks -->
+          <rect x="36" y="8" width="8" height="8" fill="#130722"/>
+          <rect x="48" y="12" width="6" height="6" fill="#4B287D"/>
+          <rect x="58" y="6" width="6" height="6" fill="#130722"/>
+          
+          <rect x="8" y="36" width="8" height="6" fill="#130722"/>
+          <rect x="20" y="44" width="8" height="8" fill="#4B287D"/>
+          <rect x="8" y="56" width="6" height="8" fill="#130722"/>
+
+          <rect x="70" y="36" width="8" height="8" fill="#130722"/>
+          <rect x="82" y="44" width="10" height="6" fill="#4B287D"/>
+          <rect x="74" y="54" width="6" height="6" fill="#130722"/>
+
+          <rect x="36" y="68" width="6" height="6" fill="#130722"/>
+          <rect x="46" y="74" width="8" height="8" fill="#4B287D"/>
+          <rect x="58" y="68" width="6" height="8" fill="#130722"/>
+          <rect x="74" y="72" width="8" height="8" fill="#130722"/>
+          <rect x="86" y="82" width="6" height="6" fill="#4B287D"/>
+
+          <!-- Center Logo badge -->
+          <circle cx="50" cy="50" r="14" fill="#25123F"/>
+          <polygon points="46,44 50,38 54,44 52,52 48,52" fill="#E8FF38"/>
+          <circle cx="48.5" cy="46" r="1" fill="#25123F"/>
+          <circle cx="51.5" cy="46" r="1" fill="#25123F"/>
+        </svg>
+      </div>
+
+      <div id="vaContainer" style="display:none; background:#F7F4FF; padding:16px; border-radius:12px; margin:16px 0;">
+        <div style="font-size:0.78rem; color:#7B689E;">Nomor Virtual Account:</div>
+        <div style="font-size:1.3rem; font-weight:900; color:var(--color-dark-purple); letter-spacing:2px; margin:6px 0;">
+          88092 0812 3456
+        </div>
+        <div style="font-size:0.75rem; color:#9D6BF0;">Salin nomor untuk simulasi m-Banking</div>
+      </div>
+
+      <p style="font-size:0.78rem; color:#6C568E; margin-bottom:18px;">
+        Klik tombol di bawah untuk menyimulasikan notifikasi sukses pembayaran dari payment gateway.
+      </p>
+
+      <button type="button" class="btn-pay-now" onclick="confirmPaymentSuccess()" style="margin-top:0;">
+        Simulasikan Pembayaran Berhasil ✓
+      </button>
+    </div>
+  </div>
+
+  <footer class="footer-strip">
+    <div class="section-container footer-content">
+      <div class="footer-copy">
+        © 2026 WOLVY Campus Streetwear · All Rights Reserved. Built for Web Development Competition.
+      </div>
+      <div class="footer-links">
+        <a href="shop.html">Shop</a>
+        <a href="tryon.html">Virtual Try-On</a>
+        <a href="orders.html">Status Pesanan</a>
+        <a href="admin.html">Admin Dashboard</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="store.js"></script>
+  <script>
+    let currentShippingFee = 0;
+    let selectedPayment = 'QRIS';
+
+    function toggleShippingType(type) {
+      const pickupBox = document.getElementById('pickupDetailBox');
+      const deliveryBox = document.getElementById('deliveryDetailBox');
+      const optPickup = document.getElementById('optPickupLabel');
+      const optDelivery = document.getElementById('optDeliveryLabel');
+
+      if (type === 'pickup') {
+        pickupBox.style.display = 'block';
+        deliveryBox.style.display = 'none';
+        optPickup.classList.add('active');
+        optDelivery.classList.remove('active');
+        currentShippingFee = 0;
+        document.getElementById('checkoutShippingFee').innerHTML = '<span style="color:#008A27; font-weight:800;">GRATIS</span>';
+      } else {
+        pickupBox.style.display = 'none';
+        deliveryBox.style.display = 'block';
+        optPickup.classList.remove('active');
+        optDelivery.classList.add('active');
+        currentShippingFee = 10000;
+        document.getElementById('checkoutShippingFee').innerText = 'Rp 10.000';
+      }
+      updateSummaryTotals();
+    }
+
+    function selectPaymentMethod(method, el) {
+      document.querySelectorAll('.payment-option-item').forEach(item => item.classList.remove('active'));
+      el.classList.add('active');
+      const radio = el.querySelector('input[type="radio"]');
+      radio.checked = true;
+      selectedPayment = radio.value;
+    }
+
+    function renderCheckoutItems() {
+      const cart = wolvyStore.getCart();
+      const container = document.getElementById('checkoutItemsContainer');
+      const badge = document.getElementById('cartBadge');
+      if (badge) badge.innerText = wolvyStore.getCartCount();
+
+      if (!cart || cart.length === 0) {
+        container.innerHTML = `
+          <div style="text-align:center; padding:30px 10px; color:#7B689E;">
+            <p>Keranjangmu masih kosong.</p>
+            <a href="shop.html" class="btn btn-primary" style="margin-top:10px; font-size:0.8rem; padding:8px 16px;">Belanja Sekarang</a>
+          </div>
+        `;
+        document.getElementById('btnTriggerPay').disabled = true;
+        document.getElementById('btnTriggerPay').style.opacity = '0.5';
+        return;
+      }
+
+      container.innerHTML = cart.map(item => `
+        <div class="checkout-item-row">
+          <img src="${item.image}" alt="${item.name}" class="cir-img">
+          <div class="cir-info">
+            <div class="cir-name">${item.name}</div>
+            <div class="cir-meta">Varian: ${item.color || 'Standard'}, Size: ${item.size} × ${item.qty}</div>
+          </div>
+          <div class="cir-price">${wolvyStore.formatPrice(item.price * item.qty)}</div>
+        </div>
+      `).join('');
+
+      updateSummaryTotals();
+    }
+
+    function updateSummaryTotals() {
+      const subtotal = wolvyStore.getCartSubtotal();
+      const totalQty = wolvyStore.getCartCount();
+      const grandTotal = subtotal + currentShippingFee;
+
+      document.getElementById('checkoutTotalQty').innerText = totalQty;
+      document.getElementById('checkoutSubtotal').innerText = wolvyStore.formatPrice(subtotal);
+      document.getElementById('checkoutGrandTotal').innerText = wolvyStore.formatPrice(grandTotal);
+      document.getElementById('modalTotalAmount').innerText = wolvyStore.formatPrice(grandTotal);
+    }
+
+    function openPaymentSimulation() {
+      const cart = wolvyStore.getCart();
+      if (!cart || cart.length === 0) {
+        alert('Keranjang kosong! Silakan tambahkan produk terlebih dahulu.');
+        return;
+      }
+
+      const modal = document.getElementById('payModalBackdrop');
+      const qrBox = document.getElementById('qrContainer');
+      const vaBox = document.getElementById('vaContainer');
+      const title = document.getElementById('payModalTitle');
+
+      if (selectedPayment.includes('Virtual Account')) {
+        title.innerText = 'Transfer BCA Virtual Account';
+        qrBox.style.display = 'none';
+        vaBox.style.display = 'block';
+      } else {
+        title.innerText = 'Scan QRIS WOLVY';
+        qrBox.style.display = 'flex';
+        vaBox.style.display = 'none';
+      }
+
+      modal.classList.add('open');
+    }
+
+    function closePaymentModal() {
+      document.getElementById('payModalBackdrop').classList.remove('open');
+    }
+
+    function confirmPaymentSuccess() {
+      const cart = wolvyStore.getCart();
+      const buyerName = document.getElementById('buyerName').value || 'Aulia Rahma';
+      const shippingType = document.querySelector('input[name="shippingType"]:checked').value;
+      const pickupLocation = shippingType === 'pickup' 
+        ? document.getElementById('pickupSpot').value 
+        : `Pengiriman ke: ${document.getElementById('deliveryAddress').value || 'Alamat Mahasiswa'}`;
+
+      const orderData = {
+        buyerName,
+        email: document.getElementById('buyerEmail').value,
+        phone: document.getElementById('buyerPhone').value,
+        faculty: document.getElementById('buyerFaculty').value,
+        items: cart.map(i => ({
+          productId: i.productId,
+          name: i.name,
+          qty: i.qty,
+          price: i.price,
+          size: i.size,
+          color: i.color,
+          image: i.image
+        })),
+        total: wolvyStore.getCartSubtotal() + currentShippingFee,
+        paymentMethod: selectedPayment,
+        pickupLocation
+      };
+
+      // Create order & deduct stock
+      const createdOrder = wolvyStore.createOrder(orderData);
+
+      // Show toast or directly redirect to orders.html
+      alert(`🎉 Pembayaran Simulasi Berhasil!\nPesanan ID #${createdOrder.orderId} telah dibuat dan stok produk berhasil diperbarui.`);
+      window.location.href = 'orders.html';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderCheckoutItems();
+      const wishlistCountEl = document.getElementById('wishlistCount');
+      if (wishlistCountEl) wishlistCountEl.innerText = wolvyStore.getWishlist().length;
+    });
+  </script>
+</body>
+</html>
