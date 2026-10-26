@@ -506,7 +506,12 @@
           <div>
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
               <label style="font-size: 0.85rem; font-weight: 700; color: #5D4B80;">Pilih Ukuran:</label>
-              <a href="#" style="font-size: 0.78rem; font-weight: 700; color: var(--color-dark-purple); text-decoration: underline;" id="sizeChartLink">Size Chart</a>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <button type="button" class="btn btn-sm btn-open-smart-fit" id="btnDetailSmartFit" style="font-size: 0.74rem; font-weight: 800; padding: 4px 10px; background: #EDE6FB; color: var(--color-dark-purple); border: 1px solid rgba(88,40,168,0.25); border-radius: var(--radius-pill); cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+                  <span>📏</span> Smart Fit Guide
+                </button>
+                <a href="#" style="font-size: 0.78rem; font-weight: 700; color: var(--color-dark-purple); text-decoration: underline;" id="sizeChartLink">Size Chart</a>
+              </div>
             </div>
             <div class="size-options">
               <button class="size-chip" data-s="S">S</button>
@@ -713,12 +718,28 @@
         }
       });
 
-      // Size chart modal trigger
-      document.getElementById('sizeChartLink').addEventListener('click', (e) => {
-        e.preventDefault();
-        alert("PANDUAN UKURAN (SIZE CHART - CM):\nS: Lebar 50, Panjang 66\nM: Lebar 53, Panjang 69\nL: Lebar 56, Panjang 72\nXL: Lebar 59, Panjang 75\nXXL: Lebar 62, Panjang 78");
-      });
+      // Size chart modal trigger -> Wolvy Smart Size & Fit Guide
+      const openFitGuideHandler = (e) => {
+        if (e) e.preventDefault();
+        if (window.WolvySmartFit) {
+          window.WolvySmartFit.open((appliedSize) => {
+            selectedSize = appliedSize;
+            document.querySelectorAll('.size-chip').forEach(c => {
+              if (c.getAttribute('data-s') === appliedSize) {
+                document.querySelectorAll('.size-chip').forEach(ch => ch.classList.remove('active'));
+                c.classList.add('active');
+              }
+            });
+          });
+        }
+      };
+
+      const sizeChartLink = document.getElementById('sizeChartLink');
+      if (sizeChartLink) sizeChartLink.addEventListener('click', openFitGuideHandler);
+      const btnDetailSmartFit = document.getElementById('btnDetailSmartFit');
+      if (btnDetailSmartFit) btnDetailSmartFit.addEventListener('click', openFitGuideHandler);
     });
   </script>
+  <script src="smart-size-guide.js"></script>
 </body>
 </html>

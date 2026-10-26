@@ -490,6 +490,13 @@
 
             <!-- Instagram / TikTok Style Filter Reels (Horizontal Carousel of Garments) -->
             <div class="ig-filter-reel-bar" id="igFilterReel">
+              <!-- Custom Merch Filter Bubble (Design Your Own Merch) -->
+              <div class="ig-filter-bubble" id="filterBubbleCustom" data-img="custom" data-name="Custom Merch Desain Kamu" data-id="999" data-type="tshirt" data-ratio="0.79">
+                <div class="bubble-circle" style="border: 2px solid var(--color-neon-yellow); background: radial-gradient(circle, #7E3FF2 0%, #18092E 100%);">
+                  <span style="font-size: 1.25rem;">✨</span>
+                </div>
+                <span class="bubble-label" style="color: var(--color-neon-yellow); font-weight: 800;">Desain Kamu</span>
+              </div>
               <div class="ig-filter-bubble active" data-img="assets/tryon_varsity_hd.png" data-name="Varsity Jacket Purple" data-id="1" data-type="jacket" data-ratio="1.0">
                 <div class="bubble-circle">
                   <img src="assets/prod_varsity.png" alt="Varsity">
@@ -567,9 +574,14 @@
           </div>
         </div>
 
-        <!-- Ukuran Pakaian -->
+        <!-- Ukuran Pakaian & Smart Fit Guide -->
         <div class="size-selector-row" style="margin-top:14px;">
-          <label class="size-label">Ukuran Fitting:</label>
+          <div style="display:flex; justify-content:space-between; align-items:center; width:100%; margin-bottom:8px;">
+            <label class="size-label" style="margin:0;">Ukuran Fitting:</label>
+            <button type="button" class="btn btn-sm btn-open-smart-fit" id="btnTryonSmartFit" style="font-size:0.74rem; font-weight:800; padding:4px 10px; background:rgba(232,255,56,0.14); color:var(--color-neon-yellow); border:1px solid var(--color-neon-yellow); border-radius:var(--radius-pill); cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+              <span>📏</span> Smart Fit Guide
+            </button>
+          </div>
           <div class="size-options">
             <button class="size-chip" data-scale="1.7">XS</button>
             <button class="size-chip" data-scale="1.85">S</button>
@@ -605,6 +617,9 @@
           <a href="checkout.html" class="btn btn-outline" id="btnTryonCheckout" style="width: 100%; font-size:0.85rem; padding:10px; text-align:center; text-decoration:none; border-color:var(--color-neon-yellow); color:var(--color-neon-yellow); font-weight:800;">
             ⚡ Checkout Langsung
           </a>
+          <a href="index.html#custom-merch" class="btn btn-sm btn-outline" style="width: 100%; font-size:0.78rem; padding:8px; text-align:center; text-decoration:none; border-color:rgba(205,184,244,0.3); color:#CDB8F4;">
+            ✏️ Desain Baju Sendiri di Merch Studio
+          </a>
         </div>
 
         <!-- Webcam / Photo Alternative -->
@@ -617,10 +632,10 @@
             </div>
           </div>
           <div class="upload-btns">
-            <button class="btn btn-sm btn-outline" id="btnToggleFullWebcam">Nyalakan Webcam AR</button>
+            <button class="btn btn-sm btn-outline" id="btnToggleAltWebcam">Nyalakan Webcam AR</button>
             <label class="btn btn-sm btn-outline btn-file-label">
               Upload Foto
-              <input type="file" id="tryonUploadInput" accept="image/*" style="display: none;">
+              <input type="file" id="tryonUploadInputAlt" accept="image/*" style="display: none;">
             </label>
           </div>
         </div>
@@ -1344,6 +1359,10 @@
       });
 
       function applyGarmentFilter(name, id, type, ratio, imgSrc) {
+        if (imgSrc === 'custom' || String(id) === '999') {
+          loadCustomMerchFilter();
+          return;
+        }
         activeMerch.name = name;
         activeMerch.id = Number(id) || 1;
         activeMerch.type = type;
@@ -1351,6 +1370,46 @@
         activeMerch.imgElement = new Image();
         activeMerch.imgElement.src = imgSrc;
         showToast(`Filter Terpasang: ${name} ✨`, '👕');
+      }
+
+      // Load & Render Custom Merch from Design Studio into Live Try-On AR
+      function loadCustomMerchFilter() {
+        const customBubble = document.getElementById('filterBubbleCustom');
+        if (customBubble) {
+          document.querySelectorAll('.ig-filter-bubble').forEach(b => b.classList.remove('active'));
+          customBubble.classList.add('active');
+        }
+
+        const customData = window.WolvyCustomAR ? window.WolvyCustomAR.getActiveDesign() : null;
+        if (customData && customData.dataUrl) {
+          activeMerch.name = `Custom: "${customData.text}" (${customData.subtext})`;
+          activeMerch.id = 999;
+          activeMerch.type = customData.type || 'tshirt';
+          activeMerch.baseRatio = customData.baseRatio || 0.79;
+          activeMerch.imgElement = new Image();
+          activeMerch.imgElement.src = customData.dataUrl;
+          showToast(`⚡ Merch Kustommu ("${customData.text}") terpasang di kamera!`, '✨');
+        } else if (window.WolvyCustomAR) {
+          // Generate default if none exists yet
+          window.WolvyCustomAR.generateAsset({
+            text: 'WOLVY SQUAD',
+            subtext: 'CAMPUS 2025',
+            font: 'Outfit',
+            color: '#120624',
+            align: 'center',
+            type: 'tshirt'
+          }, (generated) => {
+            if (generated && generated.dataUrl) {
+              activeMerch.name = `Custom: "${generated.text}"`;
+              activeMerch.id = 999;
+              activeMerch.type = 'tshirt';
+              activeMerch.baseRatio = 0.79;
+              activeMerch.imgElement = new Image();
+              activeMerch.imgElement.src = generated.dataUrl;
+              showToast(`⚡ Template Custom Merch terpasang! Kamu bisa ubah teks di studio.`, '✨');
+            }
+          });
+        }
       }
 
       function syncSidebarSelection(id) {
@@ -1396,6 +1455,77 @@
           }
         });
       });
+
+      // SMART SIZE & FIT GUIDE TRIGGER (FITUR 4)
+      const btnTryonSmartFit = document.getElementById('btnTryonSmartFit');
+      if (btnTryonSmartFit) {
+        btnTryonSmartFit.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (window.WolvySmartFit) {
+            window.WolvySmartFit.open((appliedSize) => {
+              document.querySelectorAll('.size-chip').forEach(chip => {
+                if (chip.textContent.trim() === appliedSize) {
+                  chip.click();
+                }
+              });
+            });
+          }
+        });
+      }
+
+      // Alternative Webcam & Upload handlers
+      const btnToggleAltWebcam = document.getElementById('btnToggleAltWebcam');
+      if (btnToggleAltWebcam) {
+        btnToggleAltWebcam.addEventListener('click', () => {
+          btnModeWebcam.click();
+        });
+      }
+
+      const tryonUploadInputAlt = document.getElementById('tryonUploadInputAlt');
+      if (tryonUploadInputAlt) {
+        tryonUploadInputAlt.addEventListener('change', (e) => {
+          const file = e.target.files[0];
+          if (file) {
+            stopWebcam();
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+              const img = new Image();
+              img.onload = async () => {
+                userUploadedImg = img;
+                btnModeDemo.classList.remove('active');
+                btnLabelUpload.classList.add('active');
+                arStatusText.textContent = 'Live AR: Foto Pribadi';
+                showToast('Foto berhasil dimuat! Baju langsung tertempel pas di badanmu.', '🖼️');
+                if (pose) {
+                  try {
+                    await pose.send({ image: img });
+                  } catch(err) {
+                    console.warn("Pose detection on image:", err);
+                  }
+                }
+              };
+              img.src = ev.target.result;
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+      }
+
+      // Check URL parameters for custom merch or preselected size
+      const tryonUrlParams = new URLSearchParams(window.location.search);
+      if (tryonUrlParams.get('custom') === '1') {
+        setTimeout(() => {
+          loadCustomMerchFilter();
+        }, 400);
+      }
+      if (tryonUrlParams.get('size')) {
+        const paramSize = tryonUrlParams.get('size').toUpperCase();
+        document.querySelectorAll('.size-chip').forEach(chip => {
+          if (chip.textContent.trim() === paramSize) {
+            chip.click();
+          }
+        });
+      }
 
       // ==================== MERCHANDISE CATEGORY SWITCHER (SIDEBAR) ====================
       const sliderContainer = document.querySelector('.merch-items-slider');
@@ -1579,6 +1709,8 @@
       }
     });
   </script>
+  <script src="smart-size-guide.js"></script>
+  <script src="custom-merch-ar.js"></script>
 </body>
 </html>
 

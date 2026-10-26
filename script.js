@@ -683,6 +683,38 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // ==================== LIVE TRY-ON FOR CUSTOM MERCH ====================
+  const btnLiveTryonCustom = document.getElementById('btnLiveTryonCustom');
+  if (btnLiveTryonCustom) {
+    btnLiveTryonCustom.addEventListener('click', () => {
+      const text = customTextInput ? (customTextInput.value.trim() || 'WOLVY SQUAD') : 'WOLVY SQUAD';
+      const sub = customSubTextInput ? (customSubTextInput.value.trim() || 'CAMPUS 2025') : 'CAMPUS 2025';
+      const activeFont = document.querySelector('.font-btn.active')?.getAttribute('data-font') || 'Outfit';
+      const activeColor = document.querySelector('.swatch-circle.active')?.getAttribute('data-color') || '#120624';
+      const activeAlign = document.querySelector('.align-btn.active')?.getAttribute('data-align') || 'center';
+      const activeType = document.querySelector('.studio-prod-item.active')?.getAttribute('data-type') || 'tshirt';
+
+      showToast('Menyiapkan baju desainmu untuk Virtual Try-On AR... ⚡', '⏳');
+
+      if (window.WolvyCustomAR) {
+        window.WolvyCustomAR.generateAsset({
+          text: text,
+          subtext: sub,
+          font: activeFont,
+          color: activeColor,
+          align: activeAlign,
+          type: activeType
+        }, () => {
+          setTimeout(() => {
+            window.location.href = 'tryon.html?custom=1';
+          }, 300);
+        });
+      } else {
+        window.location.href = 'tryon.html?custom=1';
+      }
+    });
+  }
+
   // ==================== SEARCH MODAL ====================
   const searchBtn = document.getElementById('searchBtn');
   const searchModal = document.getElementById('searchModal');

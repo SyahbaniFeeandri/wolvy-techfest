@@ -823,10 +823,15 @@
             </div>
           </div>
 
-          <!-- Submit CTA Button -->
-          <button class="btn btn-primary btn-submit-design" id="submitDesignBtn">
-            Lanjut ke Preview &rarr;
-          </button>
+          <!-- Submit & Live Try-on CTA Buttons -->
+          <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 14px;">
+            <button class="btn btn-primary btn-submit-design" id="submitDesignBtn" style="width: 100%;">
+              🛒 Masukkan ke Keranjang &rarr;
+            </button>
+            <button type="button" class="btn btn-outline" id="btnLiveTryonCustom" style="width: 100%; border: 2px solid var(--color-neon-yellow); color: var(--color-neon-yellow); background: rgba(232, 255, 56, 0.08); font-weight: 800; padding: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; border-radius: var(--radius-pill);">
+              <span>⚡</span> Coba Live di Kamera AR (Virtual Try-On)
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -1125,6 +1130,8 @@
   <!-- Toast Notification Container -->
   <div class="toast-container" id="toastContainer"></div>
 
+  <script src="smart-size-guide.js"></script>
+  <script src="custom-merch-ar.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
