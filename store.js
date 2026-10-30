@@ -25,7 +25,8 @@ const initialDatabase = {
       stock: 24,
       rating: 4.8,
       reviewsCount: 104,
-      image: "assets/prod_varsity.png",
+      image: "assets/prod_varsity_purple.png",
+      tryonImg: "assets/tryon_varsity_purple.png",
       description: "Varsity jacket edisi khusus kampus dengan desain modern dan bahan fleece cotton premium yang tebal namun sejuk digunakan saat kuliah maupun kegiatan ormawa.",
       badge: "Best Seller",
       variants: [
@@ -201,6 +202,118 @@ const initialDatabase = {
       variants: [
         { color: "Black-Yellow", hex: "#1A0B2E", sizes: ["S", "M", "L", "XL"] }
       ]
+    },
+    {
+      id: 13,
+      name: "Northvale Dragon Varsity Jacket (Back Edition)",
+      category: "apparel",
+      price: 429000,
+      stock: 15,
+      rating: 4.9,
+      reviewsCount: 87,
+      image: "assets/prod_varsity_dragon.png",
+      tryonImg: "assets/tryon_varsity_dragon.png",
+      description: "Varsity jacket edisi punggung dengan ilustrasi naga kosmik Northvale ungu distressed bordir high-density dan slogan 'Different Paths Same Sky'.",
+      badge: "Exclusive",
+      variants: [
+        { color: "Black Purple", hex: "#4B287D", sizes: ["S", "M", "L", "XL", "XXL"] }
+      ]
+    },
+    {
+      id: 14,
+      name: "Moonlight Cosmic Gothic Long-Sleeve Tee",
+      category: "apparel",
+      price: 189000,
+      stock: 35,
+      rating: 4.9,
+      reviewsCount: 74,
+      image: "assets/prod_longsleeve_moonlight.png",
+      tryonImg: "assets/tryon_longsleeve_moonlight.png",
+      description: "Kaos lengan panjang streetwear berbahan cotton combed 24s dengan grafis sablon plastisol bulan purnama kosmik ungu, tipografi metal gothic, dan motif api di kedua lengan.",
+      badge: "New Drop",
+      variants: [
+        { color: "Cosmic Black", hex: "#111111", sizes: ["S", "M", "L", "XL"] }
+      ]
+    },
+    {
+      id: 15,
+      name: "Purple Compass 'Lost and Found' Tee",
+      category: "apparel",
+      price: 159000,
+      stock: 40,
+      rating: 4.8,
+      reviewsCount: 62,
+      image: "assets/prod_tshirt_lostfound.png",
+      tryonImg: "assets/tryon_tshirt_lostfound.png",
+      description: "T-shirt oversized warna off-white cream dengan tipografi bordir/sablon 'Lost and Found', kompas kosmik dada kiri, dan kobaran api ungu di lengan.",
+      badge: "Trending",
+      variants: [
+        { color: "Off-White Cream", hex: "#F3EFE6", sizes: ["S", "M", "L", "XL", "XXL"] }
+      ]
+    },
+    {
+      id: 16,
+      name: "Washed Plum Gothic Graphic Hoodie",
+      category: "apparel",
+      price: 349000,
+      stock: 20,
+      rating: 4.9,
+      reviewsCount: 93,
+      image: "assets/prod_hoodie_plum.png",
+      tryonImg: "assets/tryon_hoodie_plum.png",
+      description: "Hoodie oversized premium washed plum / vintage violet dengan sablon gothic 'Dreams in Progress' di dada dan aksen sleeve tribal flame ungu pudar.",
+      badge: "Best Seller",
+      variants: [
+        { color: "Washed Plum", hex: "#3D2B4C", sizes: ["S", "M", "L", "XL"] }
+      ]
+    },
+    {
+      id: 17,
+      name: "Washed Purple Celestial Graphic Hoodie",
+      category: "apparel",
+      price: 349000,
+      stock: 18,
+      rating: 4.8,
+      reviewsCount: 51,
+      image: "assets/prod_hoodie_celestial.png",
+      tryonImg: "assets/tryon_hoodie_celestial.png",
+      description: "Hoodie tebal cotton fleece 330gsm dengan efek mineral wash ungu dan motif celestial graphic khas kampus streetwear.",
+      badge: "Limited",
+      variants: [
+        { color: "Celestial Purple", hex: "#4C2B6A", sizes: ["S", "M", "L", "XL"] }
+      ]
+    },
+    {
+      id: 18,
+      name: "Purple Cosmic Compass Embroidered Cap",
+      category: "accessories",
+      price: 159000,
+      stock: 25,
+      rating: 4.9,
+      reviewsCount: 58,
+      image: "assets/prod_cap_cosmic.png",
+      tryonImg: "assets/tryon_cap_cosmic.png",
+      description: "Topi baseball 6-panel warna ungu tua dengan bordir 3D kompas bintang kosmik dan strap gesper besi antik.",
+      badge: "New Drop",
+      variants: [
+        { color: "Deep Purple", hex: "#2E1052", sizes: ["Adjustable"] }
+      ]
+    },
+    {
+      id: 19,
+      name: "Washed Purple Cosmic Compass Vintage Cap",
+      category: "accessories",
+      price: 149000,
+      stock: 30,
+      rating: 4.7,
+      reviewsCount: 44,
+      image: "assets/prod_cap_vintage.png",
+      tryonImg: "assets/tryon_cap_vintage.png",
+      description: "Topi baseball bergaya vintage dad hat dengan cucian washed purple dan aksen bordir kompas wolvy.",
+      badge: "Vintage",
+      variants: [
+        { color: "Washed Violet", hex: "#3F2856", sizes: ["Adjustable"] }
+      ]
     }
   ],
   cart: [
@@ -212,7 +325,7 @@ const initialDatabase = {
       qty: 1,
       size: "M",
       color: "Purple",
-      image: "assets/prod_varsity.png"
+      image: "assets/prod_varsity_purple.png"
     },
     {
       id: 2,
@@ -242,7 +355,7 @@ const initialDatabase = {
       date: "12 Mei 2025",
       status: "DIPROSES", // DIPROSES | DIKIRIM | SELESAI | DIBATALKAN
       items: [
-        { name: "Varsity Jacket Purple Edition", qty: 1, price: 399000, size: "M", image: "assets/prod_varsity.png" },
+        { name: "Varsity Jacket Purple Edition", qty: 1, price: 399000, size: "M", image: "assets/prod_varsity_purple.png" },
         { name: "Cap Classic Navy", qty: 1, price: 149000, size: "Adjustable", image: "assets/prod_cap_navy.png" },
         { name: "Keychain Acrylic", qty: 1, price: 49000, size: "Standard", image: "assets/prod_keychain.png" }
       ],
@@ -323,6 +436,24 @@ class WolvyStore {
     } else {
       try {
         this.db = JSON.parse(saved);
+        if (!Array.isArray(this.db.products)) {
+          this.db.products = initialDatabase.products;
+        } else {
+          // Merge missing products from initialDatabase
+          const existingIds = new Set(this.db.products.map(p => p.id));
+          initialDatabase.products.forEach(p => {
+            if (!existingIds.has(p.id)) {
+              this.db.products.push(p);
+            }
+          });
+          // Update product 1 image if it had the old mock
+          const p1 = this.db.products.find(p => p.id === 1);
+          if (p1 && (!p1.image || p1.image.includes('prod_varsity.png') || p1.image.includes('varsity.jpg'))) {
+            p1.image = "assets/prod_varsity_purple.png";
+            p1.tryonImg = "assets/tryon_varsity_purple.png";
+          }
+        }
+        this.save();
       } catch (e) {
         this.db = initialDatabase;
         this.save();

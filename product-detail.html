@@ -419,21 +419,21 @@
         <!-- LEFT: GALLERY & DESCRIPTION -->
         <div class="pdetail-left-col">
           <div class="pdetail-gallery-wrap">
-            <div class="gallery-thumbs">
-              <div class="gallery-thumb active" data-img="assets/fotomodeltry.jpeg">
+            <div class="gallery-thumbs" id="galleryThumbsList">
+              <div class="gallery-thumb active" data-img="assets/prod_varsity_purple.png">
+                <img src="assets/prod_varsity_purple.png" alt="Tampak Depan" style="object-fit:contain; padding:4px;">
+              </div>
+              <div class="gallery-thumb" data-img="assets/prod_varsity_dragon.png">
+                <img src="assets/prod_varsity_dragon.png" alt="Tampak Belakang Dragon" style="object-fit:contain; padding:4px;">
+              </div>
+              <div class="gallery-thumb" data-img="assets/fotomodeltry.jpeg">
                 <img src="assets/fotomodeltry.jpeg" alt="Model Try-On Preview">
-              </div>
-              <div class="gallery-thumb" data-img="assets/varsity.jpg">
-                <img src="assets/varsity.jpg" alt="Jacket Front View">
-              </div>
-              <div class="gallery-thumb" data-img="assets/hoodie.jpg">
-                <img src="assets/hoodie.jpg" alt="Jacket Detail">
               </div>
             </div>
 
             <div class="gallery-main-view">
-              <img src="assets/fotomodeltry.jpeg" alt="Product Main Image" id="mainGalleryImg" class="gallery-main-img">
-              <a href="tryon.html?product=1" class="gallery-tryon-pill">
+              <img src="assets/prod_varsity_purple.png" alt="Product Main Image" id="mainGalleryImg" class="gallery-main-img">
+              <a href="tryon.html?id=1" class="gallery-tryon-pill" id="btnTryonDirectLink">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E8FF38" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
                 <span>Coba di Wajah &amp; Badanmu (Try-On)</span>
               </a>
@@ -466,12 +466,12 @@
           <div class="community-look-preview">
             <h4 class="clook-title">Lihat Preview di Kamu</h4>
             <div class="clook-grid">
-              <div class="clook-item"><img src="assets/fotomodeltry.jpeg" alt="Student Look"></div>
-              <div class="clook-item"><img src="assets/detail_hero.png" alt="Student Look"></div>
-              <div class="clook-item"><img src="assets/varsity.jpg" alt="Student Look"></div>
-              <div class="clook-item">
-                <img src="assets/hero_student_wolf.png" alt="Student Look">
-                <div class="clook-overlay-more">+12</div>
+              <div class="clook-item" style="background:#1B0A2E;"><img src="assets/prod_varsity_purple.png" alt="Varsity Look" style="object-fit:contain; padding:4px;"></div>
+              <div class="clook-item" style="background:#1B0A2E;"><img src="assets/prod_varsity_dragon.png" alt="Dragon Back Look" style="object-fit:contain; padding:4px;"></div>
+              <div class="clook-item" style="background:#1B0A2E;"><img src="assets/prod_hoodie_plum.png" alt="Hoodie Look" style="object-fit:contain; padding:4px;"></div>
+              <div class="clook-item" style="background:#1B0A2E;">
+                <img src="assets/prod_longsleeve_moonlight.png" alt="Moonlight Look" style="object-fit:contain; padding:4px;">
+                <div class="clook-overlay-more">+19</div>
               </div>
             </div>
           </div>
@@ -667,14 +667,40 @@
         });
       });
 
-      // Gallery thumb selection
-      document.querySelectorAll('.gallery-thumb').forEach(thumb => {
-        thumb.addEventListener('click', () => {
-          document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
-          thumb.classList.add('active');
-          document.getElementById('mainGalleryImg').src = thumb.getAttribute('data-img');
+      // Dynamic Gallery thumb rendering & selection
+      const thumbsContainer = document.getElementById('galleryThumbsList');
+      if (thumbsContainer) {
+        let thumbs = [
+          { img: product.image, label: 'Tampak Utama' }
+        ];
+        if (product.id === 1) {
+          thumbs.push({ img: 'assets/prod_varsity_dragon.png', label: 'Tampak Belakang (Dragon)' });
+          thumbs.push({ img: 'assets/fotomodeltry.jpeg', label: 'Model Try-On' });
+        } else if (product.id === 13) {
+          thumbs.push({ img: 'assets/prod_varsity_purple.png', label: 'Tampak Depan' });
+        } else if (product.tryonImg && product.tryonImg !== product.image) {
+          thumbs.push({ img: product.tryonImg, label: 'Fitur Try-On' });
+        }
+        
+        thumbsContainer.innerHTML = thumbs.map((t, idx) => `
+          <div class="gallery-thumb ${idx === 0 ? 'active' : ''}" data-img="${t.img}" title="${t.label}">
+            <img src="${t.img}" alt="${t.label}" style="object-fit:contain; padding:4px;">
+          </div>
+        `).join('');
+
+        thumbsContainer.querySelectorAll('.gallery-thumb').forEach(thumb => {
+          thumb.addEventListener('click', () => {
+            thumbsContainer.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
+            thumb.classList.add('active');
+            document.getElementById('mainGalleryImg').src = thumb.getAttribute('data-img');
+          });
         });
-      });
+      }
+
+      const btnTryonDirect = document.getElementById('btnTryonDirectLink');
+      if (btnTryonDirect) {
+        btnTryonDirect.href = `tryon.html?id=${product.id}`;
+      }
 
       // Custom & Preview button
       const cpTextInput = document.getElementById('cpTextInput');
