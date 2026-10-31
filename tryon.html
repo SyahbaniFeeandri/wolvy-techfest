@@ -1052,10 +1052,11 @@
           const rx = (1 - leftSh.x) * canvas.width;
           const ry = leftSh.y * canvas.height;
 
-          const shoulderDist = Math.hypot(rx - lx, ry - ly);
+          const shoulderDist = Math.hypot(lx - rx, ly - ry);
           const midX = (lx + rx) / 2;
           const midY = (ly + ry) / 2;
-          const tiltAngle = Math.atan2(ry - ly, rx - lx);
+          // FIX: angle from LEFT shoulder (rx,ry) to RIGHT shoulder (lx,ly) — was causing 180deg flip
+          const tiltAngle = Math.atan2(ly - ry, lx - rx);
 
           if (activeMerch.type === 'cap') {
             const nx = nose ? (1 - nose.x) * canvas.width : midX;
