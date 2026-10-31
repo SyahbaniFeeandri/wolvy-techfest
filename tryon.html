@@ -1074,7 +1074,7 @@
             targetTransform.height = garmentW / activeMerch.baseRatio;
             targetTransform.x = midX;
             // Place top opening around neck/shoulders
-            targetTransform.y = midY + (targetTransform.height * 0.28) + userOffsetY;
+            targetTransform.y = midY - (targetTransform.height * 0.14) + userOffsetY;
             targetTransform.angle = tiltAngle;
           }
 
@@ -1134,7 +1134,7 @@
               targetTransform.width = garmentW;
               targetTransform.height = garmentW / activeMerch.baseRatio;
               targetTransform.x = midX;
-              targetTransform.y = midY + (targetTransform.height * 0.28) + userOffsetY;
+              targetTransform.y = midY - (targetTransform.height * 0.14) + userOffsetY;
               targetTransform.angle = tilt;
             }
             targetTransform.detected = true;
@@ -1158,9 +1158,10 @@
         if (activeMerch.imgElement && activeMerch.imgElement.complete && activeMerch.imgElement.naturalWidth > 0) {
           ctx.save();
           ctx.translate(smoothTransform.x, smoothTransform.y);
+          if (isWebcamActive) {
+            ctx.scale(-1, 1); // Mirror garment to match mirrored webcam selfie view
+          }
           ctx.rotate(smoothTransform.angle);
-
-          // Realistic soft drop shadow under garment (gives depth like a real filter)
           ctx.shadowColor = 'rgba(19, 7, 34, 0.45)';
           ctx.shadowBlur = 14;
           ctx.shadowOffsetY = 6;

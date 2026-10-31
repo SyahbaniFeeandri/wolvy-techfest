@@ -625,6 +625,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (livePrintText) {
         livePrintText.style.fontFamily = font;
       }
+      if (livePrintSub) {
+        livePrintSub.style.fontFamily = font;
+      }
     });
   });
 
@@ -635,6 +638,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const color = swatch.getAttribute('data-color');
       if (livePrintText) livePrintText.style.color = color;
       if (livePrintSub) livePrintSub.style.color = color;
+      const printArea = document.getElementById('printArea');
+      if (printArea) {
+        printArea.style.borderColor = color === '#FFFFFF' ? 'rgba(88,40,168,0.4)' : color + '80';
+      }
     });
   });
 
@@ -652,15 +659,53 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  const mockupImages = {
+    tshirt: 'assets/tshirt_mockup_clean.jpg',
+    hoodie: 'assets/hoodie.jpg',
+    jaket:  'assets/varsity.jpg',
+    totebag:'assets/totebag.jpg',
+    tumbler:'assets/tumbler.jpg',
+    topi:   'assets/topi.jpg',
+    lainnya:'assets/tshirt_mockup_clean.jpg'
+  };
   studioProdItems.forEach(item => {
     item.addEventListener('click', () => {
       studioProdItems.forEach(i => i.classList.remove('active'));
       item.classList.add('active');
       const type = item.getAttribute('data-type');
-      showToast(`Produk studio: ${type.toUpperCase()}`, '👕');
+      // Update mockup image
+      const mockupGarmentImg = document.getElementById('mockupGarmentImg');
+      if (mockupGarmentImg && mockupImages[type]) {
+        mockupGarmentImg.src = mockupImages[type];
+      }
+      // Hide/show print area for non-wearables
+      const printArea = document.getElementById('printArea');
+      if (printArea) {
+        printArea.style.display = (type === 'tumbler' || type === 'totebag') ? 'none' : 'flex';
+      }
+      showToast(`Produk dipilih: ${type.toUpperCase()} ✅`, '👕');
     });
   });
 
+
+  // Thumb bar preview buttons switch mockup angle
+  document.querySelectorAll('.thumb-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.thumb-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const angle = btn.getAttribute('data-angle');
+      const mockupGarmentImg = document.getElementById('mockupGarmentImg');
+      const activeType = document.querySelector('.studio-prod-item.active')?.getAttribute('data-type') || 'tshirt';
+      const angleImages = {
+        front: { tshirt: 'assets/tshirt_mockup_clean.jpg', hoodie: 'assets/hoodie.jpg', jaket: 'assets/varsity.jpg' },
+        back:  { tshirt: 'assets/hoodie.jpg', hoodie: 'assets/hoodie.jpg', jaket: 'assets/varsity.jpg' },
+        model: { tshirt: 'assets/fotomodeltry.jpeg', hoodie: 'assets/fotomodeltry.jpeg', jaket: 'assets/fotomodeltry.jpeg' }
+      };
+      const src = (angleImages[angle] && angleImages[angle][activeType]) || 'assets/tshirt_mockup_clean.jpg';
+      if (mockupGarmentImg) mockupGarmentImg.src = src;
+      showToast(`Preview: ${angle === 'front' ? 'Tampak Depan' : angle === 'back' ? 'Tampak Belakang' : 'Di Model'}`, '👀');
+    });
+  });
   if (submitDesignBtn) {
     submitDesignBtn.addEventListener('click', () => {
       const text = customTextInput ? (customTextInput.value.trim() || 'WOLVY SQUAD') : 'WOLVY SQUAD';
